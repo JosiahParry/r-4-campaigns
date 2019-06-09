@@ -28,3 +28,58 @@ Notice that this code creates two tibbles in memory. Now everything else is the 
 
 We want to create a simple report which will be emailed out to the organizing director each morning with the most up to date weekly PTG. 
 
+Since this is a weekly report, we want to filter to the current week. In this case, the most recent data is from the 11th week of the month. We will filter both the `weekly_canvass` and `goals` tibbles to these weeks and then join. Note that it is important to filter before joining as joining can be computationally intensive. We want to reduce the data before joining it.
+
+```{r}
+current_week <- weekly_canvass %>% 
+  filter(week == 11) %>% 
+  left_join(filter(goals, week == 11), by = c("turf_code" = "region", "week")) %>% 
+  mutate(ptg = n_pledged / goal)
+
+current_week
+```
+While it nice to have each region's PTG, it's also useful to have the entire program weekly PTG. We can create an aggregate table and bind it to the existing table.
+
+```{r}
+totals <- current_week %>% 
+  bind_rows(
+    current_week %>% 
+      summarise(n_pledged = sum(n_pledged),
+                goal = sum(goal),
+                ptg = n_pledged / goal,
+                vol_yes = sum(vol_yes),
+                turf_code = "Total", 
+                week = mean(week)) 
+  )
+
+totals
+```
+
+
+```{r}
+totals %>% 
+  ggplot(aes(turf_code, ptg)) +
+  geom_col() +
+  geom_hline(yintercept = 1, lty = 2, alpha = .4) +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Weekly PTG", 
+       y = "% to goal",
+       x = "Turf Code")
+```
+
+It is important that a clean table is presented alongside the chart. For this we will use `knitr::kable()`.
+
+```{r}
+totals %>% 
+  mutate(ptg = ptg * 100) %>% 
+  select(`Turf Code` = turf_code,
+         `# Pledged` = n_pledged, 
+         Goal = goal, 
+         `% to Goal` = ptg) %>% 
+  knitr::kable(digits = 2)
+```
+
+
+
+
