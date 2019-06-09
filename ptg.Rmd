@@ -1,6 +1,6 @@
 ---
 title: "calculating PTG"
-output: html_notebook
+output: html_document
 ---
 
 Goal: Demonstrate how to take raw canvassing data and calculate a PTG. 

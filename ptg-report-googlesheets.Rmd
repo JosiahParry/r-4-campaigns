@@ -1,0 +1,30 @@
+---
+title: "reporting-googlesheets"
+output: html_document
+---
+
+Goal: Create a daily percent to goal report
+
+As described previously, a common practice is to export aggregated code from Civis into a Google Sheet. In this section we will work with Google Sheets to create a report that can be used to schedule automatic reporting. 
+
+To use the `googlesheets` package you must first install it (`install.packages("googlesheets")`). To load a spreadsheet use the `gs_title()` or `gs_url()` functions. The former takes the name of the sheet and the latter uses the url of it. Once this line is ran Google will open and require you to authenticate. This will create `.httr-oath` file in your working directory. This contains your authorization token which will be used later for automating this workflow. 
+
+```{r}
+library(googlesheets)
+
+# register the sheet
+sheet <- gs_title("R 4 Progressive Campaigns")
+
+# read the `weekly_canvas` tab
+weekly_canvass <- gs_read(sheet, "weekly_canvass")
+
+# read the `goals` tab
+goals <- gs_read(sheet, "goals")
+
+weekly_canvass
+goals
+```
+Notice that this code creates two tibbles in memory. Now everything else is the same. We will work within the context of an R Markdown document ([intro to R Markdown](https://rmarkdown.rstudio.com/articles_intro.html)).
+
+We want to create a simple report which will be emailed out to the organizing director each morning with the most up to date weekly PTG. 
+

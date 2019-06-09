@@ -1,1 +1,5 @@
 .DS_Store
+.Rproj.user
+.Rproj.user/
+.Rproj.user/*
+.httr-oauth
