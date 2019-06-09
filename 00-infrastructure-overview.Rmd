@@ -1,7 +1,4 @@
----
-title: "worflow"
-output: html_document
----
+# workflow
 
 This will be an overview of common data infrastructure in progressive campaigns. We need to start with the golden rule of data "if it is not in VAN, it does not exist". 
 

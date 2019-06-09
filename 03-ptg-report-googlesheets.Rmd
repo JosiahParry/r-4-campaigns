@@ -1,7 +1,5 @@
----
-title: "reporting-googlesheets"
-output: html_document
----
+# reporting-googlesheets
+
 
 Goal: Create a daily percent to goal report
 

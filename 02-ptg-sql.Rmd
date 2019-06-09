@@ -1,7 +1,4 @@
----
-title: "ptg-sql"
-output: html_document
----
+# ptg-sql
 
 * create sqllite db for the existing sample data 
 * go over creating the appropriate sql code.
