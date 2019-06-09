@@ -1,0 +1,188 @@
+---
+title: "calculating PTG"
+output: html_notebook
+---
+
+Goal: Demonstrate how to take raw canvassing data and calculate a PTG. 
+
+This writing assumes that the reader has at least a basic understanding of R and the tidyverse—particularly dplyr and ggplot2.
+
+Overview:
+
+* reading in data
+* aggregating 
+* joining tables
+
+
+One of the most important metrics to a field program is the percent to goal (PTG). Field staff have a target number of pledge cards or doors to knock on. It is important for the data manger to provide a reliant and robust PTG reporting system to enable organizing directors to make informed and data driven decisions. 
+
+In this exercise we will use three datasets (located in the data folder). 
+
+* `canvassing_results.csv`: canvassing results from January to March 
+* `van_turf_lookup.csv`: dataset containing the region codes for each van user
+* `goals.csv`: dataset containing the weekly pledge card goal
+
+
+Steps:
+
+* read in canvassing results
+* read in turf code look up table
+* create new week variable
+* aggregate on the weekly level
+* read in goal and calculate PTG
+
+```{r}
+library(tidyverse)
+
+canvass <- read_csv("data/canvassing_results.csv")
+canvass
+```
+
+I always briefly inspect my data using the `count()` function. Let's count the number of individuals who marked volunteer yes.
+
+```{r}
+count(canvass, vol_yes)
+```
+
+That is a lot of volunteers! They will go into the volunter recruitment and management pipeline and hopefully convert into some volunteer shifts. But which region are these potential volunteers in? To figure this out we will have to read in the `van_turf_lookup.csv` dataset. 
+
+```{r}
+turf_lookup <- read_csv("data/van_turf_lookup.csv")
+turf_lookup 
+```
+Here we see that there are only two variables, `van_id`, and `turf_code`. This is a very common structure in relational data architectures. Because this table and the `canvass` table both share the `van_id` column we can merge the who based on this. This is referred to as a _"common identifier"_. The operation of joining two tables together is called a join. 
+
+For more on joins and relational data please read [chapter 13 of R for Data Science](https://r4ds.had.co.nz/relational-data.html) by Hadley Wickham.
+
+
+
+```{r}
+left_join(canvass, turf_lookup, by = "van_id") 
+```
+
+This code node provides the turf codes for each `van_id`, but we still do not have the week that each observation belongs to.We are interested in the weekly pledge card goal so it is important to extract the calendar week from the date field. We will use the function `lubridate::week()` to do this. 
+
+We will pipe the resultant table from the join into a mutate call where we will create this new variable and save it to an object called `canvass_clean`.
+
+```{r}
+canvass_clean <- left_join(canvass, turf_lookup, by = "van_id") %>% 
+  mutate(week = week(date))
+
+canvass_clean
+```
+
+We can use `count()` again to explore the pledge cards by region and week. We can add unquoted column names as arguments to `count()` which will be used to group the data.
+
+```{r}
+count(canvass_clean, turf_code)
+count(canvass_clean, week)
+count(canvass_clean, turf_code, week)
+```
+
+Though these counts (you may be more familiar with the phrase _cross-tabs_) are extremely useful, we still want to know the number of volunteers pledged. For more control over the aggregate measures, we will use `dplyr::group_by()` and `dplyr::summarise()` (for more see [chapter 5.6](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise) in R for Data Science). 
+
+We will create a new table called `weekly_canvass` which is grouped by turf code and week. This table will have a column for `turf_code`, `week,` the number of people pledged to vote `n_pledged`, and the number of people who indicated they would volunteer `vol_yes`.
+
+```{r}
+weekly_canvass <- canvass_clean %>% 
+  group_by(turf_code, week) %>% 
+  summarise(n_pledged = n(),
+            vol_yes = sum(vol_yes))
+
+weekly_canvass
+```
+
+Now that we have our counts of pledges and volunteers by week and turf code we need to compare this to their weekly goal. The weekly goals are in  `goals.csv`.
+
+```{r}
+goals <- read_csv("data/goals.csv")
+goals
+```
+
+Again, this data will need to be joined. What is unique here though is that there is not a single common identifier column. We will need to join on _two_ columns. Namely, region (turf code), and week. Notice that we have mismatched names. To perform a join in this scenario we will need to provide a named vector to the `by` argument (more on named vectors in [chapter 20.4.4](https://r4ds.had.co.nz/vectors.html#naming-vectors) in R for Data Science). The name of the vector element is the column name in the left hand table and the value is the name of the column in the right hand table. 
+
+In our case, the left hand table is `weekly_canvass` which has the column name `turf_code`. The right hand table is `goals` which has the column name `region`. To match on this we have to provide the named vector `c("turf_code" = "region)`. Since the second column we are matching on is `week` which is present in both tables, this element does not have to be named. Thus the vector we will use is `c("turf_code" = "region", "week")`.
+
+
+```{r}
+left_join(weekly_canvass, goals, by = c("turf_code" = "region", "week"))
+```
+
+With this join we see that we have the goal and the actual number pledged. We're one step away from calculating the PTG! To calculate the percent we need to divide the actual number by the goal and multiply by 100. We will do this within a mutate call after we join and save this to a new object `ptg`.
+
+```{r}
+ptg <- left_join(weekly_canvass, goals, by = c("turf_code" = "region", "week")) %>% 
+  mutate(ptg = (n_pledged / goal) * 100)
+
+ptg
+```
+
+```{r}
+ptg %>% 
+  ggplot(aes(week, ptg, color = turf_code)) + 
+  geom_point() +
+  geom_line() +
+  theme_minimal() +
+  facet_wrap(~turf_code) +
+  geom_hline(yintercept = 100, lty = 2) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "bottom"
+  ) +
+  labs(title = "PTG by Turf Code", 
+       x = "Week", y = "%")
+```
+
+While having a table and chart for weekly PTG is extremely useful, it is important to provide a PTG metric for the entire program. 
+
+To do this we will need to calculate an aggregate measure from the `goals` table and join this to an aggregated canvass table. We will start by aggregating the goals and creating a `total_goals` object. Note that in the code chunk below I rename the `region` column in the `group_by()` statement this will be useful in the future so we can avoid having to use a named vector in our join.
+
+```{r}
+total_goals <- goals %>% 
+  group_by(turf_code = region) %>% 
+  summarise(goal = sum(goal))
+
+total_goals
+```
+
+Now that we have `total_goals` we need to know the total number of pledges each region has gathered. We will use the existing `canvass_clean` object and count the total number or pledges using `count()`.
+
+```{r}
+total_pledges <- count(canvass_clean, turf_code)
+total_pledges
+```
+
+Now we can join these two tables together and calculate a program wide PTG.
+
+```{r}
+total_ptg <- inner_join(total_pledges, total_goals, by = "turf_code") %>% 
+  mutate(ptg = n / goal * 100)
+total_ptg
+```
+
+Everyone loves a bar chart to visually understand their data.
+
+```{r}
+
+total_ptg %>% 
+  mutate(turf_code = fct_rev(turf_code)) %>%
+  ggplot(aes(turf_code, ptg)) +
+  geom_col() +
+  geom_hline(yintercept = 100, lty = 2) +
+  coord_flip() +
+  labs(title = "Cumulative PTG") +
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank()
+  ) 
+  
+```
+
+
+To Do: 
+
+1. Turn into a report
+1. turn into parameterized report
+1. emailing with gmailr 
+1. hosting and scheduling with connect

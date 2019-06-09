@@ -1,0 +1,15 @@
+"0","universe <- inner_join(canvass, van_names) %>% 
+  group_by(van_id) %>% 
+  # for duplicates grab the one where they indicated vol yes
+  top_n(1, wt = vol_yes) %>% 
+  # make sure there is only 1 observation per person in the case that 
+  # duplicates had the same vol_yes result
+  sample_n(size = 1) %>% 
+  ungroup() %>% 
+  #join region for hypothetical polling location / organizer info
+  left_join(turf_lookup)
+"
+"2","Joining, by = ""van_id""
+"
+"2","Joining, by = ""van_id""
+"

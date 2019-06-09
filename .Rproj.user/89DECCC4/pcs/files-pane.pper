@@ -1,0 +1,9 @@
+{
+    "path" : "~/github/r-4-campaigns",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

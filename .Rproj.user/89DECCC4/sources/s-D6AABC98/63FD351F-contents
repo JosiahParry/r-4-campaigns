@@ -1,0 +1,115 @@
+---
+title: "texting"
+output: html_document
+---
+
+```{r}
+canvass <- read_csv("data/canvassing_results.csv")
+van_names <- read_csv("data/van_names.csv")
+turf_lookup <- read_csv("data/van_turf_lookup.csv")
+
+universe <- inner_join(canvass, van_names) %>% 
+  group_by(van_id) %>% 
+  # for duplicates grab the one where they indicated vol yes
+  top_n(1, wt = vol_yes) %>% 
+  # make sure there is only 1 observation per person in the case that 
+  # duplicates had the same vol_yes result
+  sample_n(size = 1) %>% 
+  ungroup() %>% 
+  #join region for hypothetical polling location / organizer info
+  left_join(turf_lookup)
+  
+```
+
+We want the message to be coming from the proper regional organizing director (ROD). 
+
+We will make some fake names for our RODs. We will create a named vector where the name is the turf code and the value is the organizer's name (sampled from the babynames package / dataset cite here).
+
+```{r}
+organizers <- c("Rosaleen", "Larissa", "Lafayette", "Theo", "Zamere", "Colleen")
+names(organizers) <- LETTERS[1:6]
+
+organizers
+```
+
+We will use `stringr::str_replace_all()` to create an `organizer` column
+
+```{r}
+universe %>% 
+  mutate(organizer = str_replace_all(turf_code, organizers)) %>% 
+  select(organizer, everything())
+```
+
+Say each region has their own unique polling location (realistically this will be a much more fine grain dataset that you can join on).
+
+We can specify the polling locations using a `case_when()` function call. We will build upon the previous pipe line. In case when you specify a logical statement and then return a value using the `~`—i.e. `something == TRUE ~ "if true value"`.
+
+```{r}
+universe_locations <- universe %>% 
+  mutate(organizer = str_replace_all(turf_code, organizers),
+         polling_place = case_when(
+           turf_code == "A" ~ "Community Center",
+           turf_code == "B" ~ "High School",
+           turf_code == "C" ~ "Town Hall",
+           turf_code ==  "D" ~ "Elementary School", 
+           turf_code == "E" ~ "Rotary Club",
+           turf_code == "F" ~ "Senior Center"
+         )
+  )
+
+universe_locations
+```
+Generally, it is useful to segment texting scripts to allow for more tailored messaging. It is recommended to treat your potential volunteers differently than those who have not indicated a desire to volunteer.
+
+Let's go ahead and create two different tibbles, one for vol yes and vol no. Based on this, we will create custom scripts.
+
+```{r}
+vol_yes <- filter(universe_locations, vol_yes == 1)
+vol_no <- filter(universe_locations, vol_yes == 0)
+```
+
+At this point you should always check to see if your segmentation has missed anyone. The sum of the number of rows in your two tables should add up to the total number of rows in the original tibble (`universe_locations`). Let's perform that sanity check before moving on.
+
+```{r}
+nrow(vol_yes) + nrow(vol_no) == nrow(universe_locations)
+```
+
+This returns `TRUE`, we are good to move onward! If there were any missing rows, I would recommend finding a way to incorporate them into some generic universe.
+
+The next step is to create the script. The package `glue` allows us to create character strings with the expressions or values from a tibble. Learn more [here](https://glue.tidyverse.org/).
+
+
+```{r}
+vol_yes_message <- vol_yes %>% 
+  mutate(message = glue::glue("Hi {first_name} this is {organizer} with Abraham Lincoln for the Union! The election is right around the corner. We need all the help we can get, can we count on you to volunteer at {polling_place} on election day?"))
+
+vol_no_message <- vol_no %>% 
+  mutate(message = glue::glue("Hi {first_name} this is {organizer} with Abraham Lincoln for the Union! The election is right around the corner. Your polling location is at the {polling_place}. Can we count on your vote?"))
+
+messages <- bind_rows(vol_yes_message, vol_no_message)
+
+select(messages, message)
+
+```
+
+Once you have created your custom messaging you can write this to a `csv` and upload it into a peer to peer texting platform like Relay and Hustle. In there you can, hopefully, map the VAN IDs so that the text messages are recorded in VAN (talk to your VAN Admin about setting up these integrations).
+
+One problem that you might face with platforms like Relay and Hustle is that custom fields can have a character limit. There are a few ways to handle this. One way is by recreating the custom messages within the platform themselves. However, I have found this historically somewhat cumbersom. My work around was to split each sentence into it's own custom field.
+
+
+We can split the message into the sentences. This will create a list column which we will then unnest ([working with list columns](https://www.rstudio.com/resources/videos/how-to-work-with-list-columns/) by Garret Grolemund).
+
+```{r}
+final_message <- messages %>% 
+  mutate(message = str_split(message, boundary("sentence"))) %>% 
+  unnest() %>% 
+  group_by(van_id) %>% 
+  mutate(message_number = row_number(),
+         message_number = paste0("message_",message_number)) %>% 
+  ungroup() %>% 
+  spread(message_number, message) 
+
+select(final_message, contains("message_"))
+```
+
+Final step: upload to relay / hustle / whatever platform you use. Blast 'em.

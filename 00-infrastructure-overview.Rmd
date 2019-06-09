@@ -1,0 +1,38 @@
+---
+title: "worflow"
+output: html_document
+---
+
+This will be an overview of common data infrastructure in progressive campaigns. We need to start with the golden rule of data "if it is not in VAN, it does not exist". 
+
+
+
+What is VAN?
+
+**V**oter
+
+**A**ctivation
+
+**N**etwork
+
+It is not _the VAN_ it is _VAN_.
+
+go over types of voter outreach 
+
+VAN is the location where all voter interactions live. VAN is our database for voter outreach.
+When contact is made with a potential voter that is entered in VAN. There are many common ways that this data is recorded. Crowd canvassing—collecting pledge cards, petitioon sign ups. Door-to-door canvassing—knocking on doors and having direct conversations with voters. This is sometimes referred to "knocking doors". Two other common types of voter outreach is phone banking and text banking. 
+
+Data is collected and entered into VAN
+- pledge cards are collected, then entered into VAN (the same night)
+
+What is Civis?
+
+Civis analytis is a company that creates a data sciecne platforms which is used by many progressive campaigns. They provide secure cloud based solution for data warehousing, analysis, and workflow automation, among others. 
+
+It is common for many campaigns to have daily exports from VAN into Civis. This provides data directors and data managers the ability to programmatically analyse VAN data. Since data are avaialble in a database, they can be queried using SQL. 
+
+SQL scripts are written to create aaggregated data. A lot of the power of this comes from the ability to create workflows in Civis. The output of SQL scripts can be exported to a Google Sheet which is much more accessible for the less technically inclined. This also is great for creating shareable sheets-based reporting. 
+
+The workflow:
+
+This guide/book will try to replicate this workflow as best as possible.

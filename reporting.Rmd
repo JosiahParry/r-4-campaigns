@@ -1,0 +1,13 @@
+---
+title: "reporting"
+output: html_document
+---
+
+creating reproducible reports
+
+common reports: daily emails for weekly ptg 
+end of the week ptg
+weekly cumulative report
+
+parameterized r markdown
+hosting on connect
