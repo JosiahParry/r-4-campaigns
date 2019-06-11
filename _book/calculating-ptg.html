@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-06-10" />
+<meta name="date" content="2019-06-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -147,8 +147,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>9</b> workflow</a></li>
 <li class="chapter" data-level="10" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html"><i class="fa fa-check"></i><b>10</b> Web-Scraping: Polling use case</a><ul>
 <li class="chapter" data-level="10.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#understanding-rvest"><i class="fa fa-check"></i><b>10.1</b> Understanding <code>rvest</code></a></li>
+<li class="chapter" data-level="10.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#example"><i class="fa fa-check"></i><b>10.2</b> Example</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#date-cleaning"><i class="fa fa-check"></i><b>10.2.1</b> Date cleaning</a></li>
+<li class="chapter" data-level="10.2.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#visualization"><i class="fa fa-check"></i><b>10.2.2</b> Visualization</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="example.html"><a href="example.html"><i class="fa fa-check"></i><b>11</b> Example</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
 
@@ -195,9 +198,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>read in goal and calculate PTG</li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(lubridate)
-
-canvass &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/canvassing_results.csv&quot;</span>)</code></pre>
+<span class="kw">library</span>(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     date</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">canvass &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/canvassing_results.csv&quot;</span>)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   van_id = col_double(),
@@ -424,7 +431,7 @@ ptg</code></pre>
   ) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;PTG by Turf Code&quot;</span>, 
        <span class="dt">x =</span> <span class="st">&quot;Week&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>)</code></pre>
-<p><img src="r4c_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="r4c_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
 <p>While having a table and chart for weekly PTG is extremely useful, it is important to provide a PTG metric for the entire program.</p>
 <p>To do this we will need to calculate an aggregate measure from the <code>goals</code> table and join this to an aggregated canvass table. We will start by aggregating the goals and creating a <code>total_goals</code> object. Note that in the code chunk below I rename the <code>region</code> column in the <code>group_by()</code> statement this will be useful in the future so we can avoid having to use a named vector in our join.</p>
 <pre class="sourceCode r"><code class="sourceCode r">total_goals &lt;-<span class="st"> </span>goals <span class="op">%&gt;%</span><span class="st"> </span>
@@ -478,7 +485,7 @@ total_ptg</code></pre>
 <span class="st">  </span><span class="kw">theme</span>(
     <span class="dt">panel.grid.major.x =</span> <span class="kw">element_blank</span>()
   ) </code></pre>
-<p><img src="r4c_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="r4c_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
 <p>To Do:</p>
 <ol style="list-style-type: decimal">
 <li>Turn into a report</li>

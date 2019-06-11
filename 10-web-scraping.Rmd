@@ -2,17 +2,17 @@
 
 A very important metric to keep track of is how your candidate is polling. Are they gaining a lead in the polls or falling behind? This data is often reported via traditional news organizations or some other mediums. The supposed demi-God and mythical pollster Nate Silver's organization FiveThirtyEight does a wonderful job aggregating polls. Their page [National 2020 Democratic Presidential Primary Polls](https://projects.fivethirtyeight.com/2020-primaries/democratic/national/) has a table of the most recent polls from many different pollsters. 
 
-In this use case we will scrape acquire this data through webscraping using `rvest`. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate's growth during the quarter. 
+In this use case we will scrape acquire this data through web scraping using `rvest`. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate's growth during the quarter. 
 
 ## Understanding `rvest` 
 
 This use case will provide a cursory overview of the package `rvest`. To learn more go [here](http://rvest.tidyverse.org/). 
 
-Web scraping is the process of extracting data from a website. Websites are written in HTML and CSS. There are a few aspects of these languages that are used in webscraping that is important to know. HTML is written in a series of what are call tags. A tag is a set of characters wrapped in angle brackets—i.e. `<img>`. 
+Web scraping is the process of extracting data from a website. Websites are written in HTML and CSS. There are a few aspects of these languages that are used in web scraping that is important to know. HTML is written in a series of what are call tags. A tag is a set of characters wrapped in angle brackets—i.e. `<img>`. 
 
 With CSS (cascading style sheets), web developers can give unique identifiers to a tag. Classes can also be assigned to a tag. Think of these as group. With web scraping we can specify a particular part of a website by it's HTML tag and perhaps it's class or ID. `rvest` provides a large set of functions to make this simpler. 
 
-# Example
+## Example
 
 For this example we will be scraping FiveThirtyEight's aggregated poll table. The table can be found at https://projects.fivethirtyeight.com/2020-primaries/democratic/national/. 
 
@@ -24,7 +24,7 @@ library(tidyverse)
 ```
 
 
-The first thing we will have to do is specify what page we will be scraping from. `html_session()` will simulate a session in an html browser. By providing a url to `html_session()` we will then be able to access the underlying code of that page. Create an object called `session` by providing the FiveThirtyEight url to `html_session()`.
+The first thing we will have to do is specify what page we will be scraping from. `html_session()` will simulate a session in an html browser. By providing a URL to `html_session()` we will then be able to access the underlying code of that page. Create an object called `session` by providing the FiveThirtyEight URL to `html_session()`.
 
 ```{r}
 session <- html_session("https://projects.fivethirtyeight.com/2020-primaries/democratic/national/")
@@ -32,9 +32,9 @@ session <- html_session("https://projects.fivethirtyeight.com/2020-primaries/dem
 
 The next and most important step is to identify which piece of HTML code contains the table. The easiest way to do this is to open up the webpage in Chrome and open up the Inspect Elements view (on Mac - ⌘ + Shift + C). Now that this is open, click the select element button at the top left corner of the inspection pane. Now hover over the table.
 
-You will see that the HTML element is highlighted. We can see that it is a `table` tag. Additionally we see that there are two different classes `polls-table` and `tracker`. To specify a class we put a preceeding `.` to the class name—i.e. `.class-name`. If there are multiple classess we just append the second class named to it—i.e. `.first-class.second-class`. Be aware that these selectors can be quite finicky and be a bit difficult to figure out. You might need to do some googling or playing around with the selector.
+You will see that the HTML element is highlighted. We can see that it is a `table` tag. Additionally we see that there are two different classes `polls-table` and `tracker`. To specify a class we put a preceding `.` to the class name—i.e. `.class-name`. If there are multiple classes we just append the second class name to it—i.e. `.first-class.second-class`. Be aware that these selectors can be quite finicky and be a bit difficult to figure out. You might need to do some googling or playing around with the selector.
 
-To actually access the content of this HTML element, we must specify the element using the proper selector. `html_node()` will be used to do this. Provide the html session and the css selector to `html_node()` to extract the HTML element.
+To actually access the content of this HTML element, we must specify the element using the proper selector. `html_node()` will be used to do this. Provide the html session and the CSS selector to `html_node()` to extract the HTML element.
 
 ```{r}
 session %>% 
@@ -43,7 +43,7 @@ session %>%
 
 Here we see that this returns on object of class `xml_node`. This object returns some HTML code but it is still not entirely workable. Since this is an HTML table we want to extract we can use the handy `html_table()`. Note that if this wasn't a table but rather text, you can use `html_text()`.
 
-```{r eval = FALSE}
+```{r eval=FALSE}
 session %>% 
   html_node(".polls-table.tracker") %>% 
   html_table()
@@ -57,7 +57,7 @@ session %>%
 ```
 
 
-This is much better! But based on visual insepction the column headers are not properly matched. There are a few things that need to be sorted out: there are two date columns, there are commas and percents where numeric columns should be, the column headers are a little messy, and the table isn't a tibble (this is just personal preference). 
+This is much better! But based on visual inspection the column headers are not properly matched. There are a few things that need to be sorted out: there are two date columns, there are commas and percents where numeric columns should be, the column headers are a little messy, and the table isn't a tibble (this is just personal preference). 
 
 We will handle the final two issues first as they are easiest to deal with. The function `clean_names()` from `janitor` will handle the column headers, and `as_tibble()` will coerce the data.frame into a proper tibble. Save this semi-clean tibble into an object called `polls`. 
 
@@ -92,18 +92,135 @@ last_col <- length(col_names) - 1
 new_names <- col_names[1:last_col]
 ```
 
-Now we can try implementing the hacky solution. Here we will deselect the first column and reset the names using `setNames()`. Following, we will use the [`mutate_at()`](https://dplyr.tidyverse.org/reference/mutate_all.html) variant to remove the percent sign from every candidate column and coerce them into integer columns. Here we will sepecify which variables to _not_ mutate at within `vars()`. 
+Now we can try implementing the hacky solution. Here we will deselect the first column and reset the names using `setNames()`. Following, we will use the [`mutate_at()`](https://dplyr.tidyverse.org/reference/mutate_all.html) variant to remove the percent sign from every candidate column and coerce them into integer columns. Here we will specify which variables to _not_ mutate at within `vars()`. 
 
-It's impor
+
+```{r}
+polls %>% 
+  select(-1) %>%  
+  setNames(new_names)%>%
+  select(-1) %>%
+  mutate_at(vars(-c("dates", "pollster", "sample", "sample_2")), 
+            ~as.integer(str_remove(., "%")))
+
+
+```
+
+Now we must tidy the data. We will use `tidyr::gather()` to transform the data from wide to long. In short, gather takes the column headers (the `key` argument) and creates a new variable from the values of the columns (the `value` argument). In this case, we will create a new column called `candidate` from the column headers and a second column called `points` which are a candidates polling percentage. Next we deselect any columns that we do not want to be gathered.
 
 ```{r}
 polls %>% 
   select(-1) %>% 
   setNames(new_names)%>%
   select(-1) %>%
-  mutate_at(vars(-c("dates", "pollster", "sample", "sample_2")), ~as.integer(str_remove(., "%"))) 
-
-
+  mutate_at(vars(-c("dates", "pollster", "sample", "sample_2")),
+            ~as.integer(str_remove(., "%"))) %>% 
+  gather(candidate, points, -dates, -pollster, -sample, -sample_2)
 ```
 
-This is almost great to work with. We now need to remove the first date column, and remove the commas
+There are a few more house-keeping things that need to be done to improve this data set. `sample_2` is rather uninformative. On the FiveThirtyEight website there is a key which describes what these values represent (`A = ADULTS, RV = REGISTERED VOTERS, V = VOTERS, LV = LIKELY VOTERS`). This should be specified in our data set. In addition the `sample` column ought to be cast into an integer column. And finally, those messy dates will need to be cleaned. My approach to this requires creating a function to handle this cleaning. First, the simple stuff.
+
+To do the first two above steps, we will continue our function chain and save it to a new variable `polls_tidy`.
+
+```{r}
+polls_tidy <- polls %>% 
+  select(-1) %>% 
+  setNames(new_names)%>%
+  select(-1) %>%
+  mutate_at(vars(-c("dates", "pollster", "sample", "sample_2")), 
+            ~as.integer(str_remove(., "%"))) %>% 
+  gather(candidate, points, -dates, -pollster, -sample, -sample_2) %>% 
+  mutate(sample_2 = case_when(
+    sample_2 == "RV" ~ "Registered Voters",
+    sample_2 == "LV" ~ "Likely Voters",
+    sample_2 == "A" ~ "Adults",
+    sample_2 == "V" ~ "Voters"
+  ),
+  sample = as.integer(str_remove(sample, ",")))
+
+polls_tidy
+```
+
+
+### Date cleaning 
+
+Next we must work to clean the date field. I find that when working with a messy column, creating a single function which handles the cleaning is one of the most effective approaches. Here we will create a function which takes a value provided from the `dates` field and return a cleaned date. There are two unique cases I identified. There are poll dates which occurred during a single month, or a poll that spanned two months. The dates are separated by a single hyphen `-`. If we split the date at `-` we will either receive two elements with a month indicated or one month with a day and a day number. In the latter case we will have to carry over the month. Then the year can be appended to it and parsed as a date using the `lubridate` package. For more on `lubridate` visit [here](https://lubridate.tidyverse.org/). 
+
+The function will only return one date at a time. The two arguments will be `date` and `.return` to indicate whether the first or second date should be provided. The internals of this function rely heavily on the `stringr` package (see R for Data Science [Chapter 14](https://r4ds.had.co.nz/strings.html)). `switch()` at the end of the function determines which date should be returned (see Advanced R [Chapter 5](https://adv-r.hadley.nz/control-flow.html)). 
+
+```{r}
+clean_date <- function(date, .return = "first") {
+  # take date and split at the comma to get the year and the month-day combo
+  date_split <- str_split(date, ",") %>% 
+    # remove from list / coerce to vector
+    unlist() %>% 
+    # remove extra white space
+    str_trim()
+  
+  # extract the year
+  date_year <- date_split[2]
+  
+  # split the month day portion and coerce to vector
+  dates <- unlist(str_split(date_split[1],  "-"))
+  
+  # paste the month day and year together then parse as date using `mdy()`
+  first_date <- paste(dates[1], date_year) %>% 
+    lubridate::mdy()
+  
+  second_date <- ifelse(!str_detect(dates[2], "[A-z]+"),
+                        yes = paste(str_extract(dates[1], "[A-z]+"), 
+                              dates[2], 
+                              date_year), 
+                        no = paste(dates[2], date_year)) %>% 
+    lubridate::mdy()
+  
+  switch(.return, 
+         first = return(first_date),
+         second = return(second_date)
+         )
+  
+}
+
+# test on a date
+clean_date(polls_tidy$dates[10], .return = "first")
+clean_date(polls_tidy$dates[10], .return = "second")
+```
+
+We can use this new function to create two new columns `poll_start` and `poll_end` using `mutate()`. Following this we can deselect the original `dates` column and save this to `polls_clean`.
+
+```{r}
+polls_clean <- polls_tidy %>% 
+  mutate(poll_start = clean_date(dates, "first"),
+         poll_end = clean_date(dates, "second")) %>% 
+  select(-dates)
+
+polls_clean
+```
+
+### Visualization
+
+The cleaned data can be aggregated and visualized.
+
+```{r}
+avg_polls <- polls_clean %>% 
+  group_by(candidate) %>% 
+  summarise(avg_points = mean(points, na.rm = TRUE),
+            min_points = min(points, na.rm = TRUE),
+            max_points = max(points, na.rm = TRUE),
+            n_polls = n() - sum(is.na(points))) %>% # identify how many polls candidate is in
+  # remove candidates who appear in 50 or fewer polls: i.e. HRC
+  filter(n_polls > 50) %>% 
+  arrange(-avg_points)
+```
+
+
+```{r}
+avg_polls %>% 
+  mutate(candidate = fct_reorder(candidate, avg_points)) %>% 
+  ggplot(aes(candidate, avg_points)) +
+  geom_col() + 
+  theme_minimal() +
+  coord_flip() +
+  labs(title = "Polls Standings", x = "", y = "%")
+```
+
