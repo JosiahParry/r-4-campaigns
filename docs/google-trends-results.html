@@ -239,20 +239,20 @@ popularity</code></pre>
 <span class="st">  </span><span class="kw">get_related_queries</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co"># picking queries for a random candidate</span>
 <span class="st">  </span><span class="kw">filter</span>(keyword <span class="op">==</span><span class="st"> </span><span class="kw">sample</span>(candidates, <span class="dv">1</span>))</code></pre>
-<pre><code>## # A tibble: 31 x 5
-##    subject related_queries value                 keyword      category     
-##    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;                 &lt;chr&gt;        &lt;chr&gt;        
-##  1 100     top             kamala harris husband Kamala Harr… All categori…
-##  2 17      top             kamala harris town h… Kamala Harr… All categori…
-##  3 16      top             trump                 Kamala Harr… All categori…
-##  4 16      top             microphone kamala ha… Kamala Harr… All categori…
-##  5 15      top             douglas emhoff        Kamala Harr… All categori…
-##  6 14      top             news                  Kamala Harr… All categori…
-##  7 13      top             elizabeth warren      Kamala Harr… All categori…
-##  8 11      top             kamala harris childr… Kamala Harr… All categori…
-##  9 9       top             kamala harris age     Kamala Harr… All categori…
-## 10 9       top             joe biden             Kamala Harr… All categori…
-## # … with 21 more rows</code></pre>
+<pre><code>## # A tibble: 36 x 5
+##    subject related_queries value                keyword   category      
+##    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;                &lt;chr&gt;     &lt;chr&gt;         
+##  1 100     top             trump                Joe Biden All categories
+##  2 43      top             joe biden 2020       Joe Biden All categories
+##  3 39      top             joe biden age        Joe Biden All categories
+##  4 38      top             bernie sanders       Joe Biden All categories
+##  5 38      top             donald trump         Joe Biden All categories
+##  6 23      top             joe biden news       Joe Biden All categories
+##  7 18      top             how old is joe biden Joe Biden All categories
+##  8 17      top             joe biden campaign   Joe Biden All categories
+##  9 17      top             creepy joe biden     Joe Biden All categories
+## 10 17      top             joe biden twitter    Joe Biden All categories
+## # … with 26 more rows</code></pre>
 </div>
 <div id="visualizing-trends" class="section level2">
 <h2><span class="header-section-number">8.3</span> Visualizing Trends</h2>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Example | R for Pogressive Campaigns</title>
+  <meta name="description" content="Chapter 11 Example | R for Pogressive Campaigns" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Example | R for Pogressive Campaigns" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Example | R for Pogressive Campaigns" />
+  
+  
+  
+
+<meta name="author" content="Josiah Parry" />
+
+
+<meta name="date" content="2019-06-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="web-scraping-polling-use-case.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R for Campaigns</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> This will be a preface</a></li>
+<li class="chapter" data-level="2" data-path="calculating-ptg.html"><a href="calculating-ptg.html"><i class="fa fa-check"></i><b>2</b> calculating PTG</a></li>
+<li class="chapter" data-level="3" data-path="ptg-sql.html"><a href="ptg-sql.html"><i class="fa fa-check"></i><b>3</b> ptg-sql</a></li>
+<li class="chapter" data-level="4" data-path="reporting-googlesheets.html"><a href="reporting-googlesheets.html"><i class="fa fa-check"></i><b>4</b> reporting-googlesheets</a></li>
+<li class="chapter" data-level="5" data-path="reporting.html"><a href="reporting.html"><i class="fa fa-check"></i><b>5</b> reporting</a></li>
+<li class="chapter" data-level="6" data-path="mapping-doors-targets.html"><a href="mapping-doors-targets.html"><i class="fa fa-check"></i><b>6</b> mapping-doors-targets</a></li>
+<li class="chapter" data-level="7" data-path="shiny-creating-interactive-dashboards.html"><a href="shiny-creating-interactive-dashboards.html"><i class="fa fa-check"></i><b>7</b> shiny - creating interactive dashboards</a></li>
+<li class="chapter" data-level="8" data-path="google-trends-results.html"><a href="google-trends-results.html"><i class="fa fa-check"></i><b>8</b> google trends results</a><ul>
+<li class="chapter" data-level="8.1" data-path="google-trends-results.html"><a href="google-trends-results.html#google-trends-data"><i class="fa fa-check"></i><b>8.1</b> Google Trends Data</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="google-trends-results.html"><a href="google-trends-results.html#relative-popularity"><i class="fa fa-check"></i><b>8.1.1</b> Relative Popularity</a></li>
+<li class="chapter" data-level="8.1.2" data-path="google-trends-results.html"><a href="google-trends-results.html#related-queries"><i class="fa fa-check"></i><b>8.1.2</b> Related Queries</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="google-trends-results.html"><a href="google-trends-results.html#trendyy"><i class="fa fa-check"></i><b>8.2</b> <code>trendyy</code></a></li>
+<li class="chapter" data-level="8.3" data-path="google-trends-results.html"><a href="google-trends-results.html#visualizing-trends"><i class="fa fa-check"></i><b>8.3</b> Visualizing Trends</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>9</b> workflow</a></li>
+<li class="chapter" data-level="10" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html"><i class="fa fa-check"></i><b>10</b> Web-Scraping: Polling use case</a><ul>
+<li class="chapter" data-level="10.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#understanding-rvest"><i class="fa fa-check"></i><b>10.1</b> Understanding <code>rvest</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="example.html"><a href="example.html"><i class="fa fa-check"></i><b>11</b> Example</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="example" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Example</h1>
+<p>For this example we will be scraping FiveThirtyEight’s aggregated poll table. The table can be found at <a href="https://projects.fivethirtyeight.com/2020-primaries/democratic/national/" class="uri">https://projects.fivethirtyeight.com/2020-primaries/democratic/national/</a>.</p>
+<p>Before we begin, we must always prepare our workspace. Mise en place.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
+<span class="kw">library</span>(tidyverse)</code></pre>
+<p>The first thing we will have to do is specify what page we will be scraping from. <code>html_session()</code> will simulate a session in an html browser. By providing a url to <code>html_session()</code> we will then be able to access the underlying code of that page. Create an object called <code>session</code> by providing the FiveThirtyEight url to <code>html_session()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">session &lt;-<span class="st"> </span><span class="kw">html_session</span>(<span class="st">&quot;https://projects.fivethirtyeight.com/2020-primaries/democratic/national/&quot;</span>)</code></pre>
+<p>The next and most important step is to identify which piece of HTML code contains the table. The easiest way to do this is to open up the webpage in Chrome and open up the Inspect Elements view (on Mac - ⌘ + Shift + C). Now that this is open, click the select element button at the top left corner of the inspection pane. Now hover over the table.</p>
+<p>You will see that the HTML element is highlighted. We can see that it is a <code>table</code> tag. Additionally we see that there are two different classes <code>polls-table</code> and <code>tracker</code>. To specify a class we put a preceeding <code>.</code> to the class name—i.e. <code>.class-name</code>. If there are multiple classess we just append the second class named to it—i.e. <code>.first-class.second-class</code>. Be aware that these selectors can be quite finicky and be a bit difficult to figure out. You might need to do some googling or playing around with the selector.</p>
+<p>To actually access the content of this HTML element, we must specify the element using the proper selector. <code>html_node()</code> will be used to do this. Provide the html session and the css selector to <code>html_node()</code> to extract the HTML element.</p>
+<pre class="sourceCode r"><code class="sourceCode r">session <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_node</span>(<span class="st">&quot;.polls-table.tracker&quot;</span>)</code></pre>
+<pre><code>## {xml_node}
+## &lt;table class=&quot;polls-table tracker&quot;&gt;
+## [1] &lt;thead class=&quot;hide-mobile&quot; id=&quot;table-header&quot;&gt;&lt;tr&gt;\n&lt;th class=&quot;new&quot;&gt;&lt; ...
+## [2] &lt;tbody&gt;\n&lt;tr class=&quot;visible-row&quot; data-id=&quot;97589&quot;&gt;\n&lt;!-- Shared--&gt;&lt;td ...</code></pre>
+<p>Here we see that this returns on object of class <code>xml_node</code>. This object returns some HTML code but it is still not entirely workable. Since this is an HTML table we want to extract we can use the handy <code>html_table()</code>. Note that if this wasn’t a table but rather text, you can use <code>html_text()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">session <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_node</span>(<span class="st">&quot;.polls-table.tracker&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_table</span>()</code></pre>
+<p>Take note of the extremely informative error. It appears we might have to deal with mismatching columns.</p>
+<pre class="sourceCode r"><code class="sourceCode r">session <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_node</span>(<span class="st">&quot;.polls-table.tracker&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_table</span>(<span class="dt">fill =</span> <span class="ot">TRUE</span>)</code></pre>
+<pre><code>##                            Dates           Pollster               Sample
+## 1  •  May 29-Jun 5, 20192,271 RV May 29-Jun 5, 2019              B+Ipsos
+## 2  •   May 29-Jun 5, 20192,525 A May 29-Jun 5, 2019              B+Ipsos
+## 3  •         Jun 2-4, 2019500 RV      Jun 2-4, 2019              BYouGov
+## 4  •          Jun 2-4, 2019550 A      Jun 2-4, 2019              BYouGov
+## 5  •         Jun 1-2, 2019431 RV      Jun 1-2, 2019            C+HarrisX
+## 6  • May 27-Jun 2, 201916,587 LV May 27-Jun 2, 2019    B-Morning Consult
+## 7  •       May 28-31, 2019412 RV    May 28-31, 2019           A-CNN/SSRS
+## 8  •       May 29-30, 2019471 RV    May 29-30, 2019 C+Harris Interactive
+## 9  •       May 28-30, 2019881 RV    May 28-30, 2019            C+HarrisX
+## 10 •       May 28-30, 2019881 RV    May 28-30, 2019            C+HarrisX
+## 11 •       May 28-30, 2019881 RV    May 28-30, 2019            C+HarrisX
+## 12 •       May 28-30, 2019881 RV    May 28-30, 2019            C+HarrisX
+## 13 •       May 28-30, 2019881 RV    May 28-30, 2019            C+HarrisX
+## 14 •    May 20-26, 201916,368 LV    May 20-26, 2019    B-Morning Consult
+## 15 •       May 23-25, 2019881 RV    May 23-25, 2019            C+HarrisX
+## 16 •       May 20-21, 2019447 RV    May 20-21, 2019     Echelon Insights
+##    Sample Biden Sanders Harris Warren O&#39;Rourke Buttigieg Booker Klobuchar
+## 1   2,271    RV     31%    14%     6%       9%        3%     5%        2%
+## 2   2,525     A     30%    15%     6%       8%        4%     5%        2%
+## 3     500    RV     27%    15%     9%      12%        2%    10%        2%
+## 4     550     A     27%    16%     8%      11%        2%     9%        2%
+## 5     431    RV     35%    16%     4%       5%        4%     8%        3%
+## 6  16,587    LV     38%    19%     7%      10%        4%     7%        3%
+## 7     412    RV     32%    18%     8%       7%        5%     5%        3%
+## 8     471    RV     36%    17%     8%       5%        4%     5%        3%
+## 9     881    RV            42%    37%                                    
+## 10    881    RV     41%           38%                                    
+## 11    881    RV     43%    41%                                           
+## 12    881    RV            37%             40%                           
+## 13    881    RV     39%                    41%                           
+## 14 16,368    LV     38%    20%     7%       9%        4%     7%        3%
+## 15    881    RV     33%    15%     6%       7%        3%     5%        3%
+## 16    447    RV     66%                    19%                           
+##    Castro Yang Gillibrand Hickenlooper Gabbard Delaney Inslee Ryan Bullock
+## 1      2%   1%         1%           0%      1%      1%     0%   0%      1%
+## 2      1%   0%         1%           0%      1%      1%     0%   0%      1%
+## 3      1%   0%         1%           0%      1%      1%     1%   0%      0%
+## 4      1%   0%         1%           0%      1%      1%     1%   0%      0%
+## 5      1%   0%         0%           0%      1%      0%     0%   0%      0%
+## 6      1%   1%         1%           1%      1%      1%     1%   1%      1%
+## 7      2%   2%         1%           1%      0%      1%     0%   1%      1%
+## 8      0%   1%         1%           0%      1%      0%     1%   1%      1%
+## 9                                                                         
+## 10                                                                        
+## 11                                                                        
+## 12                                                                        
+## 13                                                                        
+## 14     1%   1%         1%           1%      1%      1%     1%   0%      1%
+## 15     1%   1%         1%           1%      1%      0%     1%   1%      1%
+## 16                                                                        
+##    de Blasio Bennet Williamson Gravel Swalwell Moulton Messam H. Clinton
+## 1         0%     1%         0%     0%       0%      0%     0%         0%
+## 2         0%     1%         0%     0%       0%      0%     0%         0%
+## 3         1%     2%         0%     0%       0%      0%     0%         0%
+## 4         1%     2%         0%     0%       0%      0%     0%         0%
+## 5         0%     0%         1%     1%       0%      0%     0%         0%
+## 6         1%     1%         1%     1%               0%     0%           
+## 7         0%     0%         1%     0%               0%     0%         0%
+## 8                                  0%       1%      0%     0%         0%
+## 9                                                                       
+## 10                                                                      
+## 11                                                                      
+## 12                                                                      
+## 13                                                                      
+## 14        1%     0%         1%     1%               0%     0%           
+## 15                                 0%       0%      0%     0%         0%
+## 16                                                                      
+##    Bloomberg M. Obama Brown Kerry Abrams Holder McAuliffe Winfrey Ojeda
+## 1                                                                      
+## 2                                                                      
+## 3                                                                      
+## 4                                                                      
+## 5                                                                      
+## 6                                                                      
+## 7                                                                      
+## 8                  1%                                                  
+## 9                                                                      
+## 10                                                                     
+## 11                                                                     
+## 12                                                                     
+## 13                                                                     
+## 14                                                                     
+## 15                                                                     
+## 16                                                                     
+##    Trump Cuomo Avenatti Kennedy Patrick Zuckerberg Pelosi Garcetti Newsom
+## 1                                                                        
+## 2                                                                        
+## 3                                                                        
+## 4                                                                        
+## 5                                                                        
+## 6                                                                        
+## 7                                                                        
+## 8                                                                        
+## 9                                                                        
+## 10                                                                       
+## 11                                                                       
+## 12                                                                       
+## 13                                                                       
+## 14                                                                       
+## 15                                                                       
+## 16                                                                       
+##    Steyer Schultz Kaine Johnson Kucinich Lee Scott Sinema Warner NA
+## 1                                                                  
+## 2                                                                  
+## 3                                                                  
+## 4                                                                  
+## 5                                                                  
+## 6                                                                  
+## 7                                                                  
+## 8                                                                  
+## 9                                                                  
+## 10                                                                 
+## 11                                                                 
+## 12                                                                 
+## 13                                                                 
+## 14                                                                 
+## 15                                                                 
+## 16                                                                 
+##                                                                                                                                                                                                                                 NA
+## 1    Biden31%Sanders14%Warren9%Harris6%Buttigieg5%O&#39;Rourke3%Booker2%Klobuchar2%Castro1%Gabbard1%Hickenlooper1%Yang1%Ryan1%de Blasio1%Gillibrand0%Bullock0%Inslee0%Delaney0%Williamson0%Messam0%Swalwell0%Moulton0%Bennet0%Gravel0%
+## 2    Biden30%Sanders15%Warren8%Harris6%Buttigieg5%O&#39;Rourke4%Booker2%Klobuchar1%Gabbard1%Hickenlooper1%Yang1%Ryan1%de Blasio1%Castro0%Gillibrand0%Bullock0%Inslee0%Delaney0%Williamson0%Messam0%Swalwell0%Moulton0%Bennet0%Gravel0%
+## 3  Biden27%Sanders15%Warren12%Buttigieg10%Harris9%Booker2%de Blasio2%O&#39;Rourke2%Bullock1%Delaney1%Gabbard1%Hickenlooper1%Klobuchar1%Yang1%Bennet0%Castro0%Gillibrand0%Gravel0%Inslee0%Messam0%Moulton0%Ryan0%Swalwell0%Williamson0%
+## 4   Biden27%Sanders16%Warren11%Buttigieg9%Harris8%Booker2%de Blasio2%O&#39;Rourke2%Bullock1%Delaney1%Gabbard1%Hickenlooper1%Klobuchar1%Yang1%Bennet0%Castro0%Gillibrand0%Gravel0%Inslee0%Messam0%Moulton0%Ryan0%Swalwell0%Williamson0%
+## 5    Biden35%Sanders16%Buttigieg8%Warren5%Harris4%O&#39;Rourke4%Booker3%Klobuchar1%Hickenlooper1%Williamson1%Bennet1%Yang0%Ryan0%Bullock0%Castro0%de Blasio0%Delaney0%Gabbard0%Gillibrand0%Inslee0%Swalwell0%Gravel0%Moulton0%Messam0%
+## 6                   Biden38%Sanders19%Warren10%Harris7%Buttigieg7%O&#39;Rourke4%Booker3%Bennet1%Bullock1%Castro1%de Blasio1%Delaney1%Gabbard1%Gillibrand1%Hickenlooper1%Inslee1%Klobuchar1%Ryan1%Yang1%Williamson1%Moulton0%Swalwell0%
+## 7            Biden32%Sanders18%Harris8%Warren7%Buttigieg5%O&#39;Rourke5%Booker3%Castro2%Klobuchar2%Bennet1%Gabbard1%Gillibrand1%Inslee1%Ryan1%Yang1%de Blasio0%Delaney0%Hickenlooper0%Williamson0%Bullock0%Messam0%Moulton0%Swalwell0%
+## 8                     Biden36%Sanders17%Harris8%Warren5%Buttigieg5%O&#39;Rourke4%Booker3%Hickenlooper1%Gravel1%Ryan1%Yang1%Castro1%Bloomberg1%Inslee1%Delaney1%Swalwell0%Gillibrand0%Moulton0%Gabbard0%Klobuchar0%Williamson0%Messam0%
+## 9                                                                                                                                                                                                              Sanders42%Harris37%
+## 10                                                                                                                                                                                                               Biden41%Harris38%
+## 11                                                                                                                                                                                                              Biden43%Sanders41%
+## 12                                                                                                                                                                                                             Warren40%Sanders37%
+## 13                                                                                                                                                                                                               Warren41%Biden39%
+## 14                   Biden38%Sanders20%Warren9%Buttigieg7%Harris7%O&#39;Rourke4%Booker3%Bennet1%Castro1%Delaney1%Gillibrand1%Hickenlooper1%Klobuchar1%Yang1%Williamson1%Bullock1%Ryan1%Gabbard1%de Blasio0%Inslee0%Moulton0%Swalwell0%
+## 15                               Biden33%Sanders15%Warren7%Harris6%Buttigieg5%Booker3%O&#39;Rourke3%Castro1%Delaney1%Gillibrand1%Hickenlooper1%Inslee1%Klobuchar1%Yang1%Ryan1%Gabbard0%Williamson0%Gravel0%Messam0%Moulton0%Swalwell0%
+## 16                                                                                                                                                                                                               Biden66%Warren19%
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 98 rows ]</code></pre>
+<p>This is much better! But based on visual insepction the column headers are not properly matched. There are a few things that need to be sorted out: there are two date columns, there are commas and percents where numeric columns should be, the column headers are a little messy, and the table isn’t a tibble (this is just personal preference).</p>
+<p>We will handle the final two issues first as they are easiest to deal with. The function <code>clean_names()</code> from <code>janitor</code> will handle the column headers, and <code>as_tibble()</code> will coerce the data.frame into a proper tibble. Save this semi-clean tibble into an object called <code>polls</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">polls &lt;-<span class="st"> </span>session <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_node</span>(<span class="st">&quot;.polls-table.tracker&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_table</span>(<span class="dt">fill =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">as_tibble</span>()
+
+polls</code></pre>
+<pre><code>## # A tibble: 114 x 59
+##    x     dates pollster sample sample_2 biden sanders harris warren
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; 
+##  1 •     May … May 29-… B+Ips… 2,271    RV    31%     14%    6%    
+##  2 •     May … May 29-… B+Ips… 2,525    A     30%     15%    6%    
+##  3 •     Jun … Jun 2-4… BYouG… 500      RV    27%     15%    9%    
+##  4 •     Jun … Jun 2-4… BYouG… 550      A     27%     16%    8%    
+##  5 •     Jun … Jun 1-2… C+Har… 431      RV    35%     16%    4%    
+##  6 •     May … May 27-… B-Mor… 16,587   LV    38%     19%    7%    
+##  7 •     May … May 28-… A-CNN… 412      RV    32%     18%    8%    
+##  8 •     May … May 29-… C+Har… 471      RV    36%     17%    8%    
+##  9 •     May … May 28-… C+Har… 881      RV    &quot;&quot;      42%    37%   
+## 10 •     May … May 28-… C+Har… 881      RV    41%     &quot;&quot;     38%   
+## # … with 104 more rows, and 50 more variables: o_rourke &lt;chr&gt;,
+## #   buttigieg &lt;chr&gt;, booker &lt;chr&gt;, klobuchar &lt;chr&gt;, castro &lt;chr&gt;,
+## #   yang &lt;chr&gt;, gillibrand &lt;chr&gt;, hickenlooper &lt;chr&gt;, gabbard &lt;chr&gt;,
+## #   delaney &lt;chr&gt;, inslee &lt;chr&gt;, ryan &lt;chr&gt;, bullock &lt;chr&gt;,
+## #   de_blasio &lt;chr&gt;, bennet &lt;chr&gt;, williamson &lt;chr&gt;, gravel &lt;chr&gt;,
+## #   swalwell &lt;chr&gt;, moulton &lt;chr&gt;, messam &lt;chr&gt;, h_clinton &lt;chr&gt;,
+## #   bloomberg &lt;chr&gt;, m_obama &lt;chr&gt;, brown &lt;chr&gt;, kerry &lt;chr&gt;,
+## #   abrams &lt;chr&gt;, holder &lt;chr&gt;, mc_auliffe &lt;chr&gt;, winfrey &lt;chr&gt;,
+## #   ojeda &lt;chr&gt;, trump &lt;chr&gt;, cuomo &lt;chr&gt;, avenatti &lt;chr&gt;, kennedy &lt;chr&gt;,
+## #   patrick &lt;chr&gt;, zuckerberg &lt;chr&gt;, pelosi &lt;chr&gt;, garcetti &lt;chr&gt;,
+## #   newsom &lt;chr&gt;, steyer &lt;chr&gt;, schultz &lt;chr&gt;, kaine &lt;chr&gt;, johnson &lt;chr&gt;,
+## #   kucinich &lt;chr&gt;, lee &lt;chr&gt;, scott &lt;chr&gt;, sinema &lt;chr&gt;, warner &lt;chr&gt;,
+## #   na &lt;chr&gt;, na_2 &lt;chr&gt;</code></pre>
+<p>We want to shift over the column names to the right just once. Unfortunately there is no elegant way to do this (that I am aware of). We can see that the first column is completely useless so that can be removed. Once that column is removed we can reset the names this way they will be well aligned.</p>
+<p>We will start by creating a vector of the original column names.</p>
+<pre class="sourceCode r"><code class="sourceCode r">col_names &lt;-<span class="st"> </span><span class="kw">names</span>(polls)
+col_names</code></pre>
+<pre><code>##  [1] &quot;x&quot;            &quot;dates&quot;        &quot;pollster&quot;     &quot;sample&quot;      
+##  [5] &quot;sample_2&quot;     &quot;biden&quot;        &quot;sanders&quot;      &quot;harris&quot;      
+##  [9] &quot;warren&quot;       &quot;o_rourke&quot;     &quot;buttigieg&quot;    &quot;booker&quot;      
+## [13] &quot;klobuchar&quot;    &quot;castro&quot;       &quot;yang&quot;         &quot;gillibrand&quot;  
+## [17] &quot;hickenlooper&quot; &quot;gabbard&quot;      &quot;delaney&quot;      &quot;inslee&quot;      
+## [21] &quot;ryan&quot;         &quot;bullock&quot;      &quot;de_blasio&quot;    &quot;bennet&quot;      
+## [25] &quot;williamson&quot;   &quot;gravel&quot;       &quot;swalwell&quot;     &quot;moulton&quot;     
+## [29] &quot;messam&quot;       &quot;h_clinton&quot;    &quot;bloomberg&quot;    &quot;m_obama&quot;     
+## [33] &quot;brown&quot;        &quot;kerry&quot;        &quot;abrams&quot;       &quot;holder&quot;      
+## [37] &quot;mc_auliffe&quot;   &quot;winfrey&quot;      &quot;ojeda&quot;        &quot;trump&quot;       
+## [41] &quot;cuomo&quot;        &quot;avenatti&quot;     &quot;kennedy&quot;      &quot;patrick&quot;     
+## [45] &quot;zuckerberg&quot;   &quot;pelosi&quot;       &quot;garcetti&quot;     &quot;newsom&quot;      
+## [49] &quot;steyer&quot;       &quot;schultz&quot;      &quot;kaine&quot;        &quot;johnson&quot;     
+## [53] &quot;kucinich&quot;     &quot;lee&quot;          &quot;scott&quot;        &quot;sinema&quot;      
+## [57] &quot;warner&quot;       &quot;na&quot;           &quot;na_2&quot;</code></pre>
+<p>Unfortunately this also presents another issue. Once a column is deselected, there will be one more column name than column. So we will need to select all but the last element of the original names. We will create a vector called <code>new_names</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># identify the integer number of the last column</span>
+last_col &lt;-<span class="st"> </span><span class="kw">length</span>(col_names) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
+
+<span class="co"># create a vector which will be used for the new names</span>
+new_names &lt;-<span class="st"> </span>col_names[<span class="dv">1</span><span class="op">:</span>last_col]</code></pre>
+<p>Now we can try implementing the hacky solution. Here we will deselect the first column and reset the names using <code>setNames()</code>. Following, we will use the <a href="https://dplyr.tidyverse.org/reference/mutate_all.html"><code>mutate_at()</code></a> variant to remove the percent sign from every candidate column and coerce them into integer columns. Here we will sepecify which variables to <em>not</em> mutate at within <code>vars()</code>.</p>
+<p>It’s impor</p>
+<pre class="sourceCode r"><code class="sourceCode r">polls <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">setNames</span>(new_names)<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;dates&quot;</span>, <span class="st">&quot;pollster&quot;</span>, <span class="st">&quot;sample&quot;</span>, <span class="st">&quot;sample_2&quot;</span>)), <span class="op">~</span><span class="kw">as.integer</span>(<span class="kw">str_remove</span>(., <span class="st">&quot;%&quot;</span>))) </code></pre>
+<pre><code>## Warning in (structure(function (..., .x = ..1, .y = ..2, . = ..1) : NAs
+## introduced by coercion</code></pre>
+<pre><code>## # A tibble: 114 x 57
+##    dates pollster sample sample_2 biden sanders harris warren o_rourke
+##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;  &lt;int&gt;  &lt;int&gt;    &lt;int&gt;
+##  1 May … B+Ipsos  2,271  RV          31      14      6      9        3
+##  2 May … B+Ipsos  2,525  A           30      15      6      8        4
+##  3 Jun … BYouGov  500    RV          27      15      9     12        2
+##  4 Jun … BYouGov  550    A           27      16      8     11        2
+##  5 Jun … C+Harri… 431    RV          35      16      4      5        4
+##  6 May … B-Morni… 16,587 LV          38      19      7     10        4
+##  7 May … A-CNN/S… 412    RV          32      18      8      7        5
+##  8 May … C+Harri… 471    RV          36      17      8      5        4
+##  9 May … C+Harri… 881    RV          NA      42     37     NA       NA
+## 10 May … C+Harri… 881    RV          41      NA     38     NA       NA
+## # … with 104 more rows, and 48 more variables: buttigieg &lt;int&gt;,
+## #   booker &lt;int&gt;, klobuchar &lt;int&gt;, castro &lt;int&gt;, yang &lt;int&gt;,
+## #   gillibrand &lt;int&gt;, hickenlooper &lt;int&gt;, gabbard &lt;int&gt;, delaney &lt;int&gt;,
+## #   inslee &lt;int&gt;, ryan &lt;int&gt;, bullock &lt;int&gt;, de_blasio &lt;int&gt;,
+## #   bennet &lt;int&gt;, williamson &lt;int&gt;, gravel &lt;int&gt;, swalwell &lt;int&gt;,
+## #   moulton &lt;int&gt;, messam &lt;int&gt;, h_clinton &lt;int&gt;, bloomberg &lt;int&gt;,
+## #   m_obama &lt;int&gt;, brown &lt;int&gt;, kerry &lt;int&gt;, abrams &lt;int&gt;, holder &lt;int&gt;,
+## #   mc_auliffe &lt;int&gt;, winfrey &lt;int&gt;, ojeda &lt;int&gt;, trump &lt;int&gt;,
+## #   cuomo &lt;int&gt;, avenatti &lt;int&gt;, kennedy &lt;int&gt;, patrick &lt;int&gt;,
+## #   zuckerberg &lt;int&gt;, pelosi &lt;int&gt;, garcetti &lt;int&gt;, newsom &lt;int&gt;,
+## #   steyer &lt;int&gt;, schultz &lt;int&gt;, kaine &lt;int&gt;, johnson &lt;int&gt;,
+## #   kucinich &lt;int&gt;, lee &lt;int&gt;, scott &lt;int&gt;, sinema &lt;int&gt;, warner &lt;int&gt;,
+## #   na &lt;int&gt;</code></pre>
+<p>This is almost great to work with. We now need to remove the first date column, and remove the commas</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="web-scraping-polling-use-case.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["r4c.pdf", "r4c.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

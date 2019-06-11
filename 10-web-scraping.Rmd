@@ -43,7 +43,7 @@ session %>%
 
 Here we see that this returns on object of class `xml_node`. This object returns some HTML code but it is still not entirely workable. Since this is an HTML table we want to extract we can use the handy `html_table()`. Note that if this wasn't a table but rather text, you can use `html_text()`.
 
-```{r}
+```{r eval = FALSE}
 session %>% 
   html_node(".polls-table.tracker") %>% 
   html_table()
