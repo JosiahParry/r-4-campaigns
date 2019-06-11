@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-06-10" />
+<meta name="date" content="2019-06-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -147,8 +147,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>9</b> workflow</a></li>
 <li class="chapter" data-level="10" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html"><i class="fa fa-check"></i><b>10</b> Web-Scraping: Polling use case</a><ul>
 <li class="chapter" data-level="10.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#understanding-rvest"><i class="fa fa-check"></i><b>10.1</b> Understanding <code>rvest</code></a></li>
+<li class="chapter" data-level="10.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#example"><i class="fa fa-check"></i><b>10.2</b> Example</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#date-cleaning"><i class="fa fa-check"></i><b>10.2.1</b> Date cleaning</a></li>
+<li class="chapter" data-level="10.2.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#visualization"><i class="fa fa-check"></i><b>10.2.2</b> Visualization</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="example.html"><a href="example.html"><i class="fa fa-check"></i><b>11</b> Example</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
 
@@ -210,49 +213,49 @@ candidate_trends</code></pre>
 ## # A tibble: 5 x 5
 ##   keyword          max_hits min_hits from       to        
 ##   &lt;chr&gt;               &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;    
-## 1 Bernie Sanders         41       32 2019-05-27 2019-06-07
-## 2 Beto O&#39;Rourke           2        1 2019-05-27 2019-06-07
-## 3 Elizabeth Warren       69       16 2019-05-27 2019-06-07
-## 4 Joe Biden              72       35 2019-05-27 2019-06-07
-## 5 Kamala Harris         100       13 2019-05-27 2019-06-07</code></pre>
+## 1 Bernie Sanders         42       34 2019-05-28 2019-06-09
+## 2 Beto O&#39;Rourke           2        1 2019-05-28 2019-06-09
+## 3 Elizabeth Warren       72       23 2019-05-28 2019-06-09
+## 4 Joe Biden              70       34 2019-05-28 2019-06-09
+## 5 Kamala Harris         100       14 2019-05-28 2019-06-09</code></pre>
 <p>Trendy creates an object of class <code>trendy</code> see <code>class(candidate_trends)</code> trendy. There are a number of accessor functions. We will use <code>get_interest()</code> and <code>get_related_queries()</code>. See the documentation of the others.</p>
 <p>To access to relative popularity, we will use <code>get_interest(trendy)</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">popularity &lt;-<span class="st"> </span><span class="kw">get_interest</span>(candidate_trends)
 
 popularity</code></pre>
-<pre><code>## # A tibble: 60 x 7
+<pre><code>## # A tibble: 65 x 7
 ##    date                 hits geo   time          keyword  gprop category   
 ##    &lt;dttm&gt;              &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      
-##  1 2019-05-27 00:00:00    47 world 2019-05-27 2… Joe Bid… web   All catego…
-##  2 2019-05-28 00:00:00    61 world 2019-05-27 2… Joe Bid… web   All catego…
-##  3 2019-05-29 00:00:00    72 world 2019-05-27 2… Joe Bid… web   All catego…
-##  4 2019-05-30 00:00:00    59 world 2019-05-27 2… Joe Bid… web   All catego…
-##  5 2019-05-31 00:00:00    41 world 2019-05-27 2… Joe Bid… web   All catego…
-##  6 2019-06-01 00:00:00    36 world 2019-05-27 2… Joe Bid… web   All catego…
-##  7 2019-06-02 00:00:00    35 world 2019-05-27 2… Joe Bid… web   All catego…
-##  8 2019-06-03 00:00:00    38 world 2019-05-27 2… Joe Bid… web   All catego…
-##  9 2019-06-04 00:00:00    44 world 2019-05-27 2… Joe Bid… web   All catego…
-## 10 2019-06-05 00:00:00    51 world 2019-05-27 2… Joe Bid… web   All catego…
-## # … with 50 more rows</code></pre>
+##  1 2019-05-28 00:00:00    55 world 2019-05-28 2… Joe Bid… web   All catego…
+##  2 2019-05-29 00:00:00    70 world 2019-05-28 2… Joe Bid… web   All catego…
+##  3 2019-05-30 00:00:00    54 world 2019-05-28 2… Joe Bid… web   All catego…
+##  4 2019-05-31 00:00:00    44 world 2019-05-28 2… Joe Bid… web   All catego…
+##  5 2019-06-01 00:00:00    38 world 2019-05-28 2… Joe Bid… web   All catego…
+##  6 2019-06-02 00:00:00    40 world 2019-05-28 2… Joe Bid… web   All catego…
+##  7 2019-06-03 00:00:00    34 world 2019-05-28 2… Joe Bid… web   All catego…
+##  8 2019-06-04 00:00:00    49 world 2019-05-28 2… Joe Bid… web   All catego…
+##  9 2019-06-05 00:00:00    56 world 2019-05-28 2… Joe Bid… web   All catego…
+## 10 2019-06-06 00:00:00    50 world 2019-05-28 2… Joe Bid… web   All catego…
+## # … with 55 more rows</code></pre>
 <p>For related queries we will use <code>get_related_queries(trendy)</code>. Note that you can either pipe the object or pass it directly.</p>
 <pre class="sourceCode r"><code class="sourceCode r">candidate_trends <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">get_related_queries</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co"># picking queries for a random candidate</span>
 <span class="st">  </span><span class="kw">filter</span>(keyword <span class="op">==</span><span class="st"> </span><span class="kw">sample</span>(candidates, <span class="dv">1</span>))</code></pre>
-<pre><code>## # A tibble: 36 x 5
-##    subject related_queries value                keyword   category      
-##    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;                &lt;chr&gt;     &lt;chr&gt;         
-##  1 100     top             trump                Joe Biden All categories
-##  2 43      top             joe biden 2020       Joe Biden All categories
-##  3 39      top             joe biden age        Joe Biden All categories
-##  4 38      top             bernie sanders       Joe Biden All categories
-##  5 38      top             donald trump         Joe Biden All categories
-##  6 23      top             joe biden news       Joe Biden All categories
-##  7 18      top             how old is joe biden Joe Biden All categories
-##  8 17      top             joe biden campaign   Joe Biden All categories
-##  9 17      top             creepy joe biden     Joe Biden All categories
-## 10 17      top             joe biden twitter    Joe Biden All categories
-## # … with 26 more rows</code></pre>
+<pre><code>## # A tibble: 32 x 5
+##    subject related_queries value                 keyword      category     
+##    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;                 &lt;chr&gt;        &lt;chr&gt;        
+##  1 100     top             kamala harris husband Kamala Harr… All categori…
+##  2 27      top             kamala harris 2020    Kamala Harr… All categori…
+##  3 25      top             elizabeth warren      Kamala Harr… All categori…
+##  4 23      top             trump                 Kamala Harr… All categori…
+##  5 20      top             kamala harris town h… Kamala Harr… All categori…
+##  6 20      top             douglas emhoff        Kamala Harr… All categori…
+##  7 18      top             kamala harris protes… Kamala Harr… All categori…
+##  8 18      top             kamala harris microp… Kamala Harr… All categori…
+##  9 17      top             joe biden             Kamala Harr… All categori…
+## 10 11      top             bernie sanders        Kamala Harr… All categori…
+## # … with 22 more rows</code></pre>
 </div>
 <div id="visualizing-trends" class="section level2">
 <h2><span class="header-section-number">8.3</span> Visualizing Trends</h2>
