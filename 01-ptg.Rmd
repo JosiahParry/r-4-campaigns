@@ -30,6 +30,7 @@ Steps:
 
 ```{r}
 library(tidyverse)
+library(lubridate)
 
 canvass <- read_csv("data/canvassing_results.csv")
 canvass

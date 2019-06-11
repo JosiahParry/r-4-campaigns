@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Web-Scraping: Polling use case | R for Pogressive Campaigns</title>
+  <meta name="description" content="Chapter 9 Web-Scraping: Polling use case | R for Pogressive Campaigns" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Web-Scraping: Polling use case | R for Pogressive Campaigns" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Web-Scraping: Polling use case | R for Pogressive Campaigns" />
+  
+  
+  
+
+<meta name="author" content="Josiah Parry" />
+
+
+<meta name="date" content="2019-06-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="workflow.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R for Campaigns</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="calculating-ptg.html"><a href="calculating-ptg.html"><i class="fa fa-check"></i><b>1</b> calculating PTG</a></li>
+<li class="chapter" data-level="2" data-path="ptg-sql.html"><a href="ptg-sql.html"><i class="fa fa-check"></i><b>2</b> ptg-sql</a></li>
+<li class="chapter" data-level="3" data-path="reporting-googlesheets.html"><a href="reporting-googlesheets.html"><i class="fa fa-check"></i><b>3</b> reporting-googlesheets</a></li>
+<li class="chapter" data-level="4" data-path="reporting.html"><a href="reporting.html"><i class="fa fa-check"></i><b>4</b> reporting</a></li>
+<li class="chapter" data-level="5" data-path="mapping-doors-targets.html"><a href="mapping-doors-targets.html"><i class="fa fa-check"></i><b>5</b> mapping-doors-targets</a></li>
+<li class="chapter" data-level="6" data-path="shiny-creating-interactive-dashboards.html"><a href="shiny-creating-interactive-dashboards.html"><i class="fa fa-check"></i><b>6</b> shiny - creating interactive dashboards</a></li>
+<li class="chapter" data-level="7" data-path="google-trends-results.html"><a href="google-trends-results.html"><i class="fa fa-check"></i><b>7</b> google trends results</a><ul>
+<li class="chapter" data-level="7.1" data-path="google-trends-results.html"><a href="google-trends-results.html#google-trends-data"><i class="fa fa-check"></i><b>7.1</b> Google Trends Data</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="google-trends-results.html"><a href="google-trends-results.html#relative-popularity"><i class="fa fa-check"></i><b>7.1.1</b> Relative Popularity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="google-trends-results.html"><a href="google-trends-results.html#related-queries"><i class="fa fa-check"></i><b>7.1.2</b> Related Queries</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="google-trends-results.html"><a href="google-trends-results.html#trendyy"><i class="fa fa-check"></i><b>7.2</b> <code>trendyy</code></a></li>
+<li class="chapter" data-level="7.3" data-path="google-trends-results.html"><a href="google-trends-results.html#visualizing-trends"><i class="fa fa-check"></i><b>7.3</b> Visualizing Trends</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>8</b> workflow</a></li>
+<li class="chapter" data-level="9" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html"><i class="fa fa-check"></i><b>9</b> Web-Scraping: Polling use case</a><ul>
+<li class="chapter" data-level="9.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#understanding-rvest"><i class="fa fa-check"></i><b>9.1</b> Understanding <code>rvest</code></a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="web-scraping-polling-use-case" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Web-Scraping: Polling use case</h1>
+<p>A very important metric to keep track of is how your candidate is polling. Are they gaining a lead in the polls or falling behind? This data is often reported via traditional news organizations or some other mediums. The supposed demi-God and mythical pollster Nate Silver’s organization Five Thirty Eight does a wonderful job aggregating polls. Their page <a href="National%202020%20Democratic%20Presidential%20Primary%20Polls">National 2020 Democratic Presidential Primary Polls</a> has a table of the most recent polls from many different pollsters.</p>
+<p>In this use case we will scrape acquire this data through webscraping using <code>rvest</code>. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate’s growth during the quarter.</p>
+<div id="understanding-rvest" class="section level2">
+<h2><span class="header-section-number">9.1</span> Understanding <code>rvest</code></h2>
+<p>This use case will provide a cursory overview of the package <code>rvest</code>. To learn more go <a href="http://rvest.tidyverse.org/">here</a>.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="workflow.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["r4c.pdf", "r4c.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

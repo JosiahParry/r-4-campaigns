@@ -1,6 +1,4 @@
----
-title: "mapping-doors-targets"
-output: html_document
----
+# mapping-doors-targets
+
 
 create choropleth of canvassing PTG by district

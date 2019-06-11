@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 google trends results | R for Pogressive Campaigns</title>
+  <meta name="description" content="Chapter 7 google trends results | R for Pogressive Campaigns" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 google trends results | R for Pogressive Campaigns" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 google trends results | R for Pogressive Campaigns" />
+  
+  
+  
+
+<meta name="author" content="Josiah Parry" />
+
+
+<meta name="date" content="2019-06-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="shiny-creating-interactive-dashboards.html">
+<link rel="next" href="workflow.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R for Campaigns</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="calculating-ptg.html"><a href="calculating-ptg.html"><i class="fa fa-check"></i><b>1</b> calculating PTG</a></li>
+<li class="chapter" data-level="2" data-path="ptg-sql.html"><a href="ptg-sql.html"><i class="fa fa-check"></i><b>2</b> ptg-sql</a></li>
+<li class="chapter" data-level="3" data-path="reporting-googlesheets.html"><a href="reporting-googlesheets.html"><i class="fa fa-check"></i><b>3</b> reporting-googlesheets</a></li>
+<li class="chapter" data-level="4" data-path="reporting.html"><a href="reporting.html"><i class="fa fa-check"></i><b>4</b> reporting</a></li>
+<li class="chapter" data-level="5" data-path="mapping-doors-targets.html"><a href="mapping-doors-targets.html"><i class="fa fa-check"></i><b>5</b> mapping-doors-targets</a></li>
+<li class="chapter" data-level="6" data-path="shiny-creating-interactive-dashboards.html"><a href="shiny-creating-interactive-dashboards.html"><i class="fa fa-check"></i><b>6</b> shiny - creating interactive dashboards</a></li>
+<li class="chapter" data-level="7" data-path="google-trends-results.html"><a href="google-trends-results.html"><i class="fa fa-check"></i><b>7</b> google trends results</a><ul>
+<li class="chapter" data-level="7.1" data-path="google-trends-results.html"><a href="google-trends-results.html#google-trends-data"><i class="fa fa-check"></i><b>7.1</b> Google Trends Data</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="google-trends-results.html"><a href="google-trends-results.html#relative-popularity"><i class="fa fa-check"></i><b>7.1.1</b> Relative Popularity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="google-trends-results.html"><a href="google-trends-results.html#related-queries"><i class="fa fa-check"></i><b>7.1.2</b> Related Queries</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="google-trends-results.html"><a href="google-trends-results.html#trendyy"><i class="fa fa-check"></i><b>7.2</b> <code>trendyy</code></a></li>
+<li class="chapter" data-level="7.3" data-path="google-trends-results.html"><a href="google-trends-results.html#visualizing-trends"><i class="fa fa-check"></i><b>7.3</b> Visualizing Trends</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>8</b> workflow</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="google-trends-results" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> google trends results</h1>
+<p>Over the past few years we have seen Google Trends becoming quite ubiquitous in politics. Pundits have used Google seach trends as talking points. It is not uncommon to hear news about a candidates search trends the days following a town hall or significant rally. It seems that Google trends are becoming the go to proxy for a candidate’s salience.</p>
+<p>As a campaign, you are interested in the popularity of a candidate <em>relative</em> to another one. If candidate A has seen a gain from 50 to 70, that is all well and good. But how does that compare with candidates C and D? There are others potential use cases—that may be less fraught with media interruptions. For example, one can keep track of the popularity of possible policy issues—i.e. healthcare, gun safety, women’s rights.</p>
+<p>Though the usefulness of Google Trends search popularity is still unclear, it may be something that your campaign might like to track. In this chapter we will explore how to acquire and utilize trend data using R. This chapter will describe how one can utilize Google Trends data to compare candidate search popularity and view related search terms. This will be done with the tidyverse, and the package <code>trendyy</code> for accessing this data.</p>
+<div id="google-trends-data" class="section level2">
+<h2><span class="header-section-number">7.1</span> Google Trends Data</h2>
+<div id="relative-popularity" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> Relative Popularity</h3>
+<p>The key metric that Google Trends provides is the <em>relative</em> popularity of a search term by a given geography. Relative search popularity is scaled from 0 to 100. This number is scaled based on population and geography size (for more information go <a href="https://support.google.com/trends/answer/4365533?hl=en">here</a>). This number may be useful on it’s own, but the strength of Google Trends is it’s ability to compare multiple terms. Using Google Trends we can compare up to 5 search terms—presumably candidates.</p>
+</div>
+<div id="related-queries" class="section level3">
+<h3><span class="header-section-number">7.1.2</span> Related Queries</h3>
+<p>In addition to popularity, Google Trends provides you with related queries. This can help your media team understand in what context their candidate is being associated online.</p>
+</div>
+</div>
+<div id="trendyy" class="section level2">
+<h2><span class="header-section-number">7.2</span> <code>trendyy</code></h2>
+<p>Now that we have an intuition of how Google Trends may be utilized, we will look at how actually acquire these data in R. To get started install the package using <code>install.packages(&quot;trendyy&quot;)</code>.</p>
+<p>Once the package is installed, load the <code>tidyverse</code> and <code>trendyy</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(trendyy)
+<span class="kw">library</span>(tidyverse)</code></pre>
+<p>In this example we will look at the top five polling candidates as of today (6/10/2019). These are, in no particular order, Joe Biden, Kamala Harris, Beto O’Rourke, Bernie Sanders, and Elizabeth Warren. Create a vector with the search terms that you will use (in this case the above candidates).</p>
+<pre class="sourceCode r"><code class="sourceCode r">candidates &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Joe Biden&quot;</span>, <span class="st">&quot;Kamala Harris&quot;</span>, <span class="st">&quot;Beto O&#39;Rourke&quot;</span>, <span class="st">&quot;Bernie Sanders&quot;</span>, <span class="st">&quot;Elizabeth Warren&quot;</span>)</code></pre>
+<p>Next we will use the <code>trendyy</code> package to get search popularity. The function <code>trendy()</code> has three main arguments: <code>search_terms</code>, <code>from</code>, and <code>to</code> (in the form of <code>&quot;yyyy-mm-dd&quot;</code>). The first argument is the only mandatory one. Provide a vector of length 5 or less as the first argument. Here we will use the <code>candidates</code> vector and look at data from the past two weeks. I will create two variables for the beginning and end dates. This will be to demonstrate how functions can be used to programatically search date ranges.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># to today</span>
+end &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>()
+<span class="co"># from 2 weeks ago</span>
+begin &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>() <span class="op">-</span><span class="st"> </span><span class="dv">14</span></code></pre>
+<p>Pass these arguments to <code>trendy()</code> and save them to a variable.</p>
+<pre class="sourceCode r"><code class="sourceCode r">candidate_trends &lt;-<span class="st"> </span><span class="kw">trendy</span>(<span class="dt">search_terms =</span> candidates, <span class="dt">from =</span> begin, <span class="dt">to =</span> end)
+
+candidate_trends</code></pre>
+<pre><code>## ~Trendy results~
+## 
+## Search Terms: Joe Biden, Kamala Harris, Beto O&#39;Rourke, Bernie Sanders, Elizabeth Warren
+## 
+## (&gt;^.^)&gt; ~~~~~~~~~~~~~~~~~~~~ summary ~~~~~~~~~~~~~~~~~~~~ &lt;(^.^&lt;)
+## # A tibble: 5 x 5
+##   keyword          max_hits min_hits from       to        
+##   &lt;chr&gt;               &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;    
+## 1 Bernie Sanders         40       31 2019-05-27 2019-06-07
+## 2 Beto O&#39;Rourke           1        1 2019-05-27 2019-06-07
+## 3 Elizabeth Warren       67       17 2019-05-27 2019-06-07
+## 4 Joe Biden              68       33 2019-05-27 2019-06-07
+## 5 Kamala Harris         100       12 2019-05-27 2019-06-07</code></pre>
+<p>Trendy creates an object of class <code>trendy</code> see <code>class(candidate_trends)</code> trendy. There are a number of accessor functions. We will use <code>get_interest()</code> and <code>get_related_queries()</code>. See the documentation of the others.</p>
+<p>To access to relative popularity, we will use <code>get_interest(trendy)</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">popularity &lt;-<span class="st"> </span><span class="kw">get_interest</span>(candidate_trends)
+
+popularity</code></pre>
+<pre><code>## # A tibble: 60 x 7
+##    date                 hits geo   time          keyword  gprop category   
+##    &lt;dttm&gt;              &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      
+##  1 2019-05-27 00:00:00    46 world 2019-05-27 2… Joe Bid… web   All catego…
+##  2 2019-05-28 00:00:00    57 world 2019-05-27 2… Joe Bid… web   All catego…
+##  3 2019-05-29 00:00:00    68 world 2019-05-27 2… Joe Bid… web   All catego…
+##  4 2019-05-30 00:00:00    54 world 2019-05-27 2… Joe Bid… web   All catego…
+##  5 2019-05-31 00:00:00    40 world 2019-05-27 2… Joe Bid… web   All catego…
+##  6 2019-06-01 00:00:00    35 world 2019-05-27 2… Joe Bid… web   All catego…
+##  7 2019-06-02 00:00:00    35 world 2019-05-27 2… Joe Bid… web   All catego…
+##  8 2019-06-03 00:00:00    33 world 2019-05-27 2… Joe Bid… web   All catego…
+##  9 2019-06-04 00:00:00    41 world 2019-05-27 2… Joe Bid… web   All catego…
+## 10 2019-06-05 00:00:00    50 world 2019-05-27 2… Joe Bid… web   All catego…
+## # … with 50 more rows</code></pre>
+<p>For related queries we will use <code>get_related_queries(trendy)</code>. Note that you can either pipe the object or pass it directly.</p>
+<pre class="sourceCode r"><code class="sourceCode r">candidate_trends <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_related_queries</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># picking queries for a random candidate</span>
+<span class="st">  </span><span class="kw">filter</span>(keyword <span class="op">==</span><span class="st"> </span><span class="kw">sample</span>(candidates, <span class="dv">1</span>))</code></pre>
+<pre><code>## # A tibble: 40 x 5
+##    subject related_queries value             keyword   category      
+##    &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;             &lt;chr&gt;     &lt;chr&gt;         
+##  1 100     top             trump             Joe Biden All categories
+##  2 54      top             joe biden 2020    Joe Biden All categories
+##  3 49      top             bernie sanders    Joe Biden All categories
+##  4 35      top             donald trump      Joe Biden All categories
+##  5 34      top             joe biden age     Joe Biden All categories
+##  6 30      top             joe biden news    Joe Biden All categories
+##  7 21      top             joe biden polls   Joe Biden All categories
+##  8 15      top             creepy joe biden  Joe Biden All categories
+##  9 14      top             joe biden twitter Joe Biden All categories
+## 10 13      top             pete buttigieg    Joe Biden All categories
+## # … with 30 more rows</code></pre>
+</div>
+<div id="visualizing-trends" class="section level2">
+<h2><span class="header-section-number">7.3</span> Visualizing Trends</h2>
+<p>I’m guessing your director enjoys charts—so do I. To make the data more accessible, use the <code>popularity</code> tibble to create a time series chart of popularity over the past two weeks. We will use <code>ggplot2</code>. Remember that time should be displayed on the x axis. We want to have a line for each candidate, so map the color aesthetic to the keyword.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(popularity, 
+       <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> hits, <span class="dt">color =</span> keyword)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Search Popularity&quot;</span>, 
+       <span class="dt">title =</span> <span class="st">&quot;Google popularity of top 5 polling candidates&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, 
+        <span class="dt">legend.title =</span> <span class="kw">element_blank</span>())</code></pre>
+<p><img src="r4c_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="shiny-creating-interactive-dashboards.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="workflow.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["r4c.pdf", "r4c.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

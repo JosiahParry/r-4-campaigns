@@ -1,7 +1,5 @@
----
-title: "reporting"
-output: html_document
----
+# reporting
+
 
 creating reproducible reports
 

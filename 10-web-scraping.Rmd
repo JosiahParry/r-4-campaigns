@@ -1,0 +1,109 @@
+# Web-Scraping: Polling use case
+
+A very important metric to keep track of is how your candidate is polling. Are they gaining a lead in the polls or falling behind? This data is often reported via traditional news organizations or some other mediums. The supposed demi-God and mythical pollster Nate Silver's organization FiveThirtyEight does a wonderful job aggregating polls. Their page [National 2020 Democratic Presidential Primary Polls](https://projects.fivethirtyeight.com/2020-primaries/democratic/national/) has a table of the most recent polls from many different pollsters. 
+
+In this use case we will scrape acquire this data through webscraping using `rvest`. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate's growth during the quarter. 
+
+## Understanding `rvest` 
+
+This use case will provide a cursory overview of the package `rvest`. To learn more go [here](http://rvest.tidyverse.org/). 
+
+Web scraping is the process of extracting data from a website. Websites are written in HTML and CSS. There are a few aspects of these languages that are used in webscraping that is important to know. HTML is written in a series of what are call tags. A tag is a set of characters wrapped in angle brackets—i.e. `<img>`. 
+
+With CSS (cascading style sheets), web developers can give unique identifiers to a tag. Classes can also be assigned to a tag. Think of these as group. With web scraping we can specify a particular part of a website by it's HTML tag and perhaps it's class or ID. `rvest` provides a large set of functions to make this simpler. 
+
+# Example
+
+For this example we will be scraping FiveThirtyEight's aggregated poll table. The table can be found at https://projects.fivethirtyeight.com/2020-primaries/democratic/national/. 
+
+Before we begin, we must always prepare our workspace. Mise en place. 
+
+```{r}
+library(rvest)
+library(tidyverse)
+```
+
+
+The first thing we will have to do is specify what page we will be scraping from. `html_session()` will simulate a session in an html browser. By providing a url to `html_session()` we will then be able to access the underlying code of that page. Create an object called `session` by providing the FiveThirtyEight url to `html_session()`.
+
+```{r}
+session <- html_session("https://projects.fivethirtyeight.com/2020-primaries/democratic/national/")
+```
+
+The next and most important step is to identify which piece of HTML code contains the table. The easiest way to do this is to open up the webpage in Chrome and open up the Inspect Elements view (on Mac - ⌘ + Shift + C). Now that this is open, click the select element button at the top left corner of the inspection pane. Now hover over the table.
+
+You will see that the HTML element is highlighted. We can see that it is a `table` tag. Additionally we see that there are two different classes `polls-table` and `tracker`. To specify a class we put a preceeding `.` to the class name—i.e. `.class-name`. If there are multiple classess we just append the second class named to it—i.e. `.first-class.second-class`. Be aware that these selectors can be quite finicky and be a bit difficult to figure out. You might need to do some googling or playing around with the selector.
+
+To actually access the content of this HTML element, we must specify the element using the proper selector. `html_node()` will be used to do this. Provide the html session and the css selector to `html_node()` to extract the HTML element.
+
+```{r}
+session %>% 
+  html_node(".polls-table.tracker")
+```
+
+Here we see that this returns on object of class `xml_node`. This object returns some HTML code but it is still not entirely workable. Since this is an HTML table we want to extract we can use the handy `html_table()`. Note that if this wasn't a table but rather text, you can use `html_text()`.
+
+```{r}
+session %>% 
+  html_node(".polls-table.tracker") %>% 
+  html_table()
+```
+Take note of the extremely informative error. It appears we might have to deal with mismatching columns. 
+
+```{r}
+session %>% 
+  html_node(".polls-table.tracker") %>% 
+  html_table(fill = TRUE)
+```
+
+
+This is much better! But based on visual insepction the column headers are not properly matched. There are a few things that need to be sorted out: there are two date columns, there are commas and percents where numeric columns should be, the column headers are a little messy, and the table isn't a tibble (this is just personal preference). 
+
+We will handle the final two issues first as they are easiest to deal with. The function `clean_names()` from `janitor` will handle the column headers, and `as_tibble()` will coerce the data.frame into a proper tibble. Save this semi-clean tibble into an object called `polls`. 
+
+```{r}
+polls <- session %>% 
+  html_node(".polls-table.tracker") %>% 
+  html_table(fill = TRUE) %>% 
+  janitor::clean_names() %>% 
+  as_tibble()
+
+polls
+```
+
+
+
+We want to shift over the column names to the right just once. Unfortunately there is no elegant way to do this (that I am aware of). We can see that the first column is completely useless so that can be removed. Once that column is removed we can reset the names this way they will be well aligned. 
+
+We will start by creating a vector of the original column names.
+
+```{r}
+col_names <- names(polls)
+col_names
+```
+
+Unfortunately this also presents another issue. Once a column is deselected, there will be one more column name than column. So we will need to select all but the last element of the original names. We will create a vector called `new_names`.
+
+```{r}
+# identify the integer number of the last column
+last_col <- length(col_names) - 1
+
+# create a vector which will be used for the new names
+new_names <- col_names[1:last_col]
+```
+
+Now we can try implementing the hacky solution. Here we will deselect the first column and reset the names using `setNames()`. Following, we will use the [`mutate_at()`](https://dplyr.tidyverse.org/reference/mutate_all.html) variant to remove the percent sign from every candidate column and coerce them into integer columns. Here we will sepecify which variables to _not_ mutate at within `vars()`. 
+
+It's impor
+
+```{r}
+polls %>% 
+  select(-1) %>% 
+  setNames(new_names)%>%
+  select(-1) %>%
+  mutate_at(vars(-c("dates", "pollster", "sample", "sample_2")), ~as.integer(str_remove(., "%"))) 
+
+
+```
+
+This is almost great to work with. We now need to remove the first date column, and remove the commas

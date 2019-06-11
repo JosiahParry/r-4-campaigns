@@ -1,0 +1,90 @@
+# google trends results
+
+Over the past few years we have seen Google Trends becoming quite ubiquitous in politics. Pundits have used Google seach trends as talking points. It is not uncommon to hear news about a candidates search trends the days following a town hall or significant rally. It seems that Google trends are becoming the go to proxy for a candidate's salience.
+
+As a campaign, you are interested in the popularity of a candidate _relative_ to another one. If candidate A has seen a gain from 50 to 70, that is all well and good. But how does that compare with candidates C and D? There are others potential use cases—that may be less fraught with media interruptions. For example, one can keep track of the popularity of possible policy issues—i.e. healthcare, gun safety, women's rights. 
+
+Though the usefulness of Google Trends search popularity is still unclear, it may be something that your campaign might like to track. In this chapter we will explore how to acquire and utilize trend data using R. This chapter will describe how one can utilize Google Trends data to compare candidate search popularity and view related search terms. This will be done with the tidyverse, and the package `trendyy` for accessing this data.
+
+
+## Google Trends Data
+
+### Relative Popularity 
+
+The key metric that Google Trends provides is the _relative_ popularity of a search term by a given geography. Relative search popularity is scaled from 0 to 100. This number is scaled based on population and geography size (for more information go [here](https://support.google.com/trends/answer/4365533?hl=en)). This number may be useful on it's own, but the strength of Google Trends is it's ability to compare multiple terms. Using Google Trends we can compare up to 5 search terms—presumably candidates. 
+
+### Related Queries 
+
+In addition to popularity, Google Trends provides you with related queries. This can help your media team understand in what context their candidate is being associated online. 
+
+## `trendyy`
+
+Now that we have an intuition of how Google Trends may be utilized, we will look at how actually acquire these data in R. To get started install the package using `install.packages("trendyy")`. 
+
+Once the package is installed, load the `tidyverse` and `trendyy`.
+
+```{r}
+library(trendyy)
+library(tidyverse)
+```
+
+In this example we will look at the top five polling candidates as of today (6/10/2019). These are, in no particular order, Joe Biden, Kamala Harris, Beto O'Rourke, Bernie Sanders, and Elizabeth Warren. Create a vector with the search terms that you will use (in this case the above candidates).
+
+```{r}
+candidates <- c("Joe Biden", "Kamala Harris", "Beto O'Rourke", "Bernie Sanders", "Elizabeth Warren")
+```
+
+Next we will use the `trendyy` package to get search popularity. The function `trendy()` has three main arguments: `search_terms`, `from`, and `to` (in the form of `"yyyy-mm-dd"`). The first argument is the only mandatory one. Provide a vector of length 5 or less as the first argument. Here we will use the `candidates` vector and look at data from the past two weeks. I will create two variables for the beginning and end dates. This will be to demonstrate how functions can be used to programatically search date ranges. 
+
+```{r}
+# to today
+end <- Sys.Date()
+# from 2 weeks ago
+begin <- Sys.Date() - 14
+
+```
+
+Pass these arguments to `trendy()` and save them to a variable.
+
+```{r}
+candidate_trends <- trendy(search_terms = candidates, from = begin, to = end)
+
+candidate_trends
+```
+
+Trendy creates an object of class `trendy` see `class(candidate_trends)` `r class(candidate_trends)`. There are a number of accessor functions. We will use `get_interest()` and `get_related_queries()`. See the documentation of the others. 
+
+To access to relative popularity, we will use `get_interest(trendy)`. 
+
+```{r}
+popularity <- get_interest(candidate_trends)
+
+popularity
+```
+
+For related queries we will use `get_related_queries(trendy)`. Note that you can either pipe the object or pass it directly. 
+
+```{r}
+candidate_trends %>% 
+  get_related_queries() %>% 
+  # picking queries for a random candidate
+  filter(keyword == sample(candidates, 1))
+```
+
+
+## Visualizing Trends
+
+I'm guessing your director enjoys charts—so do I. To make the data more accessible, use the `popularity` tibble to create a time series chart of popularity over the past two weeks. We will use `ggplot2`. Remember that time should be displayed on the x axis. We want to have a line for each candidate, so map the color aesthetic to the keyword.
+
+```{r}
+ggplot(popularity, 
+       aes(x = date, y = hits, color = keyword)) + 
+  geom_line() +
+  labs(x = "", y = "Search Popularity", 
+       title = "Google popularity of top 5 polling candidates") + 
+  theme_minimal() +
+  theme(legend.position = "bottom", 
+        legend.title = element_blank())
+```
+
+

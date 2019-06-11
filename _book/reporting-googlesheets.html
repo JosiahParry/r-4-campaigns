@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 reporting-googlesheets | R for Pogressive Campaigns</title>
+  <meta name="description" content="Chapter 3 reporting-googlesheets | R for Pogressive Campaigns" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 reporting-googlesheets | R for Pogressive Campaigns" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 reporting-googlesheets | R for Pogressive Campaigns" />
+  
+  
+  
+
+<meta name="author" content="Josiah Parry" />
+
+
+<meta name="date" content="2019-06-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ptg-sql.html">
+<link rel="next" href="reporting.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R for Campaigns</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="calculating-ptg.html"><a href="calculating-ptg.html"><i class="fa fa-check"></i><b>1</b> calculating PTG</a></li>
+<li class="chapter" data-level="2" data-path="ptg-sql.html"><a href="ptg-sql.html"><i class="fa fa-check"></i><b>2</b> ptg-sql</a></li>
+<li class="chapter" data-level="3" data-path="reporting-googlesheets.html"><a href="reporting-googlesheets.html"><i class="fa fa-check"></i><b>3</b> reporting-googlesheets</a></li>
+<li class="chapter" data-level="4" data-path="reporting.html"><a href="reporting.html"><i class="fa fa-check"></i><b>4</b> reporting</a></li>
+<li class="chapter" data-level="5" data-path="mapping-doors-targets.html"><a href="mapping-doors-targets.html"><i class="fa fa-check"></i><b>5</b> mapping-doors-targets</a></li>
+<li class="chapter" data-level="6" data-path="shiny-creating-interactive-dashboards.html"><a href="shiny-creating-interactive-dashboards.html"><i class="fa fa-check"></i><b>6</b> shiny - creating interactive dashboards</a></li>
+<li class="chapter" data-level="7" data-path="google-trends-results.html"><a href="google-trends-results.html"><i class="fa fa-check"></i><b>7</b> google trends results</a><ul>
+<li class="chapter" data-level="7.1" data-path="google-trends-results.html"><a href="google-trends-results.html#google-trends-data"><i class="fa fa-check"></i><b>7.1</b> Google Trends Data</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="google-trends-results.html"><a href="google-trends-results.html#relative-popularity"><i class="fa fa-check"></i><b>7.1.1</b> Relative Popularity</a></li>
+<li class="chapter" data-level="7.1.2" data-path="google-trends-results.html"><a href="google-trends-results.html#related-queries"><i class="fa fa-check"></i><b>7.1.2</b> Related Queries</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="google-trends-results.html"><a href="google-trends-results.html#trendyy"><i class="fa fa-check"></i><b>7.2</b> <code>trendyy</code></a></li>
+<li class="chapter" data-level="7.3" data-path="google-trends-results.html"><a href="google-trends-results.html#visualizing-trends"><i class="fa fa-check"></i><b>7.3</b> Visualizing Trends</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>8</b> workflow</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="reporting-googlesheets" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> reporting-googlesheets</h1>
+<p>Goal: Create a daily percent to goal report</p>
+<p>As described previously, a common practice is to export aggregated code from Civis into a Google Sheet. In this section we will work with Google Sheets to create a report that can be used to schedule automatic reporting.</p>
+<p>To use the <code>googlesheets</code> package you must first install it (<code>install.packages(&quot;googlesheets&quot;)</code>). To load a spreadsheet use the <code>gs_title()</code> or <code>gs_url()</code> functions. The former takes the name of the sheet and the latter uses the url of it. Once this line is ran Google will open and require you to authenticate. This will create <code>.httr-oath</code> file in your working directory. This contains your authorization token which will be used later for automating this workflow.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(googlesheets)
+
+<span class="co"># register the sheet</span>
+sheet &lt;-<span class="st"> </span><span class="kw">gs_title</span>(<span class="st">&quot;R 4 Progressive Campaigns&quot;</span>)</code></pre>
+<pre><code>## Sheet successfully identified: &quot;R 4 Progressive Campaigns&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read the `weekly_canvas` tab</span>
+weekly_canvass &lt;-<span class="st"> </span><span class="kw">gs_read</span>(sheet, <span class="st">&quot;weekly_canvass&quot;</span>)</code></pre>
+<pre><code>## Accessing worksheet titled &#39;weekly_canvass&#39;.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   turf_code = col_character(),
+##   week = col_double(),
+##   n_pledged = col_double(),
+##   vol_yes = col_double()
+## )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read the `goals` tab</span>
+goals &lt;-<span class="st"> </span><span class="kw">gs_read</span>(sheet, <span class="st">&quot;goals&quot;</span>)</code></pre>
+<pre><code>## Accessing worksheet titled &#39;goals&#39;.</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   week = col_double(),
+##   region = col_character(),
+##   goal = col_double()
+## )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">weekly_canvass</code></pre>
+<pre><code>## # A tibble: 66 x 4
+##    turf_code  week n_pledged vol_yes
+##    &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 A             1       114      41
+##  2 A             2       109      28
+##  3 A             3        96      33
+##  4 A             4       121      34
+##  5 A             5        95      32
+##  6 A             6        99      29
+##  7 A             7        78      28
+##  8 A             8       111      29
+##  9 A             9       119      34
+## 10 A            10       119      27
+## # … with 56 more rows</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">goals</code></pre>
+<pre><code>## # A tibble: 312 x 3
+##     week region  goal
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+##  1     1 A        120
+##  2     1 B        130
+##  3     1 C         70
+##  4     1 D        120
+##  5     1 E         90
+##  6     1 F        130
+##  7     2 A        110
+##  8     2 B         90
+##  9     2 C        130
+## 10     2 D         70
+## # … with 302 more rows</code></pre>
+<p>Notice that this code creates two tibbles in memory. Now everything else is the same. We will work within the context of an R Markdown document (<a href="https://rmarkdown.rstudio.com/articles_intro.html">intro to R Markdown</a>).</p>
+<p>We want to create a simple report which will be emailed out to the organizing director each morning with the most up to date weekly PTG.</p>
+<p>Since this is a weekly report, we want to filter to the current week. In this case, the most recent data is from the 11th week of the month. We will filter both the <code>weekly_canvass</code> and <code>goals</code> tibbles to these weeks and then join. Note that it is important to filter before joining as joining can be computationally intensive. We want to reduce the data before joining it.</p>
+<pre class="sourceCode r"><code class="sourceCode r">current_week &lt;-<span class="st"> </span>weekly_canvass <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(week <span class="op">==</span><span class="st"> </span><span class="dv">11</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(<span class="kw">filter</span>(goals, week <span class="op">==</span><span class="st"> </span><span class="dv">11</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;turf_code&quot;</span> =<span class="st"> &quot;region&quot;</span>, <span class="st">&quot;week&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ptg =</span> n_pledged <span class="op">/</span><span class="st"> </span>goal)
+
+current_week</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   turf_code  week n_pledged vol_yes  goal   ptg
+##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A            11        76      20    90 0.844
+## 2 B            11        51      20    50 1.02 
+## 3 C            11        87      17   130 0.669
+## 4 D            11        83      31    60 1.38 
+## 5 E            11        55      20    70 0.786
+## 6 F            11        88      29    70 1.26</code></pre>
+<p>While it nice to have each region’s PTG, it’s also useful to have the entire program weekly PTG. We can create an aggregate table and bind it to the existing table.</p>
+<pre class="sourceCode r"><code class="sourceCode r">totals &lt;-<span class="st"> </span>current_week <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">bind_rows</span>(
+    current_week <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">      </span><span class="kw">summarise</span>(<span class="dt">n_pledged =</span> <span class="kw">sum</span>(n_pledged),
+                <span class="dt">goal =</span> <span class="kw">sum</span>(goal),
+                <span class="dt">ptg =</span> n_pledged <span class="op">/</span><span class="st"> </span>goal,
+                <span class="dt">vol_yes =</span> <span class="kw">sum</span>(vol_yes),
+                <span class="dt">turf_code =</span> <span class="st">&quot;Total&quot;</span>, 
+                <span class="dt">week =</span> <span class="kw">mean</span>(week)) 
+  )
+
+totals</code></pre>
+<pre><code>## # A tibble: 7 x 6
+##   turf_code  week n_pledged vol_yes  goal   ptg
+##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A            11        76      20    90 0.844
+## 2 B            11        51      20    50 1.02 
+## 3 C            11        87      17   130 0.669
+## 4 D            11        83      31    60 1.38 
+## 5 E            11        55      20    70 0.786
+## 6 F            11        88      29    70 1.26 
+## 7 Total        11       440     137   470 0.936</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">totals <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(turf_code, ptg)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">1</span>, <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> <span class="fl">.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">percent_format</span>()) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Weekly PTG&quot;</span>, 
+       <span class="dt">y =</span> <span class="st">&quot;% to goal&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Turf Code&quot;</span>)</code></pre>
+<p><img src="r4c_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>It is important that a clean table is presented alongside the chart. For this we will use <code>knitr::kable()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">totals <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ptg =</span> ptg <span class="op">*</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="st">`</span><span class="dt">Turf Code</span><span class="st">`</span> =<span class="st"> </span>turf_code,
+         <span class="st">`</span><span class="dt"># Pledged</span><span class="st">`</span> =<span class="st"> </span>n_pledged, 
+         <span class="dt">Goal =</span> goal, 
+         <span class="st">`</span><span class="dt">% to Goal</span><span class="st">`</span> =<span class="st"> </span>ptg) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Turf Code</th>
+<th align="right"># Pledged</th>
+<th align="right">Goal</th>
+<th align="right">% to Goal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">76</td>
+<td align="right">90</td>
+<td align="right">84.44</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">51</td>
+<td align="right">50</td>
+<td align="right">102.00</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">87</td>
+<td align="right">130</td>
+<td align="right">66.92</td>
+</tr>
+<tr class="even">
+<td align="left">D</td>
+<td align="right">83</td>
+<td align="right">60</td>
+<td align="right">138.33</td>
+</tr>
+<tr class="odd">
+<td align="left">E</td>
+<td align="right">55</td>
+<td align="right">70</td>
+<td align="right">78.57</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="right">88</td>
+<td align="right">70</td>
+<td align="right">125.71</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">440</td>
+<td align="right">470</td>
+<td align="right">93.62</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ptg-sql.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reporting.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["r4c.pdf", "r4c.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
