@@ -151,6 +151,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.2.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#date-cleaning"><i class="fa fa-check"></i><b>10.2.1</b> Date cleaning</a></li>
 <li class="chapter" data-level="10.2.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#visualization"><i class="fa fa-check"></i><b>10.2.2</b> Visualization</a></li>
 </ul></li>
+<li class="chapter" data-level="10.3" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#creating-historic-polling-data"><i class="fa fa-check"></i><b>10.3</b> Creating historic polling data</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
@@ -175,7 +176,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="web-scraping-polling-use-case" class="section level1">
 <h1><span class="header-section-number">Chapter 10</span> Web-Scraping: Polling use case</h1>
 <p>A very important metric to keep track of is how your candidate is polling. Are they gaining a lead in the polls or falling behind? This data is often reported via traditional news organizations or some other mediums. The supposed demi-God and mythical pollster Nate Silver’s organization FiveThirtyEight does a wonderful job aggregating polls. Their page <a href="https://projects.fivethirtyeight.com/2020-primaries/democratic/national/">National 2020 Democratic Presidential Primary Polls</a> has a table of the most recent polls from many different pollsters.</p>
-<p>In this use case we will scrape acquire this data through web scraping using <code>rvest</code>. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate’s growth during the quarter.</p>
+<p>In this use case we will acquire this data by web scraping using <code>rvest</code>. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate’s growth during the quarter.</p>
 <div id="understanding-rvest" class="section level2">
 <h2><span class="header-section-number">10.1</span> Understanding <code>rvest</code></h2>
 <p>This use case will provide a cursory overview of the package <code>rvest</code>. To learn more go <a href="http://rvest.tidyverse.org/">here</a>.</p>
@@ -186,8 +187,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">10.2</span> Example</h2>
 <p>For this example we will be scraping FiveThirtyEight’s aggregated poll table. The table can be found at <a href="https://projects.fivethirtyeight.com/2020-primaries/democratic/national/" class="uri">https://projects.fivethirtyeight.com/2020-primaries/democratic/national/</a>.</p>
 <p>Before we begin, we must always prepare our workspace. Mise en place.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
-<span class="kw">library</span>(tidyverse)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;rvest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     pluck</code></pre>
+<pre><code>## The following object is masked from &#39;package:readr&#39;:
+## 
+##     guess_encoding</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre>
 <p>The first thing we will have to do is specify what page we will be scraping from. <code>html_session()</code> will simulate a session in an html browser. By providing a URL to <code>html_session()</code> we will then be able to access the underlying code of that page. Create an object called <code>session</code> by providing the FiveThirtyEight URL to <code>html_session()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">session &lt;-<span class="st"> </span><span class="kw">html_session</span>(<span class="st">&quot;https://projects.fivethirtyeight.com/2020-primaries/democratic/national/&quot;</span>)</code></pre>
 <p>The next and most important step is to identify which piece of HTML code contains the table. The easiest way to do this is to open up the webpage in Chrome and open up the Inspect Elements view (on Mac - ⌘ + Shift + C). Now that this is open, click the select element button at the top left corner of the inspection pane. Now hover over the table.</p>
@@ -554,14 +564,16 @@ new_names &lt;-<span class="st"> </span>col_names[<span class="dv">1</span><span
 <pre><code>## [1] &quot;2019-05-29&quot;</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">clean_date</span>(polls_tidy<span class="op">$</span>dates[<span class="dv">10</span>], <span class="dt">.return =</span> <span class="st">&quot;second&quot;</span>)</code></pre>
 <pre><code>## [1] &quot;2019-05-30&quot;</code></pre>
-<p>We can use this new function to create two new columns <code>poll_start</code> and <code>poll_end</code> using <code>mutate()</code>. Following this we can deselect the original <code>dates</code> column and save this to <code>polls_clean</code>.</p>
+<p>We can use this new function to create two new columns <code>poll_start</code> and <code>poll_end</code> using <code>mutate()</code>. Following this we can deselect the original <code>dates</code> column, remove any observations missing a <code>points</code> value, remove duplicates using <code>distinct()</code>, and save this to <code>polls_clean</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">polls_clean &lt;-<span class="st"> </span>polls_tidy <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">poll_start =</span> <span class="kw">clean_date</span>(dates, <span class="st">&quot;first&quot;</span>),
          <span class="dt">poll_end =</span> <span class="kw">clean_date</span>(dates, <span class="st">&quot;second&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>dates)
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>dates) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(points)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">distinct</span>()
 
 polls_clean</code></pre>
-<pre><code>## # A tibble: 6,148 x 7
+<pre><code>## # A tibble: 1,955 x 7
 ##    pollster       sample sample_2    candidate points poll_start poll_end  
 ##    &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;int&gt; &lt;date&gt;     &lt;date&gt;    
 ##  1 A-Quinnipiac …    503 Registered… biden         30 2019-06-06 2019-06-10
@@ -574,7 +586,7 @@ polls_clean</code></pre>
 ##  8 B-Morning Con…  16587 Likely Vot… biden         38 2019-06-06 2019-06-10
 ##  9 A-CNN/SSRS        412 Registered… biden         32 2019-06-06 2019-06-10
 ## 10 C+Harris Inte…    471 Registered… biden         36 2019-06-06 2019-06-10
-## # … with 6,138 more rows</code></pre>
+## # … with 1,945 more rows</code></pre>
 </div>
 <div id="visualization" class="section level3">
 <h3><span class="header-section-number">10.2.2</span> Visualization</h3>
@@ -587,7 +599,28 @@ polls_clean</code></pre>
             <span class="dt">n_polls =</span> <span class="kw">n</span>() <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(<span class="kw">is.na</span>(points))) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># identify how many polls candidate is in</span>
 <span class="st">  </span><span class="co"># remove candidates who appear in 50 or fewer polls: i.e. HRC</span>
 <span class="st">  </span><span class="kw">filter</span>(n_polls <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>avg_points)</code></pre>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>avg_points)
+
+avg_polls</code></pre>
+<pre><code>## # A tibble: 16 x 5
+##    candidate    avg_points min_points max_points n_polls
+##    &lt;chr&gt;             &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;int&gt;
+##  1 biden            32.1            9         66     108
+##  2 sanders          19.4            4         42     110
+##  3 harris            8.62           2         38     110
+##  4 warren            8.05           2         43     109
+##  5 o_rourke          6.50           2         21     105
+##  6 buttigieg         4.88           0         21      80
+##  7 booker            3.30           0          9     105
+##  8 klobuchar         1.77           0          5      94
+##  9 yang              1.13           0          3      62
+## 10 castro            1.10           0         12      97
+## 11 gillibrand        0.929          0          9      98
+## 12 hickenlooper      0.728          0          2      81
+## 13 gabbard           0.723          0          3      83
+## 14 delaney           0.530          0          8      83
+## 15 bullock           0.509          0          1      55
+## 16 inslee            0.429          0          2      77</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">avg_polls <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">candidate =</span> <span class="kw">fct_reorder</span>(candidate, avg_points)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(candidate, avg_points)) <span class="op">+</span>
@@ -595,9 +628,60 @@ polls_clean</code></pre>
 <span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Polls Standings&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>)</code></pre>
-<p><img src="r4c_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-
+<p><img src="r4c_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 </div>
+</div>
+<div id="creating-historic-polling-data" class="section level2">
+<h2><span class="header-section-number">10.3</span> Creating historic polling data</h2>
+<p>It may become useful to have a running history of how candidates have been polling. We can use R to write a csv file of the data from FiveThirtyEight. However, what happens when the polls update? How we can we keep the previous data <em>and</em> the new data? We will work through an example using a combination of <code>bind_rows()</code> and <code>distinct()</code>. I want to emphasize that this is not a good practice if you need to scale to hundreds of thousand of rows. This works in this case as the data are inherently small.</p>
+<p>To start, I have created a sample dataset which contains 80% of these polls (maybe less by the time you do this!). Note that is probably best to version control this or have multiple copies as a failsafe.</p>
+<p>The approach we will take is to read in the historic polls data set and bind rows with the <code>polls_clean</code> data we have scraped. Next we remove duplicate rows using <code>distinct()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">old_polls &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/polls.csv&quot;</span>)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   pollster = col_character(),
+##   sample = col_double(),
+##   sample_2 = col_character(),
+##   candidate = col_character(),
+##   points = col_double(),
+##   poll_start = col_date(format = &quot;&quot;),
+##   poll_end = col_date(format = &quot;&quot;)
+## )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">old_polls</code></pre>
+<pre><code>## # A tibble: 1,564 x 7
+##    pollster       sample sample_2    candidate points poll_start poll_end  
+##    &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;    
+##  1 C+HarrisX         370 Registered… klobuchar      2 2019-06-06 2019-06-10
+##  2 C+HarrisX         448 Registered… gillibra…      1 2019-06-06 2019-06-10
+##  3 B-Morning Con…  11627 Likely Vot… harris        13 2019-06-06 2019-06-10
+##  4 B-Morning Con…    699 Registered… delaney        0 2019-06-06 2019-06-10
+##  5 C+HarrisX         743 Registered… williams…      1 2019-06-06 2019-06-10
+##  6 A-Quinnipiac …    559 Registered… gabbard        0 2019-06-06 2019-06-10
+##  7 B-Morning Con…  14250 Likely Vot… gillibra…      2 2019-06-06 2019-06-10
+##  8 A-Quinnipiac …    559 Registered… gillibra…      0 2019-06-06 2019-06-10
+##  9 B-Morning Con…  14250 Likely Vot… harris         6 2019-06-06 2019-06-10
+## 10 A+Monmouth Un…    330 Registered… warren         8 2019-06-06 2019-06-10
+## # … with 1,554 more rows</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">updated_polls &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(old_polls, polls_clean) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">distinct</span>()
+
+updated_polls</code></pre>
+<pre><code>## # A tibble: 1,955 x 7
+##    pollster       sample sample_2    candidate points poll_start poll_end  
+##    &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;    
+##  1 C+HarrisX         370 Registered… klobuchar      2 2019-06-06 2019-06-10
+##  2 C+HarrisX         448 Registered… gillibra…      1 2019-06-06 2019-06-10
+##  3 B-Morning Con…  11627 Likely Vot… harris        13 2019-06-06 2019-06-10
+##  4 B-Morning Con…    699 Registered… delaney        0 2019-06-06 2019-06-10
+##  5 C+HarrisX         743 Registered… williams…      1 2019-06-06 2019-06-10
+##  6 A-Quinnipiac …    559 Registered… gabbard        0 2019-06-06 2019-06-10
+##  7 B-Morning Con…  14250 Likely Vot… gillibra…      2 2019-06-06 2019-06-10
+##  8 A-Quinnipiac …    559 Registered… gillibra…      0 2019-06-06 2019-06-10
+##  9 B-Morning Con…  14250 Likely Vot… harris         6 2019-06-06 2019-06-10
+## 10 A+Monmouth Un…    330 Registered… warren         8 2019-06-06 2019-06-10
+## # … with 1,945 more rows</code></pre>
+<p>Now you have a cleaned data set which has been integrated with the recently scraped data. Write this to a csv using <code>write_csv()</code> for later use.</p>
+
 </div>
 </div>
             </section>

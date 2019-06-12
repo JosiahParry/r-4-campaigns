@@ -2,7 +2,7 @@
 
 A very important metric to keep track of is how your candidate is polling. Are they gaining a lead in the polls or falling behind? This data is often reported via traditional news organizations or some other mediums. The supposed demi-God and mythical pollster Nate Silver's organization FiveThirtyEight does a wonderful job aggregating polls. Their page [National 2020 Democratic Presidential Primary Polls](https://projects.fivethirtyeight.com/2020-primaries/democratic/national/) has a table of the most recent polls from many different pollsters. 
 
-In this use case we will scrape acquire this data through web scraping using `rvest`. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate's growth during the quarter. 
+In this use case we will acquire this data by web scraping using `rvest`. We will also go over ways to programatically save polls results to a text file. Saving polling results can allow you present a long term view of your candidate's growth during the quarter. 
 
 ## Understanding `rvest` 
 
@@ -186,13 +186,15 @@ clean_date(polls_tidy$dates[10], .return = "first")
 clean_date(polls_tidy$dates[10], .return = "second")
 ```
 
-We can use this new function to create two new columns `poll_start` and `poll_end` using `mutate()`. Following this we can deselect the original `dates` column and save this to `polls_clean`.
+We can use this new function to create two new columns `poll_start` and `poll_end` using `mutate()`. Following this we can deselect the original `dates` column, remove any observations missing a `points` value, remove duplicates using `distinct()`, and save this to `polls_clean`.
 
 ```{r}
 polls_clean <- polls_tidy %>% 
   mutate(poll_start = clean_date(dates, "first"),
          poll_end = clean_date(dates, "second")) %>% 
-  select(-dates)
+  select(-dates) %>% 
+  filter(!is.na(points)) %>% 
+  distinct()
 
 polls_clean
 ```
@@ -211,6 +213,8 @@ avg_polls <- polls_clean %>%
   # remove candidates who appear in 50 or fewer polls: i.e. HRC
   filter(n_polls > 50) %>% 
   arrange(-avg_points)
+
+avg_polls
 ```
 
 
@@ -224,3 +228,26 @@ avg_polls %>%
   labs(title = "Polls Standings", x = "", y = "%")
 ```
 
+
+## Creating historic polling data
+
+It may become useful to have a running history of how candidates have been polling. We can use R to write a csv file of the data from FiveThirtyEight. However, what happens when the polls update? How we can we keep the previous data _and_ the new data? We will work through an example using a combination of `bind_rows()` and `distinct()`. I want to emphasize that this is not a good practice if you need to scale to hundreds of thousand of rows. This works in this case as the data are inherently small.
+
+To start, I have created a sample dataset which contains 80% of these polls (maybe less by the time you do this!). Note that is probably best to version control this or have multiple copies as a failsafe. 
+
+The approach we will take is to read in the historic polls data set and bind rows with the `polls_clean` data we have scraped. Next we remove duplicate rows using `distinct()`.
+
+
+```{r}
+old_polls <- read_csv("data/polls.csv")
+
+old_polls
+
+updated_polls <- bind_rows(old_polls, polls_clean) %>% 
+  distinct()
+
+updated_polls
+```
+
+
+Now you have a cleaned data set which has been integrated with the recently scraped data. Write this to a csv using `write_csv()` for later use.
