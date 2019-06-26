@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 texting | R for Pogressive Campaigns</title>
+  <meta name="description" content="Chapter 8 texting | R for Pogressive Campaigns" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 texting | R for Pogressive Campaigns" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 texting | R for Pogressive Campaigns" />
+  
+  
+  
+
+<meta name="author" content="Josiah Parry" />
+
+
+<meta name="date" content="2019-06-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="shiny-creating-interactive-dashboards.html">
+<link rel="next" href="google-trends-results.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R for Campaigns</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> This will be a preface</a></li>
+<li class="chapter" data-level="2" data-path="calculating-ptg.html"><a href="calculating-ptg.html"><i class="fa fa-check"></i><b>2</b> calculating PTG</a></li>
+<li class="chapter" data-level="3" data-path="ptg-sql.html"><a href="ptg-sql.html"><i class="fa fa-check"></i><b>3</b> ptg-sql</a></li>
+<li class="chapter" data-level="4" data-path="reporting-googlesheets.html"><a href="reporting-googlesheets.html"><i class="fa fa-check"></i><b>4</b> reporting-googlesheets</a></li>
+<li class="chapter" data-level="5" data-path="reporting.html"><a href="reporting.html"><i class="fa fa-check"></i><b>5</b> reporting</a></li>
+<li class="chapter" data-level="6" data-path="mapping-doors-targets.html"><a href="mapping-doors-targets.html"><i class="fa fa-check"></i><b>6</b> mapping-doors-targets</a></li>
+<li class="chapter" data-level="7" data-path="shiny-creating-interactive-dashboards.html"><a href="shiny-creating-interactive-dashboards.html"><i class="fa fa-check"></i><b>7</b> shiny - creating interactive dashboards</a></li>
+<li class="chapter" data-level="8" data-path="texting.html"><a href="texting.html"><i class="fa fa-check"></i><b>8</b> texting</a></li>
+<li class="chapter" data-level="9" data-path="google-trends-results.html"><a href="google-trends-results.html"><i class="fa fa-check"></i><b>9</b> google trends results</a><ul>
+<li class="chapter" data-level="9.1" data-path="google-trends-results.html"><a href="google-trends-results.html#google-trends-data"><i class="fa fa-check"></i><b>9.1</b> Google Trends Data</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="google-trends-results.html"><a href="google-trends-results.html#relative-popularity"><i class="fa fa-check"></i><b>9.1.1</b> Relative Popularity</a></li>
+<li class="chapter" data-level="9.1.2" data-path="google-trends-results.html"><a href="google-trends-results.html#related-queries"><i class="fa fa-check"></i><b>9.1.2</b> Related Queries</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="google-trends-results.html"><a href="google-trends-results.html#trendyy"><i class="fa fa-check"></i><b>9.2</b> <code>trendyy</code></a></li>
+<li class="chapter" data-level="9.3" data-path="google-trends-results.html"><a href="google-trends-results.html#visualizing-trends"><i class="fa fa-check"></i><b>9.3</b> Visualizing Trends</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="workflow.html"><a href="workflow.html"><i class="fa fa-check"></i><b>10</b> workflow</a></li>
+<li class="chapter" data-level="11" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html"><i class="fa fa-check"></i><b>11</b> Web-Scraping: Polling use case</a><ul>
+<li class="chapter" data-level="11.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#understanding-rvest"><i class="fa fa-check"></i><b>11.1</b> Understanding <code>rvest</code></a></li>
+<li class="chapter" data-level="11.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#example"><i class="fa fa-check"></i><b>11.2</b> Example</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#date-cleaning"><i class="fa fa-check"></i><b>11.2.1</b> Date cleaning</a></li>
+<li class="chapter" data-level="11.2.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#visualization"><i class="fa fa-check"></i><b>11.2.2</b> Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#creating-historic-polling-data"><i class="fa fa-check"></i><b>11.3</b> Creating historic polling data</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="texting" class="section level1">
+<h1><span class="header-section-number">Chapter 8</span> texting</h1>
+<pre class="sourceCode r"><code class="sourceCode r">canvass &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/canvassing_results.csv&quot;</span>)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   van_id = col_double(),
+##   date = col_date(format = &quot;&quot;),
+##   vol_yes = col_double()
+## )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">van_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/van_names.csv&quot;</span>)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   van_id = col_double(),
+##   first_name = col_character(),
+##   last_name = col_character(),
+##   date_of_birth = col_date(format = &quot;&quot;),
+##   age = col_double()
+## )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">turf_lookup &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/van_turf_lookup.csv&quot;</span>)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   van_id = col_double(),
+##   turf_code = col_character()
+## )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">universe &lt;-<span class="st"> </span><span class="kw">inner_join</span>(canvass, van_names) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(van_id) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># for duplicates grab the one where they indicated vol yes</span>
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">1</span>, <span class="dt">wt =</span> vol_yes) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># make sure there is only 1 observation per person in the case that </span>
+<span class="st">  </span><span class="co"># duplicates had the same vol_yes result</span>
+<span class="st">  </span><span class="kw">sample_n</span>(<span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#join region for hypothetical polling location / organizer info</span>
+<span class="st">  </span><span class="kw">left_join</span>(turf_lookup)</code></pre>
+<pre><code>## Joining, by = &quot;van_id&quot;</code></pre>
+<pre><code>## Joining, by = &quot;van_id&quot;</code></pre>
+<p>We want the message to be coming from the proper regional organizing director (ROD).</p>
+<p>We will make some fake names for our RODs. We will create a named vector where the name is the turf code and the value is the organizer’s name (sampled from the babynames package / dataset cite here).</p>
+<pre class="sourceCode r"><code class="sourceCode r">organizers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Rosaleen&quot;</span>, <span class="st">&quot;Larissa&quot;</span>, <span class="st">&quot;Lafayette&quot;</span>, <span class="st">&quot;Theo&quot;</span>, <span class="st">&quot;Zamere&quot;</span>, <span class="st">&quot;Colleen&quot;</span>)
+<span class="kw">names</span>(organizers) &lt;-<span class="st"> </span>LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]
+
+organizers</code></pre>
+<pre><code>##           A           B           C           D           E           F 
+##  &quot;Rosaleen&quot;   &quot;Larissa&quot; &quot;Lafayette&quot;      &quot;Theo&quot;    &quot;Zamere&quot;   &quot;Colleen&quot;</code></pre>
+<p>We will use <code>stringr::str_replace_all()</code> to create an <code>organizer</code> column</p>
+<pre class="sourceCode r"><code class="sourceCode r">universe <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">organizer =</span> <span class="kw">str_replace_all</span>(turf_code, organizers)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(organizer, <span class="kw">everything</span>())</code></pre>
+<pre><code>## # A tibble: 6,004 x 9
+##    organizer van_id date       vol_yes first_name last_name date_of_birth
+##    &lt;chr&gt;      &lt;dbl&gt; &lt;date&gt;       &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;date&gt;       
+##  1 Larissa        1 2019-03-15       1 Timika     Ehrsam    1970-01-03   
+##  2 Zamere         2 2019-01-30       1 Johanna    Gorden    1973-12-15   
+##  3 Zamere         3 2019-03-08       0 Parys      Stoelting 1997-02-15   
+##  4 Larissa        4 2019-02-21       0 Lavell     Dewall    1992-10-23   
+##  5 Lafayette      5 2019-01-13       0 Brenisha   Pachter   1977-07-05   
+##  6 Zamere         6 2019-01-13       1 Hoang      Millon    1992-02-29   
+##  7 Larissa        7 2019-01-14       1 Rishith    Pisciotto 1987-09-25   
+##  8 Lafayette      8 2019-01-28       1 Maximilian Arakawa   1999-05-14   
+##  9 Theo           9 2019-02-18       0 Timmie     Schlag    1965-06-12   
+## 10 Rosaleen      10 2019-02-05       0 Swetha     Spreitzer 2000-12-08   
+## # … with 5,994 more rows, and 2 more variables: age &lt;dbl&gt;, turf_code &lt;chr&gt;</code></pre>
+<p>Say each region has their own unique polling location (realistically this will be a much more fine grain dataset that you can join on).</p>
+<p>We can specify the polling locations using a <code>case_when()</code> function call. We will build upon the previous pipe line. In case when you specify a logical statement and then return a value using the <code>~</code>—i.e. <code>something == TRUE ~ &quot;if true value&quot;</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">universe_locations &lt;-<span class="st"> </span>universe <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">organizer =</span> <span class="kw">str_replace_all</span>(turf_code, organizers),
+         <span class="dt">polling_place =</span> <span class="kw">case_when</span>(
+           turf_code <span class="op">==</span><span class="st"> &quot;A&quot;</span> <span class="op">~</span><span class="st"> &quot;Community Center&quot;</span>,
+           turf_code <span class="op">==</span><span class="st"> &quot;B&quot;</span> <span class="op">~</span><span class="st"> &quot;High School&quot;</span>,
+           turf_code <span class="op">==</span><span class="st"> &quot;C&quot;</span> <span class="op">~</span><span class="st"> &quot;Town Hall&quot;</span>,
+           turf_code <span class="op">==</span><span class="st">  &quot;D&quot;</span> <span class="op">~</span><span class="st"> &quot;Elementary School&quot;</span>, 
+           turf_code <span class="op">==</span><span class="st"> &quot;E&quot;</span> <span class="op">~</span><span class="st"> &quot;Rotary Club&quot;</span>,
+           turf_code <span class="op">==</span><span class="st"> &quot;F&quot;</span> <span class="op">~</span><span class="st"> &quot;Senior Center&quot;</span>
+         )
+  )
+
+universe_locations</code></pre>
+<pre><code>## # A tibble: 6,004 x 10
+##    van_id date       vol_yes first_name last_name date_of_birth   age
+##     &lt;dbl&gt; &lt;date&gt;       &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;date&gt;        &lt;dbl&gt;
+##  1      1 2019-03-15       1 Timika     Ehrsam    1970-01-03       49
+##  2      2 2019-01-30       1 Johanna    Gorden    1973-12-15       46
+##  3      3 2019-03-08       0 Parys      Stoelting 1997-02-15       22
+##  4      4 2019-02-21       0 Lavell     Dewall    1992-10-23       27
+##  5      5 2019-01-13       0 Brenisha   Pachter   1977-07-05       42
+##  6      6 2019-01-13       1 Hoang      Millon    1992-02-29       27
+##  7      7 2019-01-14       1 Rishith    Pisciotto 1987-09-25       32
+##  8      8 2019-01-28       1 Maximilian Arakawa   1999-05-14       20
+##  9      9 2019-02-18       0 Timmie     Schlag    1965-06-12       54
+## 10     10 2019-02-05       0 Swetha     Spreitzer 2000-12-08       19
+## # … with 5,994 more rows, and 3 more variables: turf_code &lt;chr&gt;,
+## #   organizer &lt;chr&gt;, polling_place &lt;chr&gt;</code></pre>
+<p>Generally, it is useful to segment texting scripts to allow for more tailored messaging. It is recommended to treat your potential volunteers differently than those who have not indicated a desire to volunteer.</p>
+<p>Let’s go ahead and create two different tibbles, one for vol yes and vol no. Based on this, we will create custom scripts.</p>
+<pre class="sourceCode r"><code class="sourceCode r">vol_yes &lt;-<span class="st"> </span><span class="kw">filter</span>(universe_locations, vol_yes <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)
+vol_no &lt;-<span class="st"> </span><span class="kw">filter</span>(universe_locations, vol_yes <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</code></pre>
+<p>At this point you should always check to see if your segmentation has missed anyone. The sum of the number of rows in your two tables should add up to the total number of rows in the original tibble (<code>universe_locations</code>). Let’s perform that sanity check before moving on.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(vol_yes) <span class="op">+</span><span class="st"> </span><span class="kw">nrow</span>(vol_no) <span class="op">==</span><span class="st"> </span><span class="kw">nrow</span>(universe_locations)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>This returns <code>TRUE</code>, we are good to move onward! If there were any missing rows, I would recommend finding a way to incorporate them into some generic universe.</p>
+<p>The next step is to create the script. The package <code>glue</code> allows us to create character strings with the expressions or values from a tibble. Learn more <a href="https://glue.tidyverse.org/">here</a>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">vol_yes_message &lt;-<span class="st"> </span>vol_yes <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">message =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;Hi {first_name} this is {organizer} with Abraham Lincoln for the Union! The election is right around the corner. We need all the help we can get, can we count on you to volunteer at {polling_place} on election day?&quot;</span>))
+
+vol_no_message &lt;-<span class="st"> </span>vol_no <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">message =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&quot;Hi {first_name} this is {organizer} with Abraham Lincoln for the Union! The election is right around the corner. Your polling location is at the {polling_place}. Can we count on your vote?&quot;</span>))
+
+messages &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(vol_yes_message, vol_no_message)</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): Vectorizing &#39;glue&#39; elements may not preserve
+## their attributes
+
+## Warning in bind_rows_(x, .id): Vectorizing &#39;glue&#39; elements may not preserve
+## their attributes</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(messages, message)</code></pre>
+<pre><code>## # A tibble: 6,004 x 1
+##    message                                                                 
+##    &lt;chr&gt;                                                                   
+##  1 Hi Timika this is Larissa with Abraham Lincoln for the Union! The elect…
+##  2 Hi Johanna this is Zamere with Abraham Lincoln for the Union! The elect…
+##  3 Hi Hoang this is Zamere with Abraham Lincoln for the Union! The electio…
+##  4 Hi Rishith this is Larissa with Abraham Lincoln for the Union! The elec…
+##  5 Hi Maximilian this is Lafayette with Abraham Lincoln for the Union! The…
+##  6 Hi Deeksha this is Lafayette with Abraham Lincoln for the Union! The el…
+##  7 Hi Therron this is Lafayette with Abraham Lincoln for the Union! The el…
+##  8 Hi Lonney this is Lafayette with Abraham Lincoln for the Union! The ele…
+##  9 Hi Robby this is Theo with Abraham Lincoln for the Union! The election …
+## 10 Hi Siah this is Rosaleen with Abraham Lincoln for the Union! The electi…
+## # … with 5,994 more rows</code></pre>
+<p>Once you have created your custom messaging you can write this to a <code>csv</code> and upload it into a peer to peer texting platform like Relay and Hustle. In there you can, hopefully, map the VAN IDs so that the text messages are recorded in VAN (talk to your VAN Admin about setting up these integrations).</p>
+<p>One problem that you might face with platforms like Relay and Hustle is that custom fields can have a character limit. There are a few ways to handle this. One way is by recreating the custom messages within the platform themselves. However, I have found this historically somewhat cumbersom. My work around was to split each sentence into it’s own custom field.</p>
+<p>We can split the message into the sentences. This will create a list column which we will then unnest (<a href="https://www.rstudio.com/resources/videos/how-to-work-with-list-columns/">working with list columns</a> by Garret Grolemund).</p>
+<pre class="sourceCode r"><code class="sourceCode r">final_message &lt;-<span class="st"> </span>messages <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">message =</span> <span class="kw">str_split</span>(message, <span class="kw">boundary</span>(<span class="st">&quot;sentence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">unnest</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(van_id) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">message_number =</span> <span class="kw">row_number</span>(),
+         <span class="dt">message_number =</span> <span class="kw">paste0</span>(<span class="st">&quot;message_&quot;</span>,message_number)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(message_number, message) 
+
+<span class="kw">select</span>(final_message, <span class="kw">contains</span>(<span class="st">&quot;message_&quot;</span>))</code></pre>
+<pre><code>## # A tibble: 6,004 x 4
+##    message_1              message_2        message_3              message_4
+##    &lt;chr&gt;                  &lt;chr&gt;            &lt;chr&gt;                  &lt;chr&gt;    
+##  1 &quot;Hi Timika this is La… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  2 &quot;Hi Johanna this is Z… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  3 &quot;Hi Hoang this is Zam… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  4 &quot;Hi Rishith this is L… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  5 &quot;Hi Maximilian this i… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  6 &quot;Hi Deeksha this is L… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  7 &quot;Hi Therron this is L… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  8 &quot;Hi Lonney this is La… &quot;The election i… We need all the help … &lt;NA&gt;     
+##  9 &quot;Hi Robby this is The… &quot;The election i… We need all the help … &lt;NA&gt;     
+## 10 &quot;Hi Siah this is Rosa… &quot;The election i… We need all the help … &lt;NA&gt;     
+## # … with 5,994 more rows</code></pre>
+<p>Final step: upload to relay / hustle / whatever platform you use. Blast ’em.</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="shiny-creating-interactive-dashboards.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="google-trends-results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["r4c.pdf", "r4c.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
