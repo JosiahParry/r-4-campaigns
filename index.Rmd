@@ -22,7 +22,7 @@ I write this with a few assumptions. These being that you have at least a fundam
 
 ## Getting Help
 
-If you find yourself struggling with any of these exercises or handling data for your own use-case there are a number of ways to seek help. If you have code specific issues, you can always head over tto [stack**overflow**](https://stackoverflow.com/). The [RStudio Community page](https://community.rstudio.com/) is another great resource. Also, do not hesitate to reach out to me direcly via Twitter ([\@josiahparry](https://twitter.com/josiahparry)), my DMs are open.
+If you find yourself struggling with any of these exercises or handling data for your own use-case there are a number of ways to seek help. If you have code specific issues, you can always head over to [stack**overflow**](https://stackoverflow.com/). The [RStudio Community page](https://community.rstudio.com/) is another great resource. Also, do not hesitate to reach out to me direcly via Twitter ([\@josiahparry](https://twitter.com/josiahparry)), my DMs are open.
 
 
 ## Infrastructure overview
