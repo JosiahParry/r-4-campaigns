@@ -1,0 +1,4 @@
+# ptg-sql
+
+* create local postgres db for the existing sample data 
+* go over creating the appropriate sql code.

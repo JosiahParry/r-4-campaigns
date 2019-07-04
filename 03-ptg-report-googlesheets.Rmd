@@ -11,7 +11,7 @@ To use the `googlesheets` package you must first install it (`install.packages("
 library(googlesheets)
 
 # register the sheet
-sheet <- gs_title("R 4 Progressive Campaigns")
+sheet <- gs_url("https://docs.google.com/spreadsheets/d/1tROfDCP8meClFSDupPJViEQVIZ-Fsn36U9on7qSERzs/edit?usp=sharing")
 
 # read the `weekly_canvas` tab
 weekly_canvass <- gs_read(sheet, "weekly_canvass")
@@ -22,6 +22,7 @@ goals <- gs_read(sheet, "goals")
 weekly_canvass
 goals
 ```
+
 Notice that this code creates two tibbles in memory. Now everything else is the same. We will work within the context of an R Markdown document ([intro to R Markdown](https://rmarkdown.rstudio.com/articles_intro.html)).
 
 We want to create a simple report which will be emailed out to the organizing director each morning with the most up to date weekly PTG. 
@@ -31,7 +32,8 @@ Since this is a weekly report, we want to filter to the current week. In this ca
 ```{r}
 current_week <- weekly_canvass %>% 
   filter(week == 11) %>% 
-  left_join(filter(goals, week == 11), by = c("turf_code" = "region", "week")) %>% 
+  left_join(filter(goals, week == 11),
+            by = c("turf_code" = "region", "week")) %>% 
   mutate(ptg = n_pledged / goal)
 
 current_week

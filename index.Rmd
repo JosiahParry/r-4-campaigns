@@ -10,7 +10,42 @@ link-citations: yes
 description: ""
 ---
 
-# This will be a preface
+# Preface
+
+As the 2020 Presidential election looms nearer and nearer. It is important that every campaign is keeping an eye on their field performance. In 2008, the Obama campaign revolutionized the use of data in political campaigns. Since then, data teams have expanded and grown in size, capacity, and complexity.
+
+This short bookdown project is intended to illustrate how data can be used in campaigns through the statistical programming language R. This is a collection of small "recipes" that I have created that are intended to aid data teams in leveragng R.
+
+As the Data Director for NextGen American New Hampshire team during the 2018 midterm elections, I learned a lot about the ways that data was and wasn't being leveraged in progressive politics. This is my attempt to democratize (pun heavily intended) data analytic skills for progressive campaigns.
+
+I write this with a few assumptions. These being that you have at least a fundamental background in R—if this is not the case, please work through the first few chapters of [R for Data Science](https://r4ds.had.co.nz/). I also assume that you and your team are using VAN (Voter Activation Network); potentially using Civis Analytics for hosting, scheduling, and exporting your data; and are utilizing Google Sheets to some extent in your work. Note that none of the above has to be true for these examples to be useful for you and your team.
+
+## Getting Help
+
+If you find yourself struggling with any of these exercises or handling data for your own use-case there are a number of ways to seek help. If you have code specific issues, you can always head over tto [stack**overflow**](https://stackoverflow.com/). The [RStudio Community page](https://community.rstudio.com/) is another great resource. Also, do not hesitate to reach out to me direcly via Twitter ([\@josiahparry](https://twitter.com/josiahparry)), my DMs are open.
+
+
+## Infrastructure overview
+
+This will be a brief introduction to the tools your organization might be using. 
+
+> "If it is not in VAN, it does not exist" - Every VAN Admin
+
+[NGP VAN](https://www.ngpvan.com/) is the **V**oter **A**ctivation **N**etwork. VAN is the location where all voter interactions live. VAN is our database for voter outreach.When contact is made with a potential voter that is entered in VAN. There are many common ways that this data is recorded. Crowd canvassing—i.e. collecting pledge cards, petitioon sign ups. Door-to-door canvassing—i.e. knocking on doors and having direct conversations with voters. This is sometimes referred to "knocking doors". Two other common types of voter outreach is phone banking and text banking. 
+
+
+
+What is Civis?
+
+Civis analytics is a company that creates a data sciecne platforms which is used by many progressive campaigns. They provide secure cloud based solution for data warehousing, analysis, and workflow automation, among others. 
+
+It is common for many campaigns to have daily exports from VAN into Civis. This provides data directors and data managers the ability to programmatically analyse VAN data. Since data are avaialble in a database, they can be queried using SQL. 
+
+SQL scripts are written to create aaggregated data. A lot of the power of this comes from the ability to create workflows in Civis. The output of SQL scripts can be exported to a Google Sheet which is much more accessible for the less technically inclined. This also is great for creating shareable sheets-based reporting. 
+
+The workflow:
+
+This guide/book will try to replicate this workflow as best as possible.
 
 
 ```{r include=FALSE}
@@ -19,3 +54,5 @@ knitr::write_bib(c(
   .packages(), 'bookdown', 'knitr', 'rmarkdown'
 ), 'packages.bib')
 ```
+
+

@@ -1,17 +1,36 @@
 # calculating PTG
 
-Goal: Demonstrate how to take raw canvassing data and calculate a PTG. 
+### Goal: Demonstrate how to take raw canvassing data and calculate a PTG. 
 
-This writing assumes that the reader has at least a basic understanding of R and the tidyverse—particularly dplyr and ggplot2.
+One of the first reports that a data team is asked to create is the Percent to Goal (hereforth referred to as PTG). A PTG report is intended to illustrate numerically how well a field team is performing. After all, the strength of a campaign comes down to two things in particular: 1) how well your team can mobilize voters on the ground, and 2) reaching potential voters through digital media. This report will focus on field performance.
 
-Overview:
+Field work is primarily focused on canvassing. There are two types of canvassing that we care about.
 
-* reading in data
-* aggregating 
-* joining tables
+1. Crowd canvassing: walking around and engaging voters in the public space (i.e. talking to people at a farmers market)
+1. Door-to-door canvassing: knocking directly on voters' doors to discuss candidates, polling locations, etc. 
+
+[This article](https://www.masterclass.com/articles/what-is-canvassing-learn-about-the-campaign-technique#how-to-canvass-in-6-steps) from Masterclass does a solid job of describing canvassing. 
+
+This chapter will walk you through analyzing crowd canvassing data. Crowd canvassing is usually done through the use of pledge cards. Pledge cards explicitly ask voters to commit to voting, their reasons for voting for a specific candidates (usually issue based to gather further targeting information), and often have an optional field to indicate whether or not they will volunteer. 
+
+Additionally, field territory is often split up into _regions_. Each region has their own goals to meet (usually based on voter population) for the number of people pledged to vote and volunteer. This report will see how  far along each region is by week to their goal.
 
 
-One of the most important metrics to a field program is the percent to goal (PTG). Field staff have a target number of pledge cards or doors to knock on. It is important for the data manger to provide a reliant and robust PTG reporting system to enable organizing directors to make informed and data driven decisions. 
+The packages that will be used in this chapter are:
+
+* `readr`: Reading data (imported in the tidyverse)
+* `dplyr`: Manipulating datta (imported in the tidyverse)
+* `ggplot2`: Visualizing data (imported in the tidyverse)
+* `lubridate`: Managing dates
+
+Skills that will be covered:
+
+* Reading data
+* Joining tables
+* Aggregating data
+* Visualizing data
+
+This assumes that you have an understanding of `dplyr` and `ggplot2`. 
 
 In this exercise we will use three datasets (located in the data folder). 
 
@@ -22,11 +41,14 @@ In this exercise we will use three datasets (located in the data folder).
 
 Steps:
 
-* read in canvassing results
-* read in turf code look up table
-* create new week variable
-* aggregate on the weekly level
-* read in goal and calculate PTG
+* Read in canvassing results
+* Read in turf code look up table
+* Create new week variable
+* Aggregate on the weekly level
+* Read in goals
+* Calculate PTG
+
+## Exercise 
 
 ```{r}
 library(tidyverse)
@@ -48,6 +70,7 @@ That is a lot of volunteers! They will go into the volunter recruitment and mana
 turf_lookup <- read_csv("data/van_turf_lookup.csv")
 turf_lookup 
 ```
+
 Here we see that there are only two variables, `van_id`, and `turf_code`. This is a very common structure in relational data architectures. Because this table and the `canvass` table both share the `van_id` column we can merge the who based on this. This is referred to as a _"common identifier"_. The operation of joining two tables together is called a join. 
 
 For more on joins and relational data please read [chapter 13 of R for Data Science](https://r4ds.had.co.nz/relational-data.html) by Hadley Wickham.
@@ -58,7 +81,7 @@ For more on joins and relational data please read [chapter 13 of R for Data Scie
 left_join(canvass, turf_lookup, by = "van_id") 
 ```
 
-This code node provides the turf codes for each `van_id`, but we still do not have the week that each observation belongs to.We are interested in the weekly pledge card goal so it is important to extract the calendar week from the date field. We will use the function `lubridate::week()` to do this. 
+This table provides the turf codes for each `van_id`, but we still do not have the week that each observation belongs to.We are interested in the weekly pledge card goal so it is important to extract the calendar week from the date field. We will use the function `lubridate::week()` to do this. Your campaign may use different ways to measure weeks, and this may require some additional finagling on your end. 
 
 We will pipe the resultant table from the join into a mutate call where we will create this new variable and save it to an object called `canvass_clean`.
 
