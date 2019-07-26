@@ -1,0 +1,183 @@
+# State Voter Files
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Motivation
+
+Who one votes for is private but when someone voted is a matter of public record. States' Secretary of State (SOS) maintain a public record of who voted. The accompanying data may vary state by state. For example, the state of New Hampshire does not record the age of the person voting. Companies such as [Catalist](https://www.catalist.us/data/) have built their business around aggregating, cleaning, and enhancing public voter files. However, these databases can be quite expensive and are not updated at the same pace as the state voter file. 
+
+## Overview
+
+In this section, we will demonstrate how to programatically download and clean the state voterfile. From there, we will utilize it to identify potential voters and canvassing targets. Once those targets have been identified, they can  be uploaded as a list into VAN based on their SOS ID which should be present—depending on your provider. 
+
+The OH SOS website provide links to the [voter file](https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:STWD:::#stwdVtrFiles) which are updated frequently. These files were last updated on July 19th, 2019 as of today (July 21st, 2019). We will combine the webscraping tools (`rvest`) that we previously learned and combine them with `dplyr` and `data.table`—a package that works exceptionally well with large data, see the [wiki](https://github.com/Rdatatable/data.table/wiki) for a primer.
+
+## Exercise
+
+As always, let's set up our workspace. 
+
+```{r message=FALSE, warning=FALSE}
+library(rvest)
+library(data.table)
+library(dplyr)
+```
+
+The first step is to use `rvest` to identify the URLs that we can use to download the voter-file. To do this, use the [inspector tool](https://atendesigngroup.com/blog/how-determine-which-css-styling-element) in your web browser and identify the HTML elements of interest. In this use case, we will specify the `highlight-row` class and the `a` (anchor) tag. The `a` tag is used to create hyperlinks within a document. The `href` attribute is used to specify the hyperlink. We can extract the `href` attribute using `rvest::html_attr()`. 
+
+
+### Identifying download links
+
+```{r}
+session <- html_session("https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:STWD:::#stwdVtrFiles")
+
+html_nodes(session, ".highlight-row a") %>% 
+  html_attr("href")
+```
+
+Notice that this does not actually provide the full URL that is needed, but rather the query parameters. We can iteratively append this to the base url—in this case `https://www6.sos.state.oh.us/ords/`—using `purrr::map()`.
+
+```{r}
+file_urls <- html_nodes(session, ".highlight-row a") %>% 
+  html_attr("href") %>% 
+  purrr::map_chr(~paste0("https://www6.sos.state.oh.us/ords/", .))
+
+file_urls
+```
+
+With that, we now have the file paths for the four statewide voter file data sets. For the sake of computation and memory, we will only work with the first URL.
+
+### Download the voter file 
+
+Now that we have the links to the voter file, we can use R to download them using `download.file()`. The first argument is the link to the file, the second is the destination of that file. Here we are saving the first file into the data folder. You can also do this iteratively using `purrr::map()`. 
+
+
+```{r, eval = FALSE}
+# download the file as a .txt.gz (that's the file format if you download it from the web)
+download.file(file_urls[1], destfile = "data/SWVF_1_22 (Adams-Erie).txt.gz")
+```
+
+Note that the file is in `.gz` compressed format. We can uncompress this using `R.utils::gunzip()` which will return the compressed file. 
+
+```{r, eval = FALSE}
+R.utils::gunzip("data/SWVF_1_22 (Adams-Erie).txt.gz")
+```
+
+data.table reads text files using `fread()`. Since this file is very large, we will take only the first 10,000 observations. Do this by setting the `nrows` argument to `10000`. Since data.table is an extension upon the `data.frame`, we can combine both data.table aand dplyr functions. 
+
+```{r}
+swvf <- fread("data/SWVF_1_22 (Adams-Erie).txt", nrows = 10000)
+```
+
+Do your due dilligence and look at _all_ 106 columns. This is a great time to embrace dirty data. Are the data [tidy](https://vita.had.co.nz/papers/tidy-data.pdf)? 
+
+```{r}
+glimpse(swvf)
+```
+
+Nope! They are not tidy. Currently each row represents one voter and the events are on the columns following the format `ELECTION TYPE-MM/DD/YYYY`. The date of the election should be its own column as should the type (i.e. general, primary, or special). These data need to be converted to a longer format where each row is a unique combination of one voter and election pair. This means that if an individual voted in five elections, there would be five observations.
+
+There are two main steps that need to be taken to tidy up these data. Collect the column headers and their respective values into two new columns: `election`, and `party`. Since the column headers contain two variables of interest, namely the election type and election date, the column will be split into two.
+
+Usually we would use `gather()` or `pivot_longer()` from `tidyr`. However, these data are quite large and we need to write preformative code. data.table uses `data.table::melt()` to preform the same operation but is much faster. In this example we specify the `id` columns. These are the columns that will not be gathered into a new column. We also specify the name of the variable that will be created from the column headers with the `variable.name` argument. Next, we specfiy the name of the column that will contain the values.
+
+```{r message=FALSE, warning=FALSE}
+sw_gathered <- swvf %>% 
+  melt(id = 1:46, variable.name = "election", value.name = "party") %>% 
+  janitor::clean_names()
+```
+
+Preview the results of `melt()`. The example below uses `dplyr::distinct()` to identify unique value pairs. 
+
+```{r}
+# Now we can view the results. The election column can be easily split into two different columns. The election type (i.e. primary or general) and the date of the election. Next, the result column looks like there is a lot of room for cleaning. There are "" where NA should be. 
+distinct(sw_gathered, election, party)
+```
+
+Notice that there are multiple values for `party`. What are these?
+
+```{r}
+# what are the unique values?
+distinct(sw_gathered, party)
+```
+
+The SOS website has a downloadable data dictionary. The _Voter File Lyaout_ says:
+
+> The data dictionary Variable filed name with election type and date of each election. Value for this field indicates how the voter voted in that election. 
+
+> Values are:
+C - Constitution Party
+D - Democrat Party
+E - Reform Party
+G - Green Party
+L - Libertarian Party
+N - Natural Law Party
+R - Republican Party
+S - Socialist Party 
+X - Voted without declaring party affiliation
+Blank - Indicates that there is no voting record for this voter for this election
+
+We can use this to clean up the party field using `case_when()`. To create two separate columns for the election type and date, we can split on the first `-`. `tidyr::separate()` will split the column into two or more columns based on the `sep` argument. Once the `election_date` column has been created, we will need to parse it accordingly using lubridate. Since the date column is formatted as `MM/DD/YYYY` we can use `lubridate::mdy()` to parse it to class `Date`.
+
+```{r}
+sw_clean <- sw_gathered %>% 
+  tidyr::separate(election, into = c("election_type", "election_date"), sep = "-") %>% 
+  mutate(election_date = lubridate::mdy(election_date),
+         party = case_when(
+           party == "C" ~ "Constitution",
+           party == "D" ~ "Democrat",
+           party == "E" ~ "Reform",
+           party == "G" ~ "Green",
+           party == "L" ~ "Libertarian",
+           party == "N" ~ "Natural Law",
+           party == "R" ~ "Republican",
+           party == "S" ~ "Socialist",
+           party == "X" ~ "Independent"
+         ))
+```
+
+
+
+```{r}
+# One thing that you will need to do is to identify your target base voters. These will most likely be those who have voted Democrat in previous primaries. Then we will compare those people with their registered party. 
+primary_dems <- sw_clean %>% 
+  filter(election_type == "PRIMARY",
+         party == "Democrat") %>% 
+  count(SOS_VOTERID, party)
+```
+
+
+```{r}
+# join these back to the original voter file to get additional information 
+potential_targets <- right_join(primary_dems, swvf) %>% 
+  select(SOS_VOTERID, PARTY_AFFILIATION, PRECINCT_NAME, DATE_OF_BIRTH, REGISTRATION_DATE, party, n) %>% 
+  filter(party == "Democrat") %>% 
+  mutate(age = as.integer((Sys.Date() - lubridate::ymd(DATE_OF_BIRTH)) / 365))
+
+# generate some cross-tabs. Everyone loves cross tabs. For some insight into how we can segment this group.
+count(potential_targets, PARTY_AFFILIATION, party)
+
+```
+
+```{r}
+# base dems will be those that are registered dem and have voted dem
+# we  will tier our targets
+
+# tier 2 will be our motivation group. Those that aren't registered with a party, but have voted Dem
+# this will be the motivation group
+
+# tier 3 will be our persuasion group. These are the folks that have voted Dem but aren't registered as such. This is the theoretically harder group to encourage to vote. 
+
+# create a new data frame with the SOS VoterID & tier. 
+# export thiws and upload to VAN or other management software. 
+targets <- potential_targets %>% 
+  mutate(tier = case_when(
+    PARTY_AFFILIATION == "D" ~ 1,
+    PARTY_AFFILIATION == "" ~ 2,
+    !PARTY_AFFILIATION %in% c("", "D") ~ 3
+  )) %>% 
+  select(SOS_VOTERID, tier)
+```
+
