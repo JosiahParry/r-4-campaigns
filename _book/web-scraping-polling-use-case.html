@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-07-04" />
+<meta name="date" content="2019-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="google-trends-results.html">
-
+<link rel="next" href="state-voter-files.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -155,6 +155,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#creating-historic-polling-data"><i class="fa fa-check"></i><b>6.3</b> Creating historic polling data</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="state-voter-files.html"><a href="state-voter-files.html"><i class="fa fa-check"></i><b>7</b> State Voter Files</a><ul>
+<li class="chapter" data-level="7.1" data-path="state-voter-files.html"><a href="state-voter-files.html#motivation"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="state-voter-files.html"><a href="state-voter-files.html#overview"><i class="fa fa-check"></i><b>7.2</b> Overview</a></li>
+<li class="chapter" data-level="7.3" data-path="state-voter-files.html"><a href="state-voter-files.html#exercise-1"><i class="fa fa-check"></i><b>7.3</b> Exercise</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="state-voter-files.html"><a href="state-voter-files.html#identifying-download-links"><i class="fa fa-check"></i><b>7.3.1</b> Identifying download links</a></li>
+<li class="chapter" data-level="7.3.2" data-path="state-voter-files.html"><a href="state-voter-files.html#download-the-voter-file"><i class="fa fa-check"></i><b>7.3.2</b> Download the voter file</a></li>
+<li class="chapter" data-level="7.3.3" data-path="state-voter-files.html"><a href="state-voter-files.html#downloading-the-voter-file"><i class="fa fa-check"></i><b>7.3.3</b> Downloading the voter file</a></li>
+<li class="chapter" data-level="7.3.4" data-path="state-voter-files.html"><a href="state-voter-files.html#voter-file-exploratoration"><i class="fa fa-check"></i><b>7.3.4</b> Voter file exploratoration</a></li>
+<li class="chapter" data-level="7.3.5" data-path="state-voter-files.html"><a href="state-voter-files.html#tidying"><i class="fa fa-check"></i><b>7.3.5</b> Tidying</a></li>
+<li class="chapter" data-level="7.3.6" data-path="state-voter-files.html"><a href="state-voter-files.html#creating-targets"><i class="fa fa-check"></i><b>7.3.6</b> Creating targets</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
 
@@ -189,8 +201,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">6.2</span> Example</h2>
 <p>For this example we will be scraping FiveThirtyEight’s aggregated poll table. The table can be found at <a href="https://projects.fivethirtyeight.com/2020-primaries/democratic/national/" class="uri">https://projects.fivethirtyeight.com/2020-primaries/democratic/national/</a>.</p>
 <p>Before we begin, we must always prepare our workspace. Mise en place.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
-<span class="kw">library</span>(tidyverse)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;rvest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     pluck</code></pre>
+<pre><code>## The following object is masked from &#39;package:readr&#39;:
+## 
+##     guess_encoding</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre>
 <p>The first thing we will have to do is specify what page we will be scraping from. <code>html_session()</code> will simulate a session in an html browser. By providing a URL to <code>html_session()</code> we will then be able to access the underlying code of that page. Create an object called <code>session</code> by providing the FiveThirtyEight URL to <code>html_session()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">session &lt;-<span class="st"> </span><span class="kw">html_session</span>(<span class="st">&quot;https://projects.fivethirtyeight.com/2020-primaries/democratic/national/&quot;</span>)</code></pre>
 <p>The next and most important step is to identify which piece of HTML code contains the table. The easiest way to do this is to open up the webpage in Chrome and open up the Inspect Elements view (on Mac - ⌘ + Shift + C). Now that this is open, click the select element button at the top left corner of the inspection pane. Now hover over the table.</p>
@@ -201,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## {xml_node}
 ## &lt;table class=&quot;polls-table tracker&quot;&gt;
 ## [1] &lt;thead class=&quot;hide-mobile&quot; id=&quot;table-header&quot;&gt;&lt;tr&gt;\n&lt;th class=&quot;new&quot;&gt;&lt; ...
-## [2] &lt;tbody&gt;\n&lt;tr class=&quot;visible-row&quot; data-id=&quot;98946&quot;&gt;\n&lt;!-- Shared--&gt;&lt;td ...</code></pre>
+## [2] &lt;tbody&gt;\n&lt;tr class=&quot;visible-row&quot; data-id=&quot;99767&quot;&gt;\n&lt;!-- Shared--&gt;&lt;td ...</code></pre>
 <p>Here we see that this returns on object of class <code>xml_node</code>. This object returns some HTML code but it is still not entirely workable. Since this is an HTML table we want to extract we can use the handy <code>html_table()</code>. Note that if this wasn’t a table but rather text, you can use <code>html_text()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">session <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">html_node</span>(<span class="st">&quot;.polls-table.tracker&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -211,91 +232,108 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="st">  </span><span class="kw">html_node</span>(<span class="st">&quot;.polls-table.tracker&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">html_table</span>(<span class="dt">fill =</span> <span class="ot">TRUE</span>)</code></pre>
 <pre><code>##                           Dates           Pollster
-## 1  •   Jun 30-Jul 2, 2019631 LV Jun 30-Jul 2, 2019
-## 2  • Jun 29-Jul 2, 20191,173 RV Jun 29-Jul 2, 2019
-## 3  •  Jun 29-Jul 2, 20191,367 A Jun 29-Jul 2, 2019
-## 4  • Jun 27-Jul 2, 20191,522 LV Jun 27-Jul 2, 2019
-## 5  •   Jun 29-Jul 1, 2019882 RV Jun 29-Jul 1, 2019
-## 6  • Jun 28-Jul 1, 20191,185 LV Jun 28-Jul 1, 2019
-## 7  •    Jun 28-Jul 1, 2019460 A Jun 28-Jul 1, 2019
-## 8  •   Jun 28-Jul 1, 2019397 RV Jun 28-Jul 1, 2019
-## 9  •    Jun 28-Jul 1, 2019460 A Jun 28-Jul 1, 2019
-## 10 •   Jun 28-Jul 1, 2019397 RV Jun 28-Jul 1, 2019
-## 11 •   Jun 28-Jul 1, 2019554 RV Jun 28-Jul 1, 2019
-## 12 •      Jun 29-30, 2019449 RV    Jun 29-30, 2019
-## 13 •      Jun 28-30, 2019909 RV    Jun 28-30, 2019
-## 14 •      Jun 28-30, 2019656 RV    Jun 28-30, 2019
-## 15 •      Jun 28-30, 2019909 RV    Jun 28-30, 2019
-## 16 •      Jun 28-30, 2019909 RV    Jun 28-30, 2019
-##                        Sample Sample Biden Sanders Warren Harris Buttigieg
-## 1                     BYouGov    631    LV     21%    10%    18%       13%
-## 2                     B+Ipsos  1,173    RV     24%    17%    11%       11%
-## 3                     B+Ipsos  1,367     A     22%    16%     9%       10%
-## 4                BYouGov Blue  1,522    LV     23%    15%    22%       17%
-## 5                   C+HarrisX    882    RV     28%    14%     9%       13%
-## 6           C+Change Research  1,185    LV     18%    17%    22%       21%
-## 7  A+ABC News/Washington Post    460     A     29%    23%    11%       11%
-## 8  A+ABC News/Washington Post    397    RV     30%    19%    12%       13%
-## 9  A+ABC News/Washington Post    460     A     25%    18%     9%        9%
-## 10 A+ABC News/Washington Post    397    RV     28%    16%    10%       11%
-## 11    A-Quinnipiac University    554    RV     22%    13%    14%       20%
-## 12                  C+HarrisX    449    RV     33%    15%     9%       11%
-## 13                  C+HarrisX    909    RV     41%           40%          
-## 14                 A-CNN/SSRS    656    RV     22%    14%    15%       17%
-## 15                  C+HarrisX    909    RV            41%    36%          
-## 16                  C+HarrisX    909    RV     41%    40%                 
-##    O&#39;Rourke Booker Klobuchar Castro Yang Gillibrand Gabbard Hickenlooper
-## 1        9%     3%        2%     1%   2%         0%      1%           1%
-## 2        4%     3%        1%     1%   1%         3%      1%           0%
-## 3        3%     3%        1%     0%   1%         2%      1%           0%
-## 4        7%     2%        2%     1%   1%         2%      0%           1%
-## 5        4%     3%        2%     1%   2%         1%      1%           1%
-## 6       10%     2%        0%     1%   1%         2%      1%           1%
-## 7        4%     2%        1%     2%   4%         1%      0%           1%
-## 8        4%     2%        1%     2%   3%         0%      0%           1%
-## 9        3%     1%        0%     1%   1%         1%                   1%
-## 10       3%     1%        0%     1%   1%         1%                   2%
-## 11       4%     1%        3%     1%   1%         1%      0%           1%
-## 12       6%     4%        2%     0%   1%         1%      1%           1%
-## 13                                                                      
-## 14       4%     3%        3%     2%   1%         1%      0%           1%
-## 15                                                                      
-## 16                                                                      
-##    Delaney Inslee Ryan Bennet de Blasio Bullock Williamson Moulton
-## 1       0%     0%   1%     0%        1%      1%         1%      0%
-## 2       0%     0%   0%     1%        0%      0%         1%      0%
-## 3       0%     0%   0%     1%        0%      0%         1%      0%
-## 4       1%     1%   1%     0%        0%      0%         0%      0%
-## 5       1%     1%   0%     1%        1%      1%         0%      1%
-## 6       0%     1%   0%     0%        0%      0%         0%      1%
-## 7       1%     0%   1%     0%        1%      0%         0%      1%
-## 8       1%     0%   1%     0%        1%      0%         0%      1%
-## 9       0%          0%               0%                 0%      1%
-## 10      0%          0%                                  0%        
-## 11      0%     0%   0%     0%        0%      0%         0%      0%
-## 12      0%     0%   0%     0%        1%      0%         1%      0%
-## 13                                                                
-## 14      0%     0%   0%     0%        0%      1%         0%      0%
-## 15                                                                
-## 16                                                                
-##    Swalwell Gravel Messam Sestak H. Clinton Bloomberg M. Obama Brown Kerry
-## 1        0%     0%     0%     0%         0%                               
-## 2        0%     0%     0%     0%         0%                               
-## 3        0%     0%     0%     0%         0%                               
-## 4        0%     0%     0%     0%         0%                               
-## 5        0%     1%     0%     0%         0%                               
-## 6        0%     0%     0%     0%         0%                               
-## 7        0%     0%                                                        
-## 8        0%     0%                                                        
-## 9                                                                         
-## 10                                                                        
-## 11       0%     0%     0%     0%         0%                               
-## 12       0%     0%     1%     0%         0%                               
-## 13                                                                        
-## 14       0%     0%            0%                                          
-## 15                                                                        
-## 16                                                                        
-##    Abrams Holder McAuliffe Winfrey Ojeda Trump Cuomo Avenatti Kennedy
+## 1  •      Jul 21-23, 2019455 LV    Jul 21-23, 2019
+## 2  •      Jul 21-23, 2019600 LV    Jul 21-23, 2019
+## 3  •   Jul 15-21, 201917,285 LV    Jul 15-21, 2019
+## 4  •      Jul 15-17, 2019910 RV    Jul 15-17, 2019
+## 5  •      Jul 14-16, 2019572 LV    Jul 14-16, 2019
+## 6  •     Jul 2-16, 20195,548 RV     Jul 2-16, 2019
+## 7  •    Jul 8-14, 201916,504 LV     Jul 8-14, 2019
+## 8  •      Jul 12-13, 2019446 RV    Jul 12-13, 2019
+## 9  •        Jul 7-9, 2019400 LV      Jul 7-9, 2019
+## 10 •        Jul 7-9, 2019592 LV      Jul 7-9, 2019
+## 11 •        Jul 6-8, 2019481 LV      Jul 6-8, 2019
+## 12 •     Jul 1-7, 201916,599 LV      Jul 1-7, 2019
+## 13 •   Jun 30-Jul 2, 2019631 LV Jun 30-Jul 2, 2019
+## 14 • Jun 28-Jul 2, 20191,173 RV Jun 28-Jul 2, 2019
+## 15 •  Jun 28-Jul 2, 20191,367 A Jun 28-Jul 2, 2019
+## 16 • Jun 27-Jul 2, 20191,522 LV Jun 27-Jul 2, 2019
+##                            Sample Sample Biden Sanders Warren Harris
+## 1                       AFox News    455    LV     33%    15%    12%
+## 2                         BYouGov    600    LV     25%    13%    18%
+## 3               B-Morning Consult 17,285    LV     33%    18%    14%
+## 4                       C+HarrisX    910    RV     26%    14%     9%
+## 5                         BYouGov    572    LV     23%    13%    15%
+## 6                  D-SurveyMonkey  5,548    RV     25%    16%    16%
+## 7               B-Morning Consult 16,504    LV     32%    19%    14%
+## 8                       C+HarrisX    446    RV     29%    16%     9%
+## 9  A-NBC News/Wall Street Journal    400    LV     26%    13%    19%
+## 10                        BYouGov    592    LV     22%    11%    17%
+## 11              B+Emerson College    481    LV     30%    15%    15%
+## 12              B-Morning Consult 16,599    LV     31%    19%    13%
+## 13                        BYouGov    631    LV     21%    10%    18%
+## 14                        B+Ipsos  1,173    RV     24%    17%    11%
+## 15                        B+Ipsos  1,367     A     22%    16%     9%
+## 16  YouGov Blue/Data for Progress  1,522    LV     23%    15%    22%
+##    Buttigieg O&#39;Rourke Booker Klobuchar Castro Yang Gabbard Gillibrand
+## 1        10%       5%     2%        2%     3%   1%      3%         0%
+## 2         9%       6%     2%        2%     1%   3%      2%         2%
+## 3        13%       5%     3%        2%     1%   1%      2%         1%
+## 4        10%       4%     4%        2%     1%   1%      1%         0%
+## 5        10%       7%     2%        3%     1%   1%      1%         1%
+## 6        14%       8%     3%        3%     1%   2%      2%         1%
+## 7        13%       5%     3%        2%     1%   1%      2%         1%
+## 8        11%       1%     3%        1%     1%   1%      0%         1%
+## 9        13%       7%     2%        1%     1%   1%      2%         0%
+## 10       14%       5%     2%        1%     1%   2%      1%         2%
+## 11       15%       5%     4%        2%     1%   0%      3%         2%
+## 12       14%       6%     3%        2%     1%   1%      1%         1%
+## 13       13%       9%     3%        2%     1%   2%      0%         1%
+## 14       11%       4%     3%        1%     1%   1%      3%         0%
+## 15       10%       3%     3%        1%     0%   1%      2%         0%
+## 16       17%       7%     2%        2%     1%   1%      2%         1%
+##    Hickenlooper Delaney Ryan Inslee de Blasio Bennet Bullock Williamson
+## 1            1%      2%   1%     0%        0%     1%      0%         0%
+## 2            0%      0%   0%     0%        0%     1%      0%         1%
+## 3            1%      0%   1%     1%        0%     1%      0%         1%
+## 4            1%      1%   1%     1%        0%     0%      0%         0%
+## 5            1%      0%   0%     0%        0%     2%      1%         1%
+## 6            1%      0%   0%     1%        0%     1%      1%         0%
+## 7            1%      1%   1%     1%        0%     0%      1%         1%
+## 8            1%      0%   1%     1%        0%     1%      0%         1%
+## 9            0%      1%   1%     0%        1%     0%      1%         0%
+## 10           0%      1%   0%     0%        0%     1%      0%         1%
+## 11           0%      0%   0%     0%        1%     0%      1%         1%
+## 12           1%      1%   1%     1%        0%     1%      0%         1%
+## 13           1%      0%   0%     0%        1%     1%      1%         1%
+## 14           1%      0%   0%     1%        0%     0%      0%         1%
+## 15           1%      0%   0%     1%        0%     0%      0%         1%
+## 16           0%      1%   1%     0%        1%     0%      0%         0%
+##    Moulton Steyer Messam Sestak H. Clinton Bloomberg M. Obama Brown Gravel
+## 1       0%     0%     1%     0%         0%                                
+## 2       0%     0%     1%     0%         0%                                
+## 3       1%     0%     1%                                                  
+## 4       0%     1%     1%     0%         0%                                
+## 5       0%     0%     1%     0%         0%                                
+## 6       1%     0%            0%         0%                                
+## 7       0%     0%                                                         
+## 8       0%     1%     0%     1%         0%                                
+## 9       1%     0%                                                         
+## 10      0%     0%            0%         0%                                
+## 11      0%     0%            0%         0%                                
+## 12      1%     0%                                                         
+## 13      0%     0%            0%         0%                                
+## 14      0%     0%            0%         0%                                
+## 15      0%     0%            0%         0%                                
+## 16      0%     0%            0%         0%                                
+##    Swalwell Kerry Abrams Holder McAuliffe Winfrey Ojeda Trump Cuomo
+## 1                                                                  
+## 2        0%                                                        
+## 3                                                                  
+## 4        0%                                                        
+## 5        0%                                                        
+## 6        0%                                                        
+## 7                                                                  
+## 8        1%                                                        
+## 9                                                                  
+## 10       0%    0%                                                  
+## 11       1%    1%                                                  
+## 12                                                                 
+## 13       0%    0%                                                  
+## 14       0%    0%                                                  
+## 15       0%    0%                                                  
+## 16       0%    0%                                                  
+##    Avenatti Kennedy Patrick Zuckerberg Pelosi Garcetti Newsom Schultz
 ## 1                                                                    
 ## 2                                                                    
 ## 3                                                                    
@@ -312,58 +350,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 14                                                                   
 ## 15                                                                   
 ## 16                                                                   
-##    Patrick Zuckerberg Pelosi Garcetti Newsom Steyer Schultz Kaine Johnson
-## 1                                                                        
-## 2                                                                        
-## 3                                                                        
-## 4                                                                        
-## 5                                                                        
-## 6                                                                        
-## 7                                                                        
-## 8                                                                        
-## 9                                                                        
-## 10                                                                       
-## 11                                                                       
-## 12                                                                       
-## 13                                                                       
-## 14                                                                       
-## 15                                                                       
-## 16                                                                       
-##    Kucinich Lee Scott Sinema Warner NA
-## 1                                     
-## 2                                     
-## 3                                     
-## 4                                     
-## 5                                     
-## 6                                     
-## 7                                     
-## 8                                     
-## 9                                     
-## 10                                    
-## 11                                    
-## 12                                    
-## 13                                    
-## 14                                    
-## 15                                    
-## 16                                    
-##                                                                                                                                                                                                                                          NA
-## 1   Biden21%Warren18%Harris13%Sanders10%Buttigieg9%O&#39;Rourke3%Booker2%Castro2%Bennet1%Bullock1%de Blasio1%Gabbard1%Gillibrand1%Inslee1%Klobuchar1%Delaney0%Gravel0%Hickenlooper0%Messam0%Moulton0%Ryan0%Sestak0%Swalwell0%Williamson0%Yang0%
-## 2   Biden24%Sanders17%Harris11%Warren11%Buttigieg4%O&#39;Rourke3%Yang3%Booker1%Castro1%Klobuchar1%Gillibrand1%Bullock1%Ryan1%Gabbard0%Hickenlooper0%Inslee0%Delaney0%Williamson0%Messam0%Swalwell0%Moulton0%Bennet0%de Blasio0%Gravel0%Sestak0%
-## 3    Biden22%Sanders16%Harris10%Warren9%O&#39;Rourke3%Buttigieg3%Yang2%Booker1%Castro1%Gillibrand1%Bullock1%Ryan1%Klobuchar0%Gabbard0%Hickenlooper0%de Blasio0%Inslee0%Delaney0%Williamson0%Messam0%Swalwell0%Moulton0%Bennet0%Gravel0%Sestak0%
-## 4   Biden23%Warren22%Harris17%Sanders15%Buttigieg7%O&#39;Rourke2%Yang2%Booker2%Klobuchar1%Inslee1%Hickenlooper1%Castro1%Delaney1%Gabbard1%Gillibrand0%Bennet0%de Blasio0%Swalwell0%Ryan0%Bullock0%Moulton0%Sestak0%Gravel0%Messam0%Williamson0%
-## 5    Biden28%Sanders14%Harris13%Warren9%Buttigieg4%O&#39;Rourke3%Booker2%Castro2%Delaney1%Gabbard1%Gillibrand1%Hickenlooper1%Klobuchar1%Williamson1%Yang1%Ryan1%Swalwell1%Bennet1%de Blasio1%Inslee0%Gravel0%Messam0%Moulton0%Bullock0%Sestak0%
-## 6  Warren22%Harris21%Biden18%Sanders17%Buttigieg10%O&#39;Rourke2%Yang2%Castro1%Gabbard1%Delaney1%Williamson1%Gillibrand1%Klobuchar1%Bennet0%Booker0%de Blasio0%Ryan0%Inslee0%Sestak0%Hickenlooper0%Gravel0%Bullock0%Moulton0%Messam0%Swalwell0%
-## 7                           Biden29%Sanders23%Harris11%Warren11%Buttigieg4%Castro4%Klobuchar2%O&#39;Rourke2%Bennet1%Booker1%Hickenlooper1%Inslee1%Williamson1%Gabbard1%Yang1%Bullock0%Gillibrand0%Ryan0%de Blasio0%Delaney0%Moulton0%Swalwell0%
-## 8                           Biden30%Sanders19%Harris13%Warren12%Buttigieg4%Castro3%Klobuchar2%O&#39;Rourke2%Bennet1%Booker1%Hickenlooper1%Inslee1%Williamson1%Gabbard1%Yang0%Bullock0%Gillibrand0%Ryan0%de Blasio0%Delaney0%Moulton0%Swalwell0%
-## 9                                                                                      Biden25%Sanders18%Harris9%Warren9%Buttigieg3%Gabbard1%Klobuchar1%O&#39;Rourke1%Yang1%Williamson1%Castro1%Booker0%Hickenlooper0%Inslee0%Bennet0%Bullock0%
-## 10                                                                                                       Biden28%Sanders16%Harris11%Warren10%Buttigieg3%Gabbard2%Klobuchar1%O&#39;Rourke1%Yang1%Castro1%Booker0%Hickenlooper0%Inslee0%Bullock0%
-## 11  Biden22%Harris20%Warren14%Sanders13%Buttigieg4%Booker3%O&#39;Rourke1%Klobuchar1%Castro1%Gabbard1%Yang1%Gillibrand0%Inslee0%Hickenlooper0%Delaney0%Williamson0%Messam0%Swalwell0%Ryan0%Moulton0%Bennet0%Bullock0%de Blasio0%Gravel0%Sestak0%
-## 12   Biden33%Sanders15%Harris11%Warren9%Buttigieg6%O&#39;Rourke4%Booker2%Castro1%Gillibrand1%Gabbard1%Bullock1%Bennet1%Yang1%Gravel1%Klobuchar0%Ryan0%Hickenlooper0%Messam0%de Blasio0%Inslee0%Swalwell0%Sestak0%Moulton0%Williamson0%Delaney0%
-## 13                                                                                                                                                                                                                        Biden41%Warren40%
-## 14                  Biden22%Harris17%Warren15%Sanders14%Buttigieg4%Booker3%O&#39;Rourke3%Klobuchar2%Castro1%de Blasio1%Gabbard1%Yang1%Bennet0%Delaney0%Gillibrand0%Hickenlooper0%Inslee0%Moulton0%Ryan0%Swalwell0%Williamson0%Bullock0%Messam0%
-## 15                                                                                                                                                                                                                      Sanders41%Warren36%
-## 16                                                                                                                                                                                                                       Biden41%Sanders40%
-##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 147 rows ]</code></pre>
+##    Kaine Johnson Kucinich Lee Scott Sinema Warner NA
+## 1                                                   
+## 2                                                   
+## 3                                                   
+## 4                                                   
+## 5                                                   
+## 6                                                   
+## 7                                                   
+## 8                                                   
+## 9                                                   
+## 10                                                  
+## 11                                                  
+## 12                                                  
+## 13                                                  
+## 14                                                  
+## 15                                                  
+## 16                                                  
+##                                                                                                                                                                                                                                         NA
+## 1            Biden33%Sanders15%Warren12%Harris10%Buttigieg5%Klobuchar3%Yang3%Booker2%Hickenlooper2%O&#39;Rourke2%Castro1%de Blasio1%Delaney1%Gillibrand1%Steyer1%Bennet0%Bullock0%Gabbard0%Inslee0%Messam0%Ryan0%Williamson0%Moulton0%Sestak0%
+## 2     Biden25%Warren18%Sanders13%Harris9%Buttigieg6%Castro3%Booker2%Gabbard2%O&#39;Rourke2%Yang2%Bullock1%de Blasio1%Klobuchar1%Steyer1%Bennet0%Delaney0%Gillibrand0%Gravel0%Hickenlooper0%Inslee0%Messam0%Moulton0%Ryan0%Sestak0%Williamson0%
+## 3                            Biden33%Sanders18%Warren14%Harris13%Buttigieg5%O&#39;Rourke3%Booker2%Yang2%Klobuchar1%Bullock1%Castro1%de Blasio1%Delaney1%Gabbard1%Gillibrand1%Ryan1%Steyer1%Williamson1%Bennet0%Hickenlooper0%Inslee0%Moulton0%
+## 4     Biden26%Sanders14%Harris10%Warren9%Buttigieg4%O&#39;Rourke4%Booker2%Castro1%Delaney1%Gillibrand1%Hickenlooper1%Klobuchar1%Yang1%Moulton1%Ryan1%Steyer1%Gabbard0%Inslee0%Williamson0%Gravel0%Messam0%Bennet0%Bullock0%de Blasio0%Sestak0%
+## 5    Biden23%Warren15%Sanders13%Harris10%Buttigieg7%Booker3%de Blasio2%O&#39;Rourke2%Bennet1%Bullock1%Castro1%Gabbard1%Gillibrand1%Klobuchar1%Steyer1%Yang1%Delaney0%Gravel0%Hickenlooper0%Inslee0%Messam0%Moulton0%Ryan0%Sestak0%Williamson0%
+## 6            Biden25%Sanders16%Warren16%Harris14%Buttigieg8%O&#39;Rourke3%Booker3%Castro2%Yang2%Klobuchar1%Ryan1%Gillibrand1%Williamson1%Gabbard1%de Blasio1%Bennet1%Hickenlooper0%Inslee0%Delaney0%Sestak0%Bullock0%Gravel0%Moulton0%Messam0%
+## 7                                    Biden32%Sanders19%Warren14%Harris13%Buttigieg5%O&#39;Rourke3%Yang2%Booker2%Bennet1%Bullock1%Castro1%Delaney1%Gabbard1%Gillibrand1%Hickenlooper1%Klobuchar1%Ryan1%de Blasio0%Inslee0%Moulton0%Williamson0%
+## 8     Biden29%Sanders16%Harris11%Warren9%O&#39;Rourke3%Buttigieg1%Booker1%Bullock1%Gabbard1%Moulton1%Gillibrand1%Klobuchar1%Ryan1%de Blasio1%Delaney1%Gravel1%Messam1%Castro1%Hickenlooper0%Steyer0%Williamson0%Sestak0%Bennet0%Yang0%Inslee0%
+## 9                                    Biden26%Warren19%Harris13%Sanders13%Buttigieg7%Yang2%O&#39;Rourke2%Klobuchar1%Castro1%Booker1%Inslee1%Williamson1%Delaney1%Hickenlooper1%Bennet1%Bullock0%de Blasio0%Gabbard0%Gillibrand0%Moulton0%Ryan0%
+## 10 Biden22%Warren17%Harris14%Sanders11%Buttigieg5%Castro2%Gabbard2%O&#39;Rourke2%Booker1%Bullock1%de Blasio1%Hickenlooper1%Klobuchar1%Yang1%Bennet0%Delaney0%Gillibrand0%Gravel0%Inslee0%Messam0%Moulton0%Ryan0%Sestak0%Swalwell0%Williamson0%
+## 11 Biden30%Sanders15%Harris15%Warren15%Buttigieg5%O&#39;Rourke4%Yang3%Gabbard2%Booker2%Bennet1%Swalwell1%Klobuchar1%Gravel1%Bullock1%Inslee1%de Blasio0%Castro0%Delaney0%Ryan0%Sestak0%Gillibrand0%Williamson0%Moulton0%Messam0%Hickenlooper0%
+## 12                                   Biden31%Sanders19%Harris14%Warren13%Buttigieg6%O&#39;Rourke3%Booker2%Bullock1%Castro1%de Blasio1%Delaney1%Gabbard1%Gillibrand1%Hickenlooper1%Klobuchar1%Ryan1%Yang1%Williamson1%Bennet0%Inslee0%Moulton0%
+## 13 Biden21%Warren18%Harris13%Sanders10%Buttigieg9%O&#39;Rourke3%Booker2%Castro2%Bennet1%Bullock1%de Blasio1%Gabbard1%Gillibrand1%Inslee1%Klobuchar1%Delaney0%Gravel0%Hickenlooper0%Messam0%Moulton0%Ryan0%Sestak0%Swalwell0%Williamson0%Yang0%
+## 14 Biden24%Sanders17%Harris11%Warren11%Buttigieg4%O&#39;Rourke3%Yang3%Booker1%Castro1%Klobuchar1%Gillibrand1%Bullock1%Ryan1%Gabbard0%Hickenlooper0%Inslee0%Delaney0%Williamson0%Messam0%Swalwell0%Moulton0%Bennet0%de Blasio0%Gravel0%Sestak0%
+## 15  Biden22%Sanders16%Harris10%Warren9%O&#39;Rourke3%Buttigieg3%Yang2%Booker1%Castro1%Gillibrand1%Bullock1%Ryan1%Klobuchar0%Gabbard0%Hickenlooper0%de Blasio0%Inslee0%Delaney0%Williamson0%Messam0%Swalwell0%Moulton0%Bennet0%Gravel0%Sestak0%
+## 16 Biden23%Warren22%Harris17%Sanders15%Buttigieg7%O&#39;Rourke2%Yang2%Booker2%Klobuchar1%Inslee1%Hickenlooper1%Castro1%Delaney1%Gabbard1%Gillibrand0%Bennet0%de Blasio0%Swalwell0%Ryan0%Bullock0%Moulton0%Sestak0%Gravel0%Messam0%Williamson0%
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 159 rows ]</code></pre>
 <p>This is much better! But based on visual inspection the column headers are not properly matched. There are a few things that need to be sorted out: there are two date columns, there are commas and percents where numeric columns should be, the column headers are a little messy, and the table isn’t a tibble (this is just personal preference).</p>
 <p>We will handle the final two issues first as they are easiest to deal with. The function <code>clean_names()</code> from <code>janitor</code> will handle the column headers, and <code>as_tibble()</code> will coerce the data.frame into a proper tibble. Save this semi-clean tibble into an object called <code>polls</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">polls &lt;-<span class="st"> </span>session <span class="op">%&gt;%</span><span class="st"> </span>
@@ -373,32 +394,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="st">  </span><span class="kw">as_tibble</span>()
 
 polls</code></pre>
-<pre><code>## # A tibble: 163 x 60
+<pre><code>## # A tibble: 175 x 60
 ##    x     dates pollster sample sample_2 biden sanders warren harris
 ##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; 
-##  1 •     Jun … Jun 30-… BYouG… 631      LV    21%     10%    18%   
-##  2 •     Jun … Jun 29-… B+Ips… 1,173    RV    24%     17%    11%   
-##  3 •     Jun … Jun 29-… B+Ips… 1,367    A     22%     16%    9%    
-##  4 •     Jun … Jun 27-… BYouG… 1,522    LV    23%     15%    22%   
-##  5 •     Jun … Jun 29-… C+Har… 882      RV    28%     14%    9%    
-##  6 •     Jun … Jun 28-… C+Cha… 1,185    LV    18%     17%    22%   
-##  7 •     Jun … Jun 28-… A+ABC… 460      A     29%     23%    11%   
-##  8 •     Jun … Jun 28-… A+ABC… 397      RV    30%     19%    12%   
-##  9 •     Jun … Jun 28-… A+ABC… 460      A     25%     18%    9%    
-## 10 •     Jun … Jun 28-… A+ABC… 397      RV    28%     16%    10%   
-## # … with 153 more rows, and 51 more variables: buttigieg &lt;chr&gt;,
+##  1 •     Jul … Jul 21-… AFox … 455      LV    33%     15%    12%   
+##  2 •     Jul … Jul 21-… BYouG… 600      LV    25%     13%    18%   
+##  3 •     Jul … Jul 15-… B-Mor… 17,285   LV    33%     18%    14%   
+##  4 •     Jul … Jul 15-… C+Har… 910      RV    26%     14%    9%    
+##  5 •     Jul … Jul 14-… BYouG… 572      LV    23%     13%    15%   
+##  6 •     Jul … Jul 2-1… D-Sur… 5,548    RV    25%     16%    16%   
+##  7 •     Jul … Jul 8-1… B-Mor… 16,504   LV    32%     19%    14%   
+##  8 •     Jul … Jul 12-… C+Har… 446      RV    29%     16%    9%    
+##  9 •     Jul … Jul 7-9… A-NBC… 400      LV    26%     13%    19%   
+## 10 •     Jul … Jul 7-9… BYouG… 592      LV    22%     11%    17%   
+## # … with 165 more rows, and 51 more variables: buttigieg &lt;chr&gt;,
 ## #   o_rourke &lt;chr&gt;, booker &lt;chr&gt;, klobuchar &lt;chr&gt;, castro &lt;chr&gt;,
-## #   yang &lt;chr&gt;, gillibrand &lt;chr&gt;, gabbard &lt;chr&gt;, hickenlooper &lt;chr&gt;,
-## #   delaney &lt;chr&gt;, inslee &lt;chr&gt;, ryan &lt;chr&gt;, bennet &lt;chr&gt;,
-## #   de_blasio &lt;chr&gt;, bullock &lt;chr&gt;, williamson &lt;chr&gt;, moulton &lt;chr&gt;,
-## #   swalwell &lt;chr&gt;, gravel &lt;chr&gt;, messam &lt;chr&gt;, sestak &lt;chr&gt;,
-## #   h_clinton &lt;chr&gt;, bloomberg &lt;chr&gt;, m_obama &lt;chr&gt;, brown &lt;chr&gt;,
-## #   kerry &lt;chr&gt;, abrams &lt;chr&gt;, holder &lt;chr&gt;, mc_auliffe &lt;chr&gt;,
-## #   winfrey &lt;chr&gt;, ojeda &lt;chr&gt;, trump &lt;chr&gt;, cuomo &lt;chr&gt;, avenatti &lt;chr&gt;,
-## #   kennedy &lt;chr&gt;, patrick &lt;chr&gt;, zuckerberg &lt;chr&gt;, pelosi &lt;chr&gt;,
-## #   garcetti &lt;chr&gt;, newsom &lt;chr&gt;, steyer &lt;chr&gt;, schultz &lt;chr&gt;,
-## #   kaine &lt;chr&gt;, johnson &lt;chr&gt;, kucinich &lt;chr&gt;, lee &lt;chr&gt;, scott &lt;chr&gt;,
-## #   sinema &lt;chr&gt;, warner &lt;chr&gt;, na &lt;chr&gt;, na_2 &lt;chr&gt;</code></pre>
+## #   yang &lt;chr&gt;, gabbard &lt;chr&gt;, gillibrand &lt;chr&gt;, hickenlooper &lt;chr&gt;,
+## #   delaney &lt;chr&gt;, ryan &lt;chr&gt;, inslee &lt;chr&gt;, de_blasio &lt;chr&gt;,
+## #   bennet &lt;chr&gt;, bullock &lt;chr&gt;, williamson &lt;chr&gt;, moulton &lt;chr&gt;,
+## #   steyer &lt;chr&gt;, messam &lt;chr&gt;, sestak &lt;chr&gt;, h_clinton &lt;chr&gt;,
+## #   bloomberg &lt;chr&gt;, m_obama &lt;chr&gt;, brown &lt;chr&gt;, gravel &lt;chr&gt;,
+## #   swalwell &lt;chr&gt;, kerry &lt;chr&gt;, abrams &lt;chr&gt;, holder &lt;chr&gt;,
+## #   mc_auliffe &lt;chr&gt;, winfrey &lt;chr&gt;, ojeda &lt;chr&gt;, trump &lt;chr&gt;,
+## #   cuomo &lt;chr&gt;, avenatti &lt;chr&gt;, kennedy &lt;chr&gt;, patrick &lt;chr&gt;,
+## #   zuckerberg &lt;chr&gt;, pelosi &lt;chr&gt;, garcetti &lt;chr&gt;, newsom &lt;chr&gt;,
+## #   schultz &lt;chr&gt;, kaine &lt;chr&gt;, johnson &lt;chr&gt;, kucinich &lt;chr&gt;, lee &lt;chr&gt;,
+## #   scott &lt;chr&gt;, sinema &lt;chr&gt;, warner &lt;chr&gt;, na &lt;chr&gt;, na_2 &lt;chr&gt;</code></pre>
 <p>We want to shift over the column names to the right just once. Unfortunately there is no elegant way to do this (that I am aware of). We can see that the first column is completely useless so that can be removed. Once that column is removed we can reset the names this way they will be well aligned.</p>
 <p>We will start by creating a vector of the original column names.</p>
 <pre class="sourceCode r"><code class="sourceCode r">col_names &lt;-<span class="st"> </span><span class="kw">names</span>(polls)
@@ -406,16 +427,16 @@ col_names</code></pre>
 <pre><code>##  [1] &quot;x&quot;            &quot;dates&quot;        &quot;pollster&quot;     &quot;sample&quot;      
 ##  [5] &quot;sample_2&quot;     &quot;biden&quot;        &quot;sanders&quot;      &quot;warren&quot;      
 ##  [9] &quot;harris&quot;       &quot;buttigieg&quot;    &quot;o_rourke&quot;     &quot;booker&quot;      
-## [13] &quot;klobuchar&quot;    &quot;castro&quot;       &quot;yang&quot;         &quot;gillibrand&quot;  
-## [17] &quot;gabbard&quot;      &quot;hickenlooper&quot; &quot;delaney&quot;      &quot;inslee&quot;      
-## [21] &quot;ryan&quot;         &quot;bennet&quot;       &quot;de_blasio&quot;    &quot;bullock&quot;     
-## [25] &quot;williamson&quot;   &quot;moulton&quot;      &quot;swalwell&quot;     &quot;gravel&quot;      
-## [29] &quot;messam&quot;       &quot;sestak&quot;       &quot;h_clinton&quot;    &quot;bloomberg&quot;   
-## [33] &quot;m_obama&quot;      &quot;brown&quot;        &quot;kerry&quot;        &quot;abrams&quot;      
-## [37] &quot;holder&quot;       &quot;mc_auliffe&quot;   &quot;winfrey&quot;      &quot;ojeda&quot;       
-## [41] &quot;trump&quot;        &quot;cuomo&quot;        &quot;avenatti&quot;     &quot;kennedy&quot;     
-## [45] &quot;patrick&quot;      &quot;zuckerberg&quot;   &quot;pelosi&quot;       &quot;garcetti&quot;    
-## [49] &quot;newsom&quot;       &quot;steyer&quot;       &quot;schultz&quot;      &quot;kaine&quot;       
+## [13] &quot;klobuchar&quot;    &quot;castro&quot;       &quot;yang&quot;         &quot;gabbard&quot;     
+## [17] &quot;gillibrand&quot;   &quot;hickenlooper&quot; &quot;delaney&quot;      &quot;ryan&quot;        
+## [21] &quot;inslee&quot;       &quot;de_blasio&quot;    &quot;bennet&quot;       &quot;bullock&quot;     
+## [25] &quot;williamson&quot;   &quot;moulton&quot;      &quot;steyer&quot;       &quot;messam&quot;      
+## [29] &quot;sestak&quot;       &quot;h_clinton&quot;    &quot;bloomberg&quot;    &quot;m_obama&quot;     
+## [33] &quot;brown&quot;        &quot;gravel&quot;       &quot;swalwell&quot;     &quot;kerry&quot;       
+## [37] &quot;abrams&quot;       &quot;holder&quot;       &quot;mc_auliffe&quot;   &quot;winfrey&quot;     
+## [41] &quot;ojeda&quot;        &quot;trump&quot;        &quot;cuomo&quot;        &quot;avenatti&quot;    
+## [45] &quot;kennedy&quot;      &quot;patrick&quot;      &quot;zuckerberg&quot;   &quot;pelosi&quot;      
+## [49] &quot;garcetti&quot;     &quot;newsom&quot;       &quot;schultz&quot;      &quot;kaine&quot;       
 ## [53] &quot;johnson&quot;      &quot;kucinich&quot;     &quot;lee&quot;          &quot;scott&quot;       
 ## [57] &quot;sinema&quot;       &quot;warner&quot;       &quot;na&quot;           &quot;na_2&quot;</code></pre>
 <p>Unfortunately this also presents another issue. Once a column is deselected, there will be one more column name than column. So we will need to select all but the last element of the original names. We will create a vector called <code>new_names</code>.</p>
@@ -431,32 +452,31 @@ new_names &lt;-<span class="st"> </span>col_names[<span class="dv">1</span><span
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;dates&quot;</span>, <span class="st">&quot;pollster&quot;</span>, <span class="st">&quot;sample&quot;</span>, <span class="st">&quot;sample_2&quot;</span>)), 
             <span class="op">~</span><span class="kw">as.integer</span>(<span class="kw">str_remove</span>(., <span class="st">&quot;%&quot;</span>)))</code></pre>
-<pre><code>## Warning in (structure(function (..., .x = ..1, .y = ..2, . = ..1) : NAs
-## introduced by coercion</code></pre>
-<pre><code>## # A tibble: 163 x 58
+<pre><code>## Warning in ~as.integer(str_remove(., &quot;%&quot;)): NAs introduced by coercion</code></pre>
+<pre><code>## # A tibble: 175 x 58
 ##    dates pollster sample sample_2 biden sanders warren harris buttigieg
 ##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;  &lt;int&gt;  &lt;int&gt;     &lt;int&gt;
-##  1 Jun … BYouGov  631    LV          21      10     18     13         9
-##  2 Jun … B+Ipsos  1,173  RV          24      17     11     11         4
-##  3 Jun … B+Ipsos  1,367  A           22      16      9     10         3
-##  4 Jun … BYouGov… 1,522  LV          23      15     22     17         7
-##  5 Jun … C+Harri… 882    RV          28      14      9     13         4
-##  6 Jun … C+Chang… 1,185  LV          18      17     22     21        10
-##  7 Jun … A+ABC N… 460    A           29      23     11     11         4
-##  8 Jun … A+ABC N… 397    RV          30      19     12     13         4
-##  9 Jun … A+ABC N… 460    A           25      18      9      9         3
-## 10 Jun … A+ABC N… 397    RV          28      16     10     11         3
-## # … with 153 more rows, and 49 more variables: o_rourke &lt;int&gt;,
+##  1 Jul … AFox Ne… 455    LV          33      15     12     10         5
+##  2 Jul … BYouGov  600    LV          25      13     18      9         6
+##  3 Jul … B-Morni… 17,285 LV          33      18     14     13         5
+##  4 Jul … C+Harri… 910    RV          26      14      9     10         4
+##  5 Jul … BYouGov  572    LV          23      13     15     10         7
+##  6 Jul … D-Surve… 5,548  RV          25      16     16     14         8
+##  7 Jul … B-Morni… 16,504 LV          32      19     14     13         5
+##  8 Jul … C+Harri… 446    RV          29      16      9     11         1
+##  9 Jul … A-NBC N… 400    LV          26      13     19     13         7
+## 10 Jul … BYouGov  592    LV          22      11     17     14         5
+## # … with 165 more rows, and 49 more variables: o_rourke &lt;int&gt;,
 ## #   booker &lt;int&gt;, klobuchar &lt;int&gt;, castro &lt;int&gt;, yang &lt;int&gt;,
-## #   gillibrand &lt;int&gt;, gabbard &lt;int&gt;, hickenlooper &lt;int&gt;, delaney &lt;int&gt;,
-## #   inslee &lt;int&gt;, ryan &lt;int&gt;, bennet &lt;int&gt;, de_blasio &lt;int&gt;,
-## #   bullock &lt;int&gt;, williamson &lt;int&gt;, moulton &lt;int&gt;, swalwell &lt;int&gt;,
-## #   gravel &lt;int&gt;, messam &lt;int&gt;, sestak &lt;int&gt;, h_clinton &lt;int&gt;,
-## #   bloomberg &lt;int&gt;, m_obama &lt;int&gt;, brown &lt;int&gt;, kerry &lt;int&gt;,
+## #   gabbard &lt;int&gt;, gillibrand &lt;int&gt;, hickenlooper &lt;int&gt;, delaney &lt;int&gt;,
+## #   ryan &lt;int&gt;, inslee &lt;int&gt;, de_blasio &lt;int&gt;, bennet &lt;int&gt;,
+## #   bullock &lt;int&gt;, williamson &lt;int&gt;, moulton &lt;int&gt;, steyer &lt;int&gt;,
+## #   messam &lt;int&gt;, sestak &lt;int&gt;, h_clinton &lt;int&gt;, bloomberg &lt;int&gt;,
+## #   m_obama &lt;int&gt;, brown &lt;int&gt;, gravel &lt;int&gt;, swalwell &lt;int&gt;, kerry &lt;int&gt;,
 ## #   abrams &lt;int&gt;, holder &lt;int&gt;, mc_auliffe &lt;int&gt;, winfrey &lt;int&gt;,
 ## #   ojeda &lt;int&gt;, trump &lt;int&gt;, cuomo &lt;int&gt;, avenatti &lt;int&gt;, kennedy &lt;int&gt;,
 ## #   patrick &lt;int&gt;, zuckerberg &lt;int&gt;, pelosi &lt;int&gt;, garcetti &lt;int&gt;,
-## #   newsom &lt;int&gt;, steyer &lt;int&gt;, schultz &lt;int&gt;, kaine &lt;int&gt;, johnson &lt;int&gt;,
+## #   newsom &lt;int&gt;, schultz &lt;int&gt;, kaine &lt;int&gt;, johnson &lt;int&gt;,
 ## #   kucinich &lt;int&gt;, lee &lt;int&gt;, scott &lt;int&gt;, sinema &lt;int&gt;, warner &lt;int&gt;,
 ## #   na &lt;int&gt;</code></pre>
 <p>Now we must tidy the data. We will use <code>tidyr::gather()</code> to transform the data from wide to long. In short, gather takes the column headers (the <code>key</code> argument) and creates a new variable from the values of the columns (the <code>value</code> argument). In this case, we will create a new column called <code>candidate</code> from the column headers and a second column called <code>points</code> which are a candidates polling percentage. Next we deselect any columns that we do not want to be gathered.</p>
@@ -467,22 +487,21 @@ new_names &lt;-<span class="st"> </span>col_names[<span class="dv">1</span><span
 <span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;dates&quot;</span>, <span class="st">&quot;pollster&quot;</span>, <span class="st">&quot;sample&quot;</span>, <span class="st">&quot;sample_2&quot;</span>)),
             <span class="op">~</span><span class="kw">as.integer</span>(<span class="kw">str_remove</span>(., <span class="st">&quot;%&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gather</span>(candidate, points, <span class="op">-</span>dates, <span class="op">-</span>pollster, <span class="op">-</span>sample, <span class="op">-</span>sample_<span class="dv">2</span>)</code></pre>
-<pre><code>## Warning in (structure(function (..., .x = ..1, .y = ..2, . = ..1) : NAs
-## introduced by coercion</code></pre>
-<pre><code>## # A tibble: 8,802 x 6
-##    dates            pollster               sample sample_2 candidate points
-##    &lt;chr&gt;            &lt;chr&gt;                  &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;      &lt;int&gt;
-##  1 Jun 30-Jul 2, 2… BYouGov                631    LV       biden         21
-##  2 Jun 29-Jul 2, 2… B+Ipsos                1,173  RV       biden         24
-##  3 Jun 29-Jul 2, 2… B+Ipsos                1,367  A        biden         22
-##  4 Jun 27-Jul 2, 2… BYouGov Blue           1,522  LV       biden         23
-##  5 Jun 29-Jul 1, 2… C+HarrisX              882    RV       biden         28
-##  6 Jun 28-Jul 1, 2… C+Change Research      1,185  LV       biden         18
-##  7 Jun 28-Jul 1, 2… A+ABC News/Washington… 460    A        biden         29
-##  8 Jun 28-Jul 1, 2… A+ABC News/Washington… 397    RV       biden         30
-##  9 Jun 28-Jul 1, 2… A+ABC News/Washington… 460    A        biden         25
-## 10 Jun 28-Jul 1, 2… A+ABC News/Washington… 397    RV       biden         28
-## # … with 8,792 more rows</code></pre>
+<pre><code>## Warning in ~as.integer(str_remove(., &quot;%&quot;)): NAs introduced by coercion</code></pre>
+<pre><code>## # A tibble: 9,450 x 6
+##    dates         pollster                  sample sample_2 candidate points
+##    &lt;chr&gt;         &lt;chr&gt;                     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;      &lt;int&gt;
+##  1 Jul 21-23, 2… AFox News                 455    LV       biden         33
+##  2 Jul 21-23, 2… BYouGov                   600    LV       biden         25
+##  3 Jul 15-21, 2… B-Morning Consult         17,285 LV       biden         33
+##  4 Jul 15-17, 2… C+HarrisX                 910    RV       biden         26
+##  5 Jul 14-16, 2… BYouGov                   572    LV       biden         23
+##  6 Jul 2-16, 20… D-SurveyMonkey            5,548  RV       biden         25
+##  7 Jul 8-14, 20… B-Morning Consult         16,504 LV       biden         32
+##  8 Jul 12-13, 2… C+HarrisX                 446    RV       biden         29
+##  9 Jul 7-9, 2019 A-NBC News/Wall Street J… 400    LV       biden         26
+## 10 Jul 7-9, 2019 BYouGov                   592    LV       biden         22
+## # … with 9,440 more rows</code></pre>
 <p>There are a few more house-keeping things that need to be done to improve this data set. <code>sample_2</code> is rather uninformative. On the FiveThirtyEight website there is a key which describes what these values represent (<code>A = ADULTS, RV = REGISTERED VOTERS, V = VOTERS, LV = LIKELY VOTERS</code>). This should be specified in our data set. In addition the <code>sample</code> column ought to be cast into an integer column. And finally, those messy dates will need to be cleaned. My approach to this requires creating a function to handle this cleaning. First, the simple stuff.</p>
 <p>To do the first two above steps, we will continue our function chain and save it to a new variable <code>polls_tidy</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">polls_tidy &lt;-<span class="st"> </span>polls <span class="op">%&gt;%</span><span class="st"> </span>
@@ -499,23 +518,22 @@ new_names &lt;-<span class="st"> </span>col_names[<span class="dv">1</span><span
     sample_<span class="dv">2</span> <span class="op">==</span><span class="st"> &quot;V&quot;</span> <span class="op">~</span><span class="st"> &quot;Voters&quot;</span>
   ),
   <span class="dt">sample =</span> <span class="kw">as.integer</span>(<span class="kw">str_remove</span>(sample, <span class="st">&quot;,&quot;</span>)))</code></pre>
-<pre><code>## Warning in (structure(function (..., .x = ..1, .y = ..2, . = ..1) : NAs
-## introduced by coercion</code></pre>
+<pre><code>## Warning in ~as.integer(str_remove(., &quot;%&quot;)): NAs introduced by coercion</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">polls_tidy</code></pre>
-<pre><code>## # A tibble: 8,802 x 6
-##    dates          pollster            sample sample_2      candidate points
-##    &lt;chr&gt;          &lt;chr&gt;                &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;      &lt;int&gt;
-##  1 Jun 30-Jul 2,… BYouGov                631 Likely Voters biden         21
-##  2 Jun 29-Jul 2,… B+Ipsos               1173 Registered V… biden         24
-##  3 Jun 29-Jul 2,… B+Ipsos               1367 Adults        biden         22
-##  4 Jun 27-Jul 2,… BYouGov Blue          1522 Likely Voters biden         23
-##  5 Jun 29-Jul 1,… C+HarrisX              882 Registered V… biden         28
-##  6 Jun 28-Jul 1,… C+Change Research     1185 Likely Voters biden         18
-##  7 Jun 28-Jul 1,… A+ABC News/Washing…    460 Adults        biden         29
-##  8 Jun 28-Jul 1,… A+ABC News/Washing…    397 Registered V… biden         30
-##  9 Jun 28-Jul 1,… A+ABC News/Washing…    460 Adults        biden         25
-## 10 Jun 28-Jul 1,… A+ABC News/Washing…    397 Registered V… biden         28
-## # … with 8,792 more rows</code></pre>
+<pre><code>## # A tibble: 9,450 x 6
+##    dates        pollster              sample sample_2      candidate points
+##    &lt;chr&gt;        &lt;chr&gt;                  &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;      &lt;int&gt;
+##  1 Jul 21-23, … AFox News                455 Likely Voters biden         33
+##  2 Jul 21-23, … BYouGov                  600 Likely Voters biden         25
+##  3 Jul 15-21, … B-Morning Consult      17285 Likely Voters biden         33
+##  4 Jul 15-17, … C+HarrisX                910 Registered V… biden         26
+##  5 Jul 14-16, … BYouGov                  572 Likely Voters biden         23
+##  6 Jul 2-16, 2… D-SurveyMonkey          5548 Registered V… biden         25
+##  7 Jul 8-14, 2… B-Morning Consult      16504 Likely Voters biden         32
+##  8 Jul 12-13, … C+HarrisX                446 Registered V… biden         29
+##  9 Jul 7-9, 20… A-NBC News/Wall Stre…    400 Likely Voters biden         26
+## 10 Jul 7-9, 20… BYouGov                  592 Likely Voters biden         22
+## # … with 9,440 more rows</code></pre>
 <div id="date-cleaning" class="section level3">
 <h3><span class="header-section-number">6.2.1</span> Date cleaning</h3>
 <p>Next we must work to clean the date field. I find that when working with a messy column, creating a single function which handles the cleaning is one of the most effective approaches. Here we will create a function which takes a value provided from the <code>dates</code> field and return a cleaned date. There are two unique cases I identified. There are poll dates which occurred during a single month, or a poll that spanned two months. The dates are separated by a single hyphen <code>-</code>. If we split the date at <code>-</code> we will either receive two elements with a month indicated or one month with a day and a day number. In the latter case we will have to carry over the month. Then the year can be appended to it and parsed as a date using the <code>lubridate</code> package. For more on <code>lubridate</code> visit <a href="https://lubridate.tidyverse.org/">here</a>.</p>
@@ -554,9 +572,9 @@ new_names &lt;-<span class="st"> </span>col_names[<span class="dv">1</span><span
 
 <span class="co"># test on a date</span>
 <span class="kw">clean_date</span>(polls_tidy<span class="op">$</span>dates[<span class="dv">10</span>], <span class="dt">.return =</span> <span class="st">&quot;first&quot;</span>)</code></pre>
-<pre><code>## [1] &quot;2019-06-28&quot;</code></pre>
+<pre><code>## [1] &quot;2019-07-07&quot;</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">clean_date</span>(polls_tidy<span class="op">$</span>dates[<span class="dv">10</span>], <span class="dt">.return =</span> <span class="st">&quot;second&quot;</span>)</code></pre>
-<pre><code>## [1] &quot;2019-07-01&quot;</code></pre>
+<pre><code>## [1] &quot;2019-07-09&quot;</code></pre>
 <p>We can use this new function to create two new columns <code>poll_start</code> and <code>poll_end</code> using <code>mutate()</code>. Following this we can deselect the original <code>dates</code> column, remove any observations missing a <code>points</code> value, remove duplicates using <code>distinct()</code>, and save this to <code>polls_clean</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">polls_clean &lt;-<span class="st"> </span>polls_tidy <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">poll_start =</span> <span class="kw">clean_date</span>(dates, <span class="st">&quot;first&quot;</span>),
@@ -566,20 +584,20 @@ new_names &lt;-<span class="st"> </span>col_names[<span class="dv">1</span><span
 <span class="st">  </span><span class="kw">distinct</span>()
 
 polls_clean</code></pre>
-<pre><code>## # A tibble: 2,854 x 7
-##    pollster       sample sample_2    candidate points poll_start poll_end  
-##    &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;int&gt; &lt;date&gt;     &lt;date&gt;    
-##  1 BYouGov           631 Likely Vot… biden         21 2019-06-30 2019-07-02
-##  2 B+Ipsos          1173 Registered… biden         24 2019-06-30 2019-07-02
-##  3 B+Ipsos          1367 Adults      biden         22 2019-06-30 2019-07-02
-##  4 BYouGov Blue     1522 Likely Vot… biden         23 2019-06-30 2019-07-02
-##  5 C+HarrisX         882 Registered… biden         28 2019-06-30 2019-07-02
-##  6 C+Change Rese…   1185 Likely Vot… biden         18 2019-06-30 2019-07-02
-##  7 A+ABC News/Wa…    460 Adults      biden         29 2019-06-30 2019-07-02
-##  8 A+ABC News/Wa…    397 Registered… biden         30 2019-06-30 2019-07-02
-##  9 A+ABC News/Wa…    460 Adults      biden         25 2019-06-30 2019-07-02
-## 10 A+ABC News/Wa…    397 Registered… biden         28 2019-06-30 2019-07-02
-## # … with 2,844 more rows</code></pre>
+<pre><code>## # A tibble: 3,136 x 7
+##    pollster        sample sample_2   candidate points poll_start poll_end  
+##    &lt;chr&gt;            &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;int&gt; &lt;date&gt;     &lt;date&gt;    
+##  1 AFox News          455 Likely Vo… biden         33 2019-07-21 2019-07-23
+##  2 BYouGov            600 Likely Vo… biden         25 2019-07-21 2019-07-23
+##  3 B-Morning Cons…  17285 Likely Vo… biden         33 2019-07-21 2019-07-23
+##  4 C+HarrisX          910 Registere… biden         26 2019-07-21 2019-07-23
+##  5 BYouGov            572 Likely Vo… biden         23 2019-07-21 2019-07-23
+##  6 D-SurveyMonkey    5548 Registere… biden         25 2019-07-21 2019-07-23
+##  7 B-Morning Cons…  16504 Likely Vo… biden         32 2019-07-21 2019-07-23
+##  8 C+HarrisX          446 Registere… biden         29 2019-07-21 2019-07-23
+##  9 A-NBC News/Wal…    400 Likely Vo… biden         26 2019-07-21 2019-07-23
+## 10 BYouGov            592 Likely Vo… biden         22 2019-07-21 2019-07-23
+## # … with 3,126 more rows</code></pre>
 </div>
 <div id="visualization" class="section level3">
 <h3><span class="header-section-number">6.2.2</span> Visualization</h3>
@@ -595,20 +613,20 @@ polls_clean</code></pre>
 <span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>avg_points)
 
 avg_polls</code></pre>
-<pre><code>## # A tibble: 23 x 5
+<pre><code>## # A tibble: 24 x 5
 ##    candidate avg_points min_points max_points n_polls
-##    &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;int&gt;
-##  1 biden          31.7           9         66     151
-##  2 sanders        19.0           4         42     152
-##  3 warren         10.0           2         43     152
-##  4 harris          9.48          2         41     152
-##  5 o_rourke        5.53          1         21     144
-##  6 buttigieg       5.27          0         21     119
-##  7 booker          2.99          0          9     143
-##  8 klobuchar       1.55          0          5     132
-##  9 yang            1.15          0          3      99
-## 10 castro          1.14          0         12     135
-## # … with 13 more rows</code></pre>
+##    &lt;chr&gt;          &lt;dbl&gt;      &lt;int&gt;      &lt;int&gt;   &lt;int&gt;
+##  1 biden          31.5           9         66     163
+##  2 sanders        18.7           4         42     164
+##  3 warren         10.3           2         43     164
+##  4 harris          9.68          2         41     164
+##  5 o_rourke        5.32          1         21     156
+##  6 buttigieg       5.27          0         21     131
+##  7 booker          2.90          0          9     155
+##  8 klobuchar       1.52          0          5     144
+##  9 yang            1.21          0          3     111
+## 10 castro          1.15          0         12     147
+## # … with 14 more rows</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">avg_polls <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">candidate =</span> <span class="kw">fct_reorder</span>(candidate, avg_points)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(candidate, avg_points)) <span class="op">+</span>
@@ -654,7 +672,7 @@ avg_polls</code></pre>
 <span class="st">  </span><span class="kw">distinct</span>()
 
 updated_polls</code></pre>
-<pre><code>## # A tibble: 4,418 x 7
+<pre><code>## # A tibble: 4,700 x 7
 ##    pollster       sample sample_2    candidate points poll_start poll_end  
 ##    &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;    
 ##  1 C+HarrisX         370 Registered… klobuchar      2 2019-06-06 2019-06-10
@@ -667,7 +685,7 @@ updated_polls</code></pre>
 ##  8 A-Quinnipiac …    559 Registered… gillibra…      0 2019-06-06 2019-06-10
 ##  9 B-Morning Con…  14250 Likely Vot… harris         6 2019-06-06 2019-06-10
 ## 10 A+Monmouth Un…    330 Registered… warren         8 2019-06-06 2019-06-10
-## # … with 4,408 more rows</code></pre>
+## # … with 4,690 more rows</code></pre>
 <p>Now you have a cleaned data set which has been integrated with the recently scraped data. Write this to a csv using <code>write_csv()</code> for later use.</p>
 
 </div>
@@ -677,8 +695,8 @@ updated_polls</code></pre>
           </div>
         </div>
       </div>
-<a href="google-trends-results.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="google-trends-results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="state-voter-files.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

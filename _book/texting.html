@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-07-04" />
+<meta name="date" content="2019-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -155,6 +155,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#creating-historic-polling-data"><i class="fa fa-check"></i><b>6.3</b> Creating historic polling data</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="state-voter-files.html"><a href="state-voter-files.html"><i class="fa fa-check"></i><b>7</b> State Voter Files</a><ul>
+<li class="chapter" data-level="7.1" data-path="state-voter-files.html"><a href="state-voter-files.html#motivation"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="state-voter-files.html"><a href="state-voter-files.html#overview"><i class="fa fa-check"></i><b>7.2</b> Overview</a></li>
+<li class="chapter" data-level="7.3" data-path="state-voter-files.html"><a href="state-voter-files.html#exercise-1"><i class="fa fa-check"></i><b>7.3</b> Exercise</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="state-voter-files.html"><a href="state-voter-files.html#identifying-download-links"><i class="fa fa-check"></i><b>7.3.1</b> Identifying download links</a></li>
+<li class="chapter" data-level="7.3.2" data-path="state-voter-files.html"><a href="state-voter-files.html#download-the-voter-file"><i class="fa fa-check"></i><b>7.3.2</b> Download the voter file</a></li>
+<li class="chapter" data-level="7.3.3" data-path="state-voter-files.html"><a href="state-voter-files.html#downloading-the-voter-file"><i class="fa fa-check"></i><b>7.3.3</b> Downloading the voter file</a></li>
+<li class="chapter" data-level="7.3.4" data-path="state-voter-files.html"><a href="state-voter-files.html#voter-file-exploratoration"><i class="fa fa-check"></i><b>7.3.4</b> Voter file exploratoration</a></li>
+<li class="chapter" data-level="7.3.5" data-path="state-voter-files.html"><a href="state-voter-files.html#tidying"><i class="fa fa-check"></i><b>7.3.5</b> Tidying</a></li>
+<li class="chapter" data-level="7.3.6" data-path="state-voter-files.html"><a href="state-voter-files.html#creating-targets"><i class="fa fa-check"></i><b>7.3.6</b> Creating targets</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
 
@@ -235,7 +247,7 @@ organizers</code></pre>
 ##  7 Larissa        7 2019-01-14       1 Rishith    Pisciotto 1987-09-25   
 ##  8 Lafayette      8 2019-01-28       1 Maximilian Arakawa   1999-05-14   
 ##  9 Theo           9 2019-02-18       0 Timmie     Schlag    1965-06-12   
-## 10 Rosaleen      10 2019-03-06       0 Swetha     Spreitzer 2000-12-08   
+## 10 Rosaleen      10 2019-02-05       0 Swetha     Spreitzer 2000-12-08   
 ## # … with 5,994 more rows, and 2 more variables: age &lt;dbl&gt;, turf_code &lt;chr&gt;</code></pre>
 <p>Say each region has their own unique polling location (realistically this will be a much more fine grain dataset that you can join on).</p>
 <p>We can specify the polling locations using a <code>case_when()</code> function call. We will build upon the previous pipe line. In case when you specify a logical statement and then return a value using the <code>~</code>—i.e. <code>something == TRUE ~ &quot;if true value&quot;</code>.</p>
@@ -264,7 +276,7 @@ universe_locations</code></pre>
 ##  7      7 2019-01-14       1 Rishith    Pisciotto 1987-09-25       32
 ##  8      8 2019-01-28       1 Maximilian Arakawa   1999-05-14       20
 ##  9      9 2019-02-18       0 Timmie     Schlag    1965-06-12       54
-## 10     10 2019-03-06       0 Swetha     Spreitzer 2000-12-08       19
+## 10     10 2019-02-05       0 Swetha     Spreitzer 2000-12-08       19
 ## # … with 5,994 more rows, and 3 more variables: turf_code &lt;chr&gt;,
 ## #   organizer &lt;chr&gt;, polling_place &lt;chr&gt;</code></pre>
 <p>Generally, it is useful to segment texting scripts to allow for more tailored messaging. It is recommended to treat your potential volunteers differently than those who have not indicated a desire to volunteer.</p>

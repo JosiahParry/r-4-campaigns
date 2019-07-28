@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-07-04" />
+<meta name="date" content="2019-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -155,6 +155,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#creating-historic-polling-data"><i class="fa fa-check"></i><b>6.3</b> Creating historic polling data</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="state-voter-files.html"><a href="state-voter-files.html"><i class="fa fa-check"></i><b>7</b> State Voter Files</a><ul>
+<li class="chapter" data-level="7.1" data-path="state-voter-files.html"><a href="state-voter-files.html#motivation"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="state-voter-files.html"><a href="state-voter-files.html#overview"><i class="fa fa-check"></i><b>7.2</b> Overview</a></li>
+<li class="chapter" data-level="7.3" data-path="state-voter-files.html"><a href="state-voter-files.html#exercise-1"><i class="fa fa-check"></i><b>7.3</b> Exercise</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="state-voter-files.html"><a href="state-voter-files.html#identifying-download-links"><i class="fa fa-check"></i><b>7.3.1</b> Identifying download links</a></li>
+<li class="chapter" data-level="7.3.2" data-path="state-voter-files.html"><a href="state-voter-files.html#download-the-voter-file"><i class="fa fa-check"></i><b>7.3.2</b> Download the voter file</a></li>
+<li class="chapter" data-level="7.3.3" data-path="state-voter-files.html"><a href="state-voter-files.html#downloading-the-voter-file"><i class="fa fa-check"></i><b>7.3.3</b> Downloading the voter file</a></li>
+<li class="chapter" data-level="7.3.4" data-path="state-voter-files.html"><a href="state-voter-files.html#voter-file-exploratoration"><i class="fa fa-check"></i><b>7.3.4</b> Voter file exploratoration</a></li>
+<li class="chapter" data-level="7.3.5" data-path="state-voter-files.html"><a href="state-voter-files.html#tidying"><i class="fa fa-check"></i><b>7.3.5</b> Tidying</a></li>
+<li class="chapter" data-level="7.3.6" data-path="state-voter-files.html"><a href="state-voter-files.html#creating-targets"><i class="fa fa-check"></i><b>7.3.6</b> Creating targets</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
 
@@ -187,16 +199,22 @@ sheet &lt;-<span class="st"> </span><span class="kw">gs_url</span>(<span class="
 <pre><code>## Sheet-identifying info appears to be a browser URL.
 ## googlesheets will attempt to extract sheet key from the URL.</code></pre>
 <pre><code>## Putative key: 1tROfDCP8meClFSDupPJViEQVIZ-Fsn36U9on7qSERzs</code></pre>
+<pre><code>## Auto-refreshing stale OAuth token.</code></pre>
 <pre><code>## Sheet successfully identified: &quot;R 4 Progressive Campaigns&quot;</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read the `weekly_canvas` tab</span>
 weekly_canvass &lt;-<span class="st"> </span><span class="kw">gs_read</span>(sheet, <span class="st">&quot;weekly_canvass&quot;</span>)</code></pre>
 <pre><code>## Accessing worksheet titled &#39;weekly_canvass&#39;.</code></pre>
+<pre><code>## Warning: Missing column names filled in: &#39;X5&#39; [5], &#39;X6&#39; [6], &#39;X7&#39; [7]</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   turf_code = col_character(),
 ##   week = col_double(),
 ##   n_pledged = col_double(),
-##   vol_yes = col_double()
+##   vol_yes = col_double(),
+##   X5 = col_logical(),
+##   X6 = col_logical(),
+##   X7 = col_double(),
+##   `#NAME?` = col_logical()
 ## )</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read the `goals` tab</span>
 goals &lt;-<span class="st"> </span><span class="kw">gs_read</span>(sheet, <span class="st">&quot;goals&quot;</span>)</code></pre>
@@ -208,19 +226,19 @@ goals &lt;-<span class="st"> </span><span class="kw">gs_read</span>(sheet, <span
 ##   goal = col_double()
 ## )</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">weekly_canvass</code></pre>
-<pre><code>## # A tibble: 66 x 4
-##    turf_code  week n_pledged vol_yes
-##    &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-##  1 A             1       114      41
-##  2 A             2       109      28
-##  3 A             3        96      33
-##  4 A             4       121      34
-##  5 A             5        95      32
-##  6 A             6        99      29
-##  7 A             7        78      28
-##  8 A             8       111      29
-##  9 A             9       119      34
-## 10 A            10       119      27
+<pre><code>## # A tibble: 66 x 8
+##    turf_code  week n_pledged vol_yes X5    X6       X7 `#NAME?`
+##    &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;lgl&gt;   
+##  1 A             1       114      41 NA    NA      130 NA      
+##  2 A             2       109      28 NA    NA      130 NA      
+##  3 A             3        96      33 NA    NA      130 NA      
+##  4 A             4       121      34 NA    NA      130 NA      
+##  5 A             5        95      32 NA    NA      130 NA      
+##  6 A             6        99      29 NA    NA      130 NA      
+##  7 A             7        78      28 NA    NA      130 NA      
+##  8 A             8       111      29 NA    NA      130 NA      
+##  9 A             9       119      34 NA    NA      130 NA      
+## 10 A            10       119      27 NA    NA      130 NA      
 ## # … with 56 more rows</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">goals</code></pre>
 <pre><code>## # A tibble: 312 x 3
@@ -247,15 +265,15 @@ goals &lt;-<span class="st"> </span><span class="kw">gs_read</span>(sheet, <span
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ptg =</span> n_pledged <span class="op">/</span><span class="st"> </span>goal)
 
 current_week</code></pre>
-<pre><code>## # A tibble: 6 x 6
-##   turf_code  week n_pledged vol_yes  goal   ptg
-##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 A            11        76      20    90 0.844
-## 2 B            11        51      20    50 1.02 
-## 3 C            11        87      17   130 0.669
-## 4 D            11        83      31    60 1.38 
-## 5 E            11        55      20    70 0.786
-## 6 F            11        88      29    70 1.26</code></pre>
+<pre><code>## # A tibble: 6 x 10
+##   turf_code  week n_pledged vol_yes X5    X6       X7 `#NAME?`  goal   ptg
+##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;lgl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+## 1 A            11        76      20 NA    NA      130 NA          90 0.844
+## 2 B            11        51      20 NA    NA       NA NA          50 1.02 
+## 3 C            11        87      17 NA    NA       NA NA         130 0.669
+## 4 D            11        83      31 NA    NA       NA NA          60 1.38 
+## 5 E            11        55      20 NA    NA       NA NA          70 0.786
+## 6 F            11        88      29 NA    NA       NA NA          70 1.26</code></pre>
 <p>While it nice to have each region’s PTG, it’s also useful to have the entire program weekly PTG. We can create an aggregate table and bind it to the existing table.</p>
 <pre class="sourceCode r"><code class="sourceCode r">totals &lt;-<span class="st"> </span>current_week <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">bind_rows</span>(
@@ -269,16 +287,16 @@ current_week</code></pre>
   )
 
 totals</code></pre>
-<pre><code>## # A tibble: 7 x 6
-##   turf_code  week n_pledged vol_yes  goal   ptg
-##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 A            11        76      20    90 0.844
-## 2 B            11        51      20    50 1.02 
-## 3 C            11        87      17   130 0.669
-## 4 D            11        83      31    60 1.38 
-## 5 E            11        55      20    70 0.786
-## 6 F            11        88      29    70 1.26 
-## 7 Total        11       440     137   470 0.936</code></pre>
+<pre><code>## # A tibble: 7 x 10
+##   turf_code  week n_pledged vol_yes X5    X6       X7 `#NAME?`  goal   ptg
+##   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;dbl&gt; &lt;lgl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+## 1 A            11        76      20 NA    NA      130 NA          90 0.844
+## 2 B            11        51      20 NA    NA       NA NA          50 1.02 
+## 3 C            11        87      17 NA    NA       NA NA         130 0.669
+## 4 D            11        83      31 NA    NA       NA NA          60 1.38 
+## 5 E            11        55      20 NA    NA       NA NA          70 0.786
+## 6 F            11        88      29 NA    NA       NA NA          70 1.26 
+## 7 Total        11       440     137 NA    NA       NA NA         470 0.936</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">totals <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(turf_code, ptg)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span>

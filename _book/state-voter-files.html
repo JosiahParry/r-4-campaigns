@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 State Voter Files | R for Pogressive Campaigns</title>
+  <meta name="description" content="Chapter 7 State Voter Files | R for Pogressive Campaigns" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 State Voter Files | R for Pogressive Campaigns" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 State Voter Files | R for Pogressive Campaigns" />
+  
+  
+  
+
+<meta name="author" content="Josiah Parry" />
+
+
+<meta name="date" content="2019-07-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="web-scraping-polling-use-case.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R for Campaigns</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#getting-help"><i class="fa fa-check"></i><b>1.1</b> Getting Help</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#infrastructure-overview"><i class="fa fa-check"></i><b>1.2</b> Infrastructure overview</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="calculating-ptg.html"><a href="calculating-ptg.html"><i class="fa fa-check"></i><b>2</b> calculating PTG</a><ul>
+<li class="chapter" data-level="2.0.1" data-path="calculating-ptg.html"><a href="calculating-ptg.html#goal-demonstrate-how-to-take-raw-canvassing-data-and-calculate-a-ptg."><i class="fa fa-check"></i><b>2.0.1</b> Goal: Demonstrate how to take raw canvassing data and calculate a PTG.</a></li>
+<li class="chapter" data-level="2.1" data-path="calculating-ptg.html"><a href="calculating-ptg.html#exercise"><i class="fa fa-check"></i><b>2.1</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="reporting-googlesheets.html"><a href="reporting-googlesheets.html"><i class="fa fa-check"></i><b>3</b> reporting-googlesheets</a></li>
+<li class="chapter" data-level="4" data-path="texting.html"><a href="texting.html"><i class="fa fa-check"></i><b>4</b> texting</a></li>
+<li class="chapter" data-level="5" data-path="google-trends-results.html"><a href="google-trends-results.html"><i class="fa fa-check"></i><b>5</b> google trends results</a><ul>
+<li class="chapter" data-level="5.1" data-path="google-trends-results.html"><a href="google-trends-results.html#google-trends-data"><i class="fa fa-check"></i><b>5.1</b> Google Trends Data</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="google-trends-results.html"><a href="google-trends-results.html#relative-popularity"><i class="fa fa-check"></i><b>5.1.1</b> Relative Popularity</a></li>
+<li class="chapter" data-level="5.1.2" data-path="google-trends-results.html"><a href="google-trends-results.html#related-queries"><i class="fa fa-check"></i><b>5.1.2</b> Related Queries</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="google-trends-results.html"><a href="google-trends-results.html#trendyy"><i class="fa fa-check"></i><b>5.2</b> <code>trendyy</code></a></li>
+<li class="chapter" data-level="5.3" data-path="google-trends-results.html"><a href="google-trends-results.html#visualizing-trends"><i class="fa fa-check"></i><b>5.3</b> Visualizing Trends</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html"><i class="fa fa-check"></i><b>6</b> Web-Scraping: Polling use case</a><ul>
+<li class="chapter" data-level="6.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#understanding-rvest"><i class="fa fa-check"></i><b>6.1</b> Understanding <code>rvest</code></a></li>
+<li class="chapter" data-level="6.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#example"><i class="fa fa-check"></i><b>6.2</b> Example</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#date-cleaning"><i class="fa fa-check"></i><b>6.2.1</b> Date cleaning</a></li>
+<li class="chapter" data-level="6.2.2" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#visualization"><i class="fa fa-check"></i><b>6.2.2</b> Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="web-scraping-polling-use-case.html"><a href="web-scraping-polling-use-case.html#creating-historic-polling-data"><i class="fa fa-check"></i><b>6.3</b> Creating historic polling data</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="state-voter-files.html"><a href="state-voter-files.html"><i class="fa fa-check"></i><b>7</b> State Voter Files</a><ul>
+<li class="chapter" data-level="7.1" data-path="state-voter-files.html"><a href="state-voter-files.html#motivation"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="state-voter-files.html"><a href="state-voter-files.html#overview"><i class="fa fa-check"></i><b>7.2</b> Overview</a></li>
+<li class="chapter" data-level="7.3" data-path="state-voter-files.html"><a href="state-voter-files.html#exercise-1"><i class="fa fa-check"></i><b>7.3</b> Exercise</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="state-voter-files.html"><a href="state-voter-files.html#identifying-download-links"><i class="fa fa-check"></i><b>7.3.1</b> Identifying download links</a></li>
+<li class="chapter" data-level="7.3.2" data-path="state-voter-files.html"><a href="state-voter-files.html#download-the-voter-file"><i class="fa fa-check"></i><b>7.3.2</b> Download the voter file</a></li>
+<li class="chapter" data-level="7.3.3" data-path="state-voter-files.html"><a href="state-voter-files.html#voter-file-exploratoration"><i class="fa fa-check"></i><b>7.3.3</b> Voter file exploratoration</a></li>
+<li class="chapter" data-level="7.3.4" data-path="state-voter-files.html"><a href="state-voter-files.html#tidying"><i class="fa fa-check"></i><b>7.3.4</b> Tidying</a></li>
+<li class="chapter" data-level="7.3.5" data-path="state-voter-files.html"><a href="state-voter-files.html#creating-targets"><i class="fa fa-check"></i><b>7.3.5</b> Creating targets</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/josiahparry/r-4-campaigns" target="blank">GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="state-voter-files" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> State Voter Files</h1>
+<div id="motivation" class="section level2">
+<h2><span class="header-section-number">7.1</span> Motivation</h2>
+<p><em>Who</em> one votes for is private, but <em>when</em> someone votes is a matter of public record. A state’s Secretary of State (SOS) maintains a public record of who voted. The accompanying data may vary state by state. For example, the state of New Hampshire does not record the age of the person voting. Companies such as <a href="https://www.catalist.us/data/">Catalist</a> have built their business around aggregating, cleaning, and enhancing public voter files. However, these databases can be quite expensive and are not updated at the same pace as the state voter file.</p>
+</div>
+<div id="overview" class="section level2">
+<h2><span class="header-section-number">7.2</span> Overview</h2>
+<p>In this section we will demonstrate how to programatically download and clean the state voterfile. From there, we will identify potential voters and canvassing targets. Once those targets have been identified, they can be uploaded as a list into VAN based on their SOS ID which should be present depending on your provider.</p>
+<p>The OH SOS website provide links to the <a href="https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:STWD:::#stwdVtrFiles">voter file</a> which are updated frequently. These files were last updated on July 19th, 2019 as of today (July 21st, 2019). We will combine the webscraping tools (<code>rvest</code>) that we previously learned and combine them with <code>dplyr</code> and <code>data.table</code>—a package that works exceptionally well with large data, see the <a href="https://github.com/Rdatatable/data.table/wiki">wiki</a> for a primer.</p>
+</div>
+<div id="exercise-1" class="section level2">
+<h2><span class="header-section-number">7.3</span> Exercise</h2>
+<p>As always, let’s set up our workspace.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
+<span class="kw">library</span>(data.table)
+<span class="kw">library</span>(dplyr)</code></pre>
+<p>The first step is to use <code>rvest</code> to identify the URLs that we can use to download the voter-file. To do this, use the <a href="https://atendesigngroup.com/blog/how-determine-which-css-styling-element">inspector tool</a> in your web browser and identify the HTML elements of interest. In this use case, we will specify the <code>highlight-row</code> class and the <code>a</code> (anchor) tag. The <code>a</code> tag is used to create hyperlinks within a document. The <code>href</code> attribute is used to specify the hyperlink. We can extract the <code>href</code> attribute using <code>rvest::html_attr()</code>.</p>
+<div id="identifying-download-links" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Identifying download links</h3>
+<pre class="sourceCode r"><code class="sourceCode r">session &lt;-<span class="st"> </span><span class="kw">html_session</span>(<span class="st">&quot;https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:STWD:::#stwdVtrFiles&quot;</span>)
+
+<span class="kw">html_nodes</span>(session, <span class="st">&quot;.highlight-row a&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_attr</span>(<span class="st">&quot;href&quot;</span>)</code></pre>
+<pre><code>## [1] &quot;f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:363&quot;
+## [2] &quot;f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:364&quot;
+## [3] &quot;f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:365&quot;
+## [4] &quot;f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:366&quot;</code></pre>
+<p>Notice that this does not actually provide the full URL that is needed, but rather the query parameters. We can iteratively append this to the base url—in this case <code>https://www6.sos.state.oh.us/ords/</code>—using <code>purrr::map()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">file_urls &lt;-<span class="st"> </span><span class="kw">html_nodes</span>(session, <span class="st">&quot;.highlight-row a&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">html_attr</span>(<span class="st">&quot;href&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>purrr<span class="op">::</span><span class="kw">map_chr</span>(<span class="op">~</span><span class="kw">paste0</span>(<span class="st">&quot;https://www6.sos.state.oh.us/ords/&quot;</span>, .))
+
+file_urls</code></pre>
+<pre><code>## [1] &quot;https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:363&quot;
+## [2] &quot;https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:364&quot;
+## [3] &quot;https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:365&quot;
+## [4] &quot;https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:DOWNLOAD::FILE:NO:2:P2_PRODUCT_NUMBER:366&quot;</code></pre>
+<p>With that, we now have the file paths for the four statewide voter file data sets. For the sake of computation and memory, we will only work with the first URL.</p>
+</div>
+<div id="download-the-voter-file" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> Download the voter file</h3>
+<p>Now that we have the links to the voter file, we can use R to download them using <code>download.file()</code>. The first argument is the link to the file, the second is the destination of that file. Here we are saving the first file into the data folder. You can also do this iteratively using <code>purrr::map()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># download the file as a .txt.gz (that&#39;s the file format if you download it from the web)</span>
+<span class="kw">download.file</span>(file_urls[<span class="dv">1</span>], <span class="dt">destfile =</span> <span class="st">&quot;data/SWVF_1_22 (Adams-Erie).txt.gz&quot;</span>)</code></pre>
+<p>Note that the file is in <code>.gz</code> compressed format. We can uncompress this using <code>R.utils::gunzip()</code> which will return the compressed file.</p>
+<pre class="sourceCode r"><code class="sourceCode r">R.utils<span class="op">::</span><span class="kw">gunzip</span>(<span class="st">&quot;data/SWVF_1_22 (Adams-Erie).txt.gz&quot;</span>)</code></pre>
+<p>data.table reads text files using <code>fread()</code>. Since this file is very large, we will take only the first 10,000 observations. Do this by setting the <code>nrows</code> argument to <code>10000</code>. Since data.table is an extension upon the <code>data.frame</code>, we can combine both data.table aand dplyr functions.</p>
+</div>
+<div id="voter-file-exploratoration" class="section level3">
+<h3><span class="header-section-number">7.3.3</span> Voter file exploratoration</h3>
+<pre class="sourceCode r"><code class="sourceCode r">swvf &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;data/SWVF_1_22 (Adams-Erie).txt&quot;</span>, <span class="dt">nrows =</span> <span class="dv">10000</span>)</code></pre>
+<p>Do your due dilligence and look at <em>all</em> 106 columns. This is a great time to embrace dirty data. Are the data <a href="https://vita.had.co.nz/papers/tidy-data.pdf">tidy</a>?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(swvf)</code></pre>
+<pre><code>## Observations: 10,000
+## Variables: 106
+## $ SOS_VOTERID                   &lt;chr&gt; &quot;OH0016238254&quot;, &quot;OH0019414074&quot;, &quot;O…
+## $ COUNTY_NUMBER                 &lt;int&gt; 6, 2, 6, 9, 18, 13, 18, 18, 13, 4,…
+## $ COUNTY_ID                     &lt;int&gt; 21511, 1010005, 40055, 482703, 204…
+## $ LAST_NAME                     &lt;chr&gt; &quot;KUETHER&quot;, &quot;GEMLICK&quot;, &quot;KITCHEN&quot;, &quot;…
+## $ FIRST_NAME                    &lt;chr&gt; &quot;BARBARA&quot;, &quot;JODI&quot;, &quot;LESLIE&quot;, &quot;AMAN…
+## $ MIDDLE_NAME                   &lt;chr&gt; &quot;A&quot;, &quot;LYN&quot;, &quot;L&quot;, &quot;LEIGH&quot;, &quot;J&quot;, &quot;L&quot;…
+## $ SUFFIX                        &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ DATE_OF_BIRTH                 &lt;chr&gt; &quot;1969-11-15&quot;, &quot;1972-08-19&quot;, &quot;1969-…
+## $ REGISTRATION_DATE             &lt;chr&gt; &quot;1998-02-23&quot;, &quot;2007-01-29&quot;, &quot;2008-…
+## $ VOTER_STATUS                  &lt;chr&gt; &quot;ACTIVE&quot;, &quot;ACTIVE&quot;, &quot;ACTIVE&quot;, &quot;ACT…
+## $ PARTY_AFFILIATION             &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;D&quot;, &quot;…
+## $ RESIDENTIAL_ADDRESS1          &lt;chr&gt; &quot;725 OAKWOOD DR&quot;, &quot;3464 WOODHAVEN …
+## $ RESIDENTIAL_SECONDARY_ADDR    &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ RESIDENTIAL_CITY              &lt;chr&gt; &quot;MINSTER&quot;, &quot;LIMA&quot;, &quot;ST MARYS&quot;, &quot;MO…
+## $ RESIDENTIAL_STATE             &lt;chr&gt; &quot;OH&quot;, &quot;OH&quot;, &quot;OH&quot;, &quot;OH&quot;, &quot;OH&quot;, &quot;OH&quot;…
+## $ RESIDENTIAL_ZIP               &lt;int&gt; 45865, 45806, 45885, 45050, 44105,…
+## $ RESIDENTIAL_ZIP_PLUS4         &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ RESIDENTIAL_COUNTRY           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ RESIDENTIAL_POSTALCODE        &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ MAILING_ADDRESS1              &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ MAILING_SECONDARY_ADDRESS     &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ MAILING_CITY                  &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ MAILING_STATE                 &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ MAILING_ZIP                   &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ MAILING_ZIP_PLUS4             &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ MAILING_COUNTRY               &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ MAILING_POSTAL_CODE           &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ CAREER_CENTER                 &lt;chr&gt; &quot;&quot;, &quot;APOLLO CAREER CENTER&quot;, &quot;&quot;, &quot;&quot;…
+## $ CITY                          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;ST. MARYS CITY&quot;, &quot;MONROE …
+## $ CITY_SCHOOL_DISTRICT          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;ST MARYS CITY SD&quot;, &quot;&quot;, &quot;C…
+## $ COUNTY_COURT_DISTRICT         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ CONGRESSIONAL_DISTRICT        &lt;int&gt; 4, 4, 4, 8, 11, 2, 11, 16, 2, 14, …
+## $ COURT_OF_APPEALS              &lt;int&gt; 3, 3, 3, 12, 8, 12, 8, 8, 12, 11, …
+## $ EDU_SERVICE_CENTER_DISTRICT   &lt;chr&gt; &quot;AUGLAIZE COUNTY ESC&quot;, &quot;ALLEN COUN…
+## $ EXEMPTED_VILL_SCHOOL_DISTRICT &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ LIBRARY                       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ LOCAL_SCHOOL_DISTRICT         &lt;chr&gt; &quot;MINSTER LOCAL SD (AUGLAIZE)&quot;, &quot;SH…
+## $ MUNICIPAL_COURT_DISTRICT      &lt;chr&gt; &quot;&quot;, &quot;LIMA&quot;, &quot;&quot;, &quot;&quot;, &quot;CLEVELAND&quot;, &quot;…
+## $ PRECINCT_NAME                 &lt;chr&gt; &quot;PRECINCT MINSTER N&quot;, &quot;SHAWNEE H&quot;,…
+## $ PRECINCT_CODE                 &lt;chr&gt; &quot;06AAZ&quot;, &quot;02AFU&quot;, &quot;06AAE&quot;, &quot;09-P-A…
+## $ STATE_BOARD_OF_EDUCATION      &lt;int&gt; 1, 1, 1, 3, 11, 10, 11, 5, 10, 7, …
+## $ STATE_REPRESENTATIVE_DISTRICT &lt;int&gt; 84, 4, 82, 53, 9, 65, 12, 16, 65, …
+## $ STATE_SENATE_DISTRICT         &lt;int&gt; 12, 12, 1, 4, 21, 14, 25, 24, 14, …
+## $ TOWNSHIP                      &lt;chr&gt; &quot;JACKSON TOWNSHIP&quot;, &quot;Township Shaw…
+## $ VILLAGE                       &lt;chr&gt; &quot;MINSTER VILLAGE&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;,…
+## $ WARD                          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;ST. MARYS WARD 3&quot;, &quot;&quot;, &quot;C…
+## $ `PRIMARY-03/07/2000`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/07/2000`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, …
+## $ `SPECIAL-05/08/2001`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/06/2001`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;…
+## $ `PRIMARY-05/07/2002`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/05/2002`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;…
+## $ `SPECIAL-05/06/2003`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/04/2003`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-03/02/2004`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;D&quot;, &quot;&quot;, &quot;…
+## $ `GENERAL-11/02/2004`          &lt;chr&gt; &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, …
+## $ `SPECIAL-02/08/2005`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X…
+## $ `PRIMARY-05/03/2005`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/13/2005`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `GENERAL-11/08/2005`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;…
+## $ `SPECIAL-02/07/2006`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-05/02/2006`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;D&quot;, &quot;&quot;, &quot;…
+## $ `GENERAL-11/07/2006`          &lt;chr&gt; &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;,…
+## $ `PRIMARY-05/08/2007`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/11/2007`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `GENERAL-11/06/2007`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-11/06/2007`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-12/11/2007`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-03/04/2008`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;D&quot;, &quot;D&quot;, …
+## $ `PRIMARY-10/14/2008`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `GENERAL-11/04/2008`          &lt;chr&gt; &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X…
+## $ `GENERAL-11/18/2008`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `PRIMARY-05/05/2009`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/08/2009`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/15/2009`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `PRIMARY-09/29/2009`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/03/2009`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, …
+## $ `PRIMARY-05/04/2010`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-07/13/2010`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/07/2010`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/02/2010`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;…
+## $ `PRIMARY-05/03/2011`          &lt;chr&gt; &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;…
+## $ `PRIMARY-09/13/2011`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `GENERAL-11/08/2011`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;&quot;,…
+## $ `PRIMARY-03/06/2012`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;D&quot;, &quot;&quot;, &quot;…
+## $ `GENERAL-11/06/2012`          &lt;chr&gt; &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;…
+## $ `PRIMARY-05/07/2013`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;…
+## $ `PRIMARY-09/10/2013`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `PRIMARY-10/01/2013`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `GENERAL-11/05/2013`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, …
+## $ `PRIMARY-05/06/2014`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;D&quot;, &quot;&quot;, &quot;…
+## $ `GENERAL-11/04/2014`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X&quot;…
+## $ `PRIMARY-05/05/2015`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/15/2015`          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ `GENERAL-11/03/2015`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;…
+## $ `PRIMARY-03/15/2016`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;D&quot;, &quot;…
+## $ `GENERAL-06/07/2016`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/13/2016`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/08/2016`          &lt;chr&gt; &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;X…
+## $ `PRIMARY-05/02/2017`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `PRIMARY-09/12/2017`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, …
+## $ `GENERAL-11/07/2017`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;…
+## $ `PRIMARY-05/08/2018`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-08/07/2018`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…
+## $ `GENERAL-11/06/2018`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;, &quot;&quot;, &quot;&quot;, &quot;X&quot;, &quot;X&quot;…
+## $ `PRIMARY-05/07/2019`          &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;…</code></pre>
+<p>Nope! They are not tidy. Currently each row represents one voter and the events are on the columns following the format <code>ELECTION TYPE-MM/DD/YYYY</code>. The date of the election should be its own column as should the type (i.e. general, primary, or special). These data need to be converted to a longer format where each row is a unique combination of one voter and election. This means that if an individual voted in five elections, there would be five observations.</p>
+<p>There are two main steps that need to be taken to tidy up these data. Collect the column headers and their respective values into two new columns: <code>election</code>, and <code>party</code>. Since the column headers contain two variables of interest, namely the election type and election date, the column will be split into two.</p>
+<p>Usually we would use <code>gather()</code> or <code>pivot_longer()</code> from <code>tidyr</code>. However, these data are quite large and we need to write preformative code. data.table uses <code>data.table::melt()</code> to preform the same operation but is much faster. In this example we specify the <code>id</code> columns. These are the columns that will not be gathered into a new column. We also specify the name of the variable that will be created from the column headers with the <code>variable.name</code> argument. Next, we specfiy the name of the column that will contain the values.</p>
+<pre class="sourceCode r"><code class="sourceCode r">sw_gathered &lt;-<span class="st"> </span>swvf <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">melt</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">46</span>, <span class="dt">variable.name =</span> <span class="st">&quot;election&quot;</span>, <span class="dt">value.name =</span> <span class="st">&quot;party&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>()</code></pre>
+<p>Preview the results of <code>melt()</code>. The example below uses <code>dplyr::distinct()</code> to identify unique value pairs.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we can view the results. The election column can be easily split into two different columns. The election type (i.e. primary or general) and the date of the election. Next, the result column looks like there is a lot of room for cleaning. There are &quot;&quot; where NA should be. </span>
+<span class="kw">distinct</span>(sw_gathered, election, party)</code></pre>
+<pre><code>##                election party
+##   1: PRIMARY-03/07/2000      
+##   2: PRIMARY-03/07/2000     D
+##   3: PRIMARY-03/07/2000     X
+##   4: PRIMARY-03/07/2000     R
+##   5: PRIMARY-03/07/2000     L
+##  ---                         
+## 170: GENERAL-11/06/2018     X
+## 171: PRIMARY-05/07/2019      
+## 172: PRIMARY-05/07/2019     X
+## 173: PRIMARY-05/07/2019     R
+## 174: PRIMARY-05/07/2019     D</code></pre>
+<p>Notice that there are multiple values for <code>party</code>. What are these?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># what are the unique values?</span>
+<span class="kw">distinct</span>(sw_gathered, party)</code></pre>
+<pre><code>##    party
+## 1:      
+## 2:     D
+## 3:     X
+## 4:     R
+## 5:     L
+## 6:  &lt;NA&gt;
+## 7:     C
+## 8:     G</code></pre>
+</div>
+<div id="tidying" class="section level3">
+<h3><span class="header-section-number">7.3.4</span> Tidying</h3>
+<p>The SOS website has a downloadable data dictionary. The <em>Voter File Layout</em> says:</p>
+<blockquote>
+<p>The data dictionary Variable filed name with election type and date of each election. Value for this field indicates how the voter voted in that election.</p>
+</blockquote>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Abbr.</th>
+<th>Party Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>C</td>
+<td>Constitution Party</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>Democrat Party</td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>Reform Party</td>
+</tr>
+<tr class="even">
+<td>G</td>
+<td>Green Party</td>
+</tr>
+<tr class="odd">
+<td>L</td>
+<td>Libertarian Party</td>
+</tr>
+<tr class="even">
+<td>N</td>
+<td>Natural Law Party</td>
+</tr>
+<tr class="odd">
+<td>R</td>
+<td>Republican Party</td>
+</tr>
+<tr class="even">
+<td>S</td>
+<td>Socialist Party</td>
+</tr>
+<tr class="odd">
+<td>X</td>
+<td>Voted without declaring party affiliation</td>
+</tr>
+<tr class="even">
+<td>Blank</td>
+<td>Indicates that there is no voting record for this voter for this election</td>
+</tr>
+</tbody>
+</table>
+<p>We can use this to clean up the party field using <code>case_when()</code>. To create two separate columns for the election type and date, we can split on the first <code>-</code>. <code>tidyr::separate()</code> will split the column into two or more columns based on the <code>sep</code> argument. Once the <code>election_date</code> column has been created, we will need to parse it accordingly using lubridate. Since the date column is formatted as <code>MM/DD/YYYY</code> we can use <code>lubridate::mdy()</code> to parse it to class <code>Date</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">sw_clean &lt;-<span class="st"> </span>sw_gathered <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(election, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;election_type&quot;</span>, <span class="st">&quot;election_date&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;-&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">election_date =</span> lubridate<span class="op">::</span><span class="kw">mdy</span>(election_date),
+         <span class="dt">party =</span> <span class="kw">case_when</span>(
+           party <span class="op">==</span><span class="st"> &quot;C&quot;</span> <span class="op">~</span><span class="st"> &quot;Constitution&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;D&quot;</span> <span class="op">~</span><span class="st"> &quot;Democrat&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;E&quot;</span> <span class="op">~</span><span class="st"> &quot;Reform&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;G&quot;</span> <span class="op">~</span><span class="st"> &quot;Green&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;L&quot;</span> <span class="op">~</span><span class="st"> &quot;Libertarian&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;N&quot;</span> <span class="op">~</span><span class="st"> &quot;Natural Law&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;R&quot;</span> <span class="op">~</span><span class="st"> &quot;Republican&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;S&quot;</span> <span class="op">~</span><span class="st"> &quot;Socialist&quot;</span>,
+           party <span class="op">==</span><span class="st"> &quot;X&quot;</span> <span class="op">~</span><span class="st"> &quot;Independent&quot;</span>
+         ))
+
+sw_clean</code></pre>
+<pre><code>##     sos_voterid county_number county_id last_name first_name middle_name
+## 1  OH0016238254             6     21511   KUETHER    BARBARA           A
+## 2  OH0019414074             2   1010005   GEMLICK       JODI         LYN
+## 3  OH0019419095             6     40055   KITCHEN     LESLIE           L
+## 4  OH0019489283             9    482703     GRACE     AMANDA       LEIGH
+## 5  OH0015384921            18   2044314    CARNER    TIFFANY           J
+## 6  OH0020115764            13   6100757 VAN SCYOC      SUSAN           L
+## 7  OH0015058130            18   1674659     BERRY     NICOLE           L
+## 8  OH0015138398            18   1775588 GILCHRIST     LAUREN           E
+## 9  OH0017921202            13    155695   MEADORS      NANCY      LOUISE
+## 10 OH0020901137             4   9642563  ANDERSON      DAVID           A
+## 11 OH0021110639            13   6114771  PANGUITO       GAIL           M
+## 12 OH0021216967            18   2470286    TOOHEY   MARGARET           M
+## 13 OH0015214880            18   1863083       TAG    JESSICA            
+## 14 OH0018242491             7     33803     KOZEL      HENRY     CHARLES
+## 15 OH0012639909            17     12573       PRY    DOUGLAS           A
+## 16 OH0019156107            18   2253681     BARRY    COLLEEN           L
+## 17 OH0021892836             3   9633538    MILLER     TREVOR         IAN
+## 18 OH0014978513            18   1005945   EDWARDS    CYNTHIA           A
+## 19 OH0021955947            18   2554809  TOWNSEND      KIARA            
+## 20 OH0018713790             9    459591     SCHUL      KATIE    MICHELLE
+##    suffix date_of_birth registration_date voter_status party_affiliation
+## 1            1969-11-15        1998-02-23       ACTIVE                  
+## 2            1972-08-19        2007-01-29       ACTIVE                  
+## 3            1969-12-26        2008-01-09       ACTIVE                  
+## 4            1974-11-09        2008-02-01       ACTIVE                  
+## 5            1971-08-28        2016-05-25       ACTIVE                  
+## 6            1973-08-01        2008-09-18       ACTIVE                  
+## 7            1975-04-25        2009-08-19       ACTIVE                  
+## 8            1978-12-02        1999-04-30       ACTIVE                 D
+## 9            1943-04-07        1997-06-27       ACTIVE                  
+## 10           1943-07-14        2009-11-30       ACTIVE                 R
+## 11           1972-03-16        2010-07-14 CONFIRMATION                  
+## 12           1992-09-24        2017-10-09       ACTIVE                  
+## 13           1982-12-31        2010-12-21       ACTIVE                 D
+## 14           1927-09-07        1977-11-08 CONFIRMATION                  
+## 15           1967-05-05        2015-05-14       ACTIVE                 R
+## 16           1978-06-30        2011-07-22       ACTIVE                  
+## 17           1987-08-24        2012-08-20       ACTIVE                 R
+## 18           1962-05-03        2012-09-22       ACTIVE                  
+## 19           1974-10-30        2012-09-11 CONFIRMATION                  
+## 20           1987-03-02        2012-09-20       ACTIVE                  
+##               residential_address1 residential_secondary_addr
+## 1                   725 OAKWOOD DR                           
+## 2                3464 WOODHAVEN LN                           
+## 3                  122 CONCORD AVE                           
+## 4             932 SLEEPY HOLLOW DR                           
+## 5                13902 BENWOOD AVE                           
+## 6                1090 S MUSCOVY DR                           
+## 7                 16308 KOLLIN AVE                           
+## 8               3419 E OXFORD OVAL                           
+## 9                 6137 TAYLOR PIKE                           
+## 10                6787 LINDSLEY AV                           
+## 11             6321 TRAIL RIDGE CT                           
+## 12              25 PEPPER CREEK DR                           
+## 13                  1916 W 50TH ST                           
+## 14 55505 BLOOMINGDALE ST WOLFHURST                           
+## 15                   4691 BAKER RD                           
+## 16             6103 NORTHCLIFF AVE                           
+## 17                    1998 TR 1095                           
+## 18                14307 GRANGER RD                           
+## 19                11910 BUCKEYE RD                           
+## 20                18 TWIN LAKES DR                           
+##    residential_city residential_state residential_zip
+## 1           MINSTER                OH           45865
+## 2              LIMA                OH           45806
+## 3          ST MARYS                OH           45885
+## 4            MONROE                OH           45050
+## 5         CLEVELAND                OH           44105
+## 6          LOVELAND                OH           45140
+## 7         CLEVELAND                OH           44128
+## 8     NORTH OLMSTED                OH           44070
+## 9       BLANCHESTER                OH           45107
+## 10          ANDOVER                OH           44003
+## 11         LOVELAND                OH           45140
+## 12      PEPPER PIKE                OH           44124
+## 13        CLEVELAND                OH           44102
+## 14       BRIDGEPORT                OH           43912
+## 15        CRESTLINE                OH           44827
+## 16         BROOKLYN                OH           44144
+## 17          ASHLAND                OH           44805
+## 18        MAPLE HTS                OH           44137
+## 19        CLEVELAND                OH           44120
+## 20        FAIRFIELD                OH           45014
+##    residential_zip_plus4 residential_country residential_postalcode
+## 1                     NA                  NA                     NA
+## 2                     NA                  NA                     NA
+## 3                     NA                  NA                     NA
+## 4                     NA                  NA                     NA
+## 5                     NA                  NA                     NA
+## 6                     NA                  NA                     NA
+## 7                     NA                  NA                     NA
+## 8                     NA                  NA                     NA
+## 9                     NA                  NA                     NA
+## 10                    NA                  NA                     NA
+## 11                    NA                  NA                     NA
+## 12                    NA                  NA                     NA
+## 13                    NA                  NA                     NA
+## 14                    NA                  NA                     NA
+## 15                    NA                  NA                     NA
+## 16                    NA                  NA                     NA
+## 17                    NA                  NA                     NA
+## 18                    NA                  NA                     NA
+## 19                    NA                  NA                     NA
+## 20                    NA                  NA                     NA
+##    mailing_address1 mailing_secondary_address mailing_city mailing_state
+## 1                                          NA                           
+## 2                                          NA                           
+## 3                                          NA                           
+## 4                                          NA                           
+## 5                                          NA                           
+## 6                                          NA                           
+## 7                                          NA                           
+## 8                                          NA                           
+## 9                                          NA                           
+## 10                                         NA                           
+## 11                                         NA                           
+## 12                                         NA                           
+## 13                                         NA                           
+## 14                                         NA                           
+## 15                                         NA                           
+## 16                                         NA                           
+## 17                                         NA                           
+## 18                                         NA                           
+## 19                                         NA                           
+## 20                                         NA                           
+##    mailing_zip mailing_zip_plus4 mailing_country mailing_postal_code
+## 1           NA                NA                                    
+## 2           NA                NA                                    
+## 3           NA                NA                                    
+## 4           NA                NA                                    
+## 5           NA                NA                                    
+## 6           NA                NA                                    
+## 7           NA                NA                                    
+## 8           NA                NA                                    
+## 9           NA                NA                                    
+## 10          NA                NA                                    
+## 11          NA                NA                                    
+## 12          NA                NA                                    
+## 13          NA                NA                                    
+## 14          NA                NA                                    
+## 15          NA                NA                                    
+## 16          NA                NA                                    
+## 17          NA                NA                                    
+## 18          NA                NA                                    
+## 19          NA                NA                                    
+## 20          NA                NA                                    
+##                      career_center           city
+## 1                                                
+## 2             APOLLO CAREER CENTER               
+## 3                                  ST. MARYS CITY
+## 4                                     MONROE CITY
+## 5                                                
+## 6       GREAT OAKS CAREER CAMPUSES               
+## 7                                                
+## 8            POLARIS CAREER CENTER               
+## 9       GREAT OAKS CAREER CAMPUSES               
+## 10                                               
+## 11      GREAT OAKS CAREER CAMPUSES               
+## 12                                               
+## 13                                               
+## 14  BELMONT-HARRISON CAREER CENTER               
+## 15    PIONEER CAREER &amp; TECH CENTER               
+## 16           POLARIS CAREER CENTER               
+## 17 ASHLAND COUNTY-WEST HOLMES JVSD               
+## 18                                               
+## 19                                               
+## 20                                 FAIRFIELD CITY
+##           city_school_district county_court_district
+## 1                                                 NA
+## 2                                                 NA
+## 3             ST MARYS CITY SD                    NA
+## 4                                                 NA
+## 5  CLEVELAND MUNICIPAL CITY SD                    NA
+## 6                                                 NA
+## 7  CLEVELAND MUNICIPAL CITY SD                    NA
+## 8        NORTH OLMSTED CITY SD                    NA
+## 9                                                 NA
+## 10                                                NA
+## 11                                                NA
+## 12              ORANGE CITY SD                    NA
+## 13 CLEVELAND MUNICIPAL CITY SD                    NA
+## 14                                                NA
+## 15                                                NA
+## 16            BROOKLYN CITY SD                    NA
+## 17                                                NA
+## 18       MAPLE HEIGHTS CITY SD                    NA
+## 19 CLEVELAND MUNICIPAL CITY SD                    NA
+## 20           FAIRFIELD CITY SD                    NA
+##    congressional_district court_of_appeals edu_service_center_district
+## 1                       4                3         AUGLAIZE COUNTY ESC
+## 2                       4                3            ALLEN COUNTY ESC
+## 3                       4                3                            
+## 4                       8               12           BUTLER COUNTY ESC
+## 5                      11                8                            
+## 6                       2               12                            
+## 7                      11                8                            
+## 8                      16                8                            
+## 9                       2               12                            
+## 10                     14               11        ASHTABULA COUNTY ESC
+## 11                      2               12                            
+## 12                     11                8                            
+## 13                     11                8                            
+## 14                      6                7                            
+## 15                      4                3                MID-OHIO ESC
+## 16                      9                8                            
+## 17                      7                5              TRI-COUNTY ESC
+## 18                     11                8                            
+## 19                     11                8                            
+## 20                      8               12                            
+##      exempted_vill_school_district library
+## 1                                       NA
+## 2                                       NA
+## 3                                       NA
+## 4                                       NA
+## 5                                       NA
+## 6                                       NA
+## 7                                       NA
+## 8                                       NA
+## 9                                       NA
+## 10                                      NA
+## 11                                      NA
+## 12                                      NA
+## 13                                      NA
+## 14 BRIDGEPORT EX VILL SD (BELMONT)      NA
+## 15                                      NA
+## 16                                      NA
+## 17                                      NA
+## 18                                      NA
+## 19                                      NA
+## 20                                      NA
+##                     local_school_district municipal_court_district
+## 1             MINSTER LOCAL SD (AUGLAIZE)                         
+## 2                SHAWNEE LOCAL SD (ALLEN)                     LIMA
+## 3                                                                 
+## 4                MONROE LOCAL SD (BUTLER)                         
+## 5                                                        CLEVELAND
+## 6                                                                 
+## 7                                                        CLEVELAND
+## 8                                                      ROCKY-RIVER
+## 9                                                                 
+## 10 PYMATUNING VALLEY LOCAL SD (ASHTABULA)                         
+## 11                                                                
+## 12                                                  SHAKER-HEIGHTS
+## 13                                                       CLEVELAND
+## 14                                                                
+## 15    BUCKEYE CENTRAL LOCAL SD (CRAWFORD)                         
+## 16                                                           PARMA
+## 17           HILLSDALE LOCAL SD (ASHLAND)                         
+## 18                                                GARFIELD-HEIGHTS
+## 19                                                       CLEVELAND
+## 20                                                                
+##            precinct_name precinct_code state_board_of_education
+## 1     PRECINCT MINSTER N         06AAZ                        1
+## 2              SHAWNEE H         02AFU                        1
+## 3  PRECINCT ST. MARYS 3A         06AAE                        1
+## 4               MONROE 2      09-P-AKN                        3
+## 5         CLEVELAND-02-Q      18-P-ALJ                       11
+## 6       MIAMI TOWNSHIP X      13-P-ACY                       10
+## 7         CLEVELAND-01-E      18-P-AIA                       11
+## 8     NORTH OLMSTED-02-C      18-P-CDV                        5
+## 9       WAYNE TOWNSHIP B      13-P-AGV                       10
+## 10 PRECINCT WMSFLD TWP 2         04AEW                        7
+## 11    MIAMI TOWNSHIP L1L      13-P-AHS                       10
+## 12      PEPPER PIKE-00-D      18-P-CNB                       11
+## 13        CLEVELAND-15-J      18-P-BDX                       11
+## 14  PRECINCT PEASE TWP 2         07ABW                        8
+## 15            VERNON TWP      17-P-ACN                        1
+## 16         BROOKLYN-00-H      18-P-AGJ                       11
+## 17      PRECINCT MIFFLIN         03ACV                        5
+## 18    MAPLE HEIGHTS-03-B      18-P-CAE                       11
+## 19        CLEVELAND-04-E      18-P-AMQ                       11
+## 20              FAIR7WD1      09-P-AAG                        3
+##    state_representative_district state_senate_district          township
+## 1                             84                    12  JACKSON TOWNSHIP
+## 2                              4                    12  Township Shawnee
+## 3                             82                     1 ST MARYS TOWNSHIP
+## 4                             53                     4    LEMON TOWNSHIP
+## 5                              9                    21                  
+## 6                             65                    14         MIAMI TWP
+## 7                             12                    25                  
+## 8                             16                    24                  
+## 9                             65                    14         WAYNE TWP
+## 10                            64                    32 WILLIAMSFIELD TWP
+## 11                            65                    14         MIAMI TWP
+## 12                            12                    25                  
+## 13                            13                    23                  
+## 14                            96                    30    PEASE TOWNSHIP
+## 15                            87                    26   VERNON TOWNSHIP
+## 16                            14                    23                  
+## 17                            70                    22  MIFFLIN-COMBINED
+## 18                            12                    25                  
+## 19                             9                    21                  
+## 20                            51                     4                  
+##            village                     ward election_type election_date
+## 1  MINSTER VILLAGE                                PRIMARY    2000-03-07
+## 2                                                 PRIMARY    2000-03-07
+## 3                          ST. MARYS WARD 3       PRIMARY    2000-03-07
+## 4                                                 PRIMARY    2000-03-07
+## 5                          CLEVELAND WARD 2       PRIMARY    2000-03-07
+## 6                                                 PRIMARY    2000-03-07
+## 7                          CLEVELAND WARD 1       PRIMARY    2000-03-07
+## 8                      NORTH OLMSTED WARD 2       PRIMARY    2000-03-07
+## 9                                                 PRIMARY    2000-03-07
+## 10                                                PRIMARY    2000-03-07
+## 11                                                PRIMARY    2000-03-07
+## 12                                                PRIMARY    2000-03-07
+## 13                        CLEVELAND WARD 15       PRIMARY    2000-03-07
+## 14                                                PRIMARY    2000-03-07
+## 15                                                PRIMARY    2000-03-07
+## 16                                                PRIMARY    2000-03-07
+## 17                                                PRIMARY    2000-03-07
+## 18                 MAPLE HEIGHTS DISTRICT 3       PRIMARY    2000-03-07
+## 19                         CLEVELAND WARD 4       PRIMARY    2000-03-07
+## 20                     FAIRFIELD CTY WARD 1       PRIMARY    2000-03-07
+##          party
+## 1         &lt;NA&gt;
+## 2         &lt;NA&gt;
+## 3         &lt;NA&gt;
+## 4         &lt;NA&gt;
+## 5         &lt;NA&gt;
+## 6         &lt;NA&gt;
+## 7         &lt;NA&gt;
+## 8         &lt;NA&gt;
+## 9         &lt;NA&gt;
+## 10        &lt;NA&gt;
+## 11        &lt;NA&gt;
+## 12        &lt;NA&gt;
+## 13        &lt;NA&gt;
+## 14    Democrat
+## 15 Independent
+## 16        &lt;NA&gt;
+## 17        &lt;NA&gt;
+## 18        &lt;NA&gt;
+## 19        &lt;NA&gt;
+## 20        &lt;NA&gt;
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 599980 rows ]</code></pre>
+</div>
+<div id="creating-targets" class="section level3">
+<h3><span class="header-section-number">7.3.5</span> Creating targets</h3>
+<p>One thing that you will need to do is identify your potential voter base. These voters are sometimes referred to as your “targets” or your voter “universe”. Each voter is a unique culmination of experience, opinions, and biases. As such, not every person will be willing to vote for your candidate or maybe to even vote at all. Some people are habitual voters who vote in every election and always along party lines. Others may only sometimes vote in a general election. And others might not vote consistently along party lines.</p>
+<p>Due to the never ending complexities that are peoples’ preferences and persuasions it is important to break the pool of potential voters down into smaller groups which I will refer to as <em>tiers</em>. We will break our voters into three distinct tiers. These categorizations are rather crude. Work with your state leadership team to determine the best way to segment your voter base.</p>
+<p>Tier 1. Base voters - registered Democrats who have voted Democrat in a primary
+Tier 2. Motivation - are not registered with a party but have voted Democrat in a primary
+Tier 3. Persuasion - folks that have voted Democrat in a priimary but aren’t registered as such</p>
+<p>To begin this process, we want to identify everyone who has voted Democrat in a primary. We will filter <code>sw_clean</code> to these criteria. Then we will count the number of times each voter has voted for a Democrat. This will then be joined back to the original data frame so we can identify those people who have voted Democrat even if it conflicts with their party registration.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># One thing that you will need to do is to identify your target base voters. These will most likely be those who have voted Democrat in previous primaries. Then we will compare those people with their registered party. </span>
+primary_dems &lt;-<span class="st"> </span>sw_clean <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(election_type <span class="op">==</span><span class="st"> &quot;PRIMARY&quot;</span>,
+         party <span class="op">==</span><span class="st"> &quot;Democrat&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(sos_voterid, party)
+
+primary_dems</code></pre>
+<pre><code>## # A tibble: 3,588 x 3
+##    sos_voterid  party        n
+##    &lt;chr&gt;        &lt;chr&gt;    &lt;int&gt;
+##  1 OH0010002426 Democrat     1
+##  2 OH0010004408 Democrat     1
+##  3 OH0010012148 Democrat     1
+##  4 OH0010012441 Democrat     3
+##  5 OH0010013144 Democrat     1
+##  6 OH0010015404 Democrat     1
+##  7 OH0010015734 Democrat     1
+##  8 OH0010019098 Democrat     2
+##  9 OH0010020566 Democrat     1
+## 10 OH0010021800 Democrat     1
+## # … with 3,578 more rows</code></pre>
+<p>Now that we have a table of everyone who has voted for a Democrat in a primary, we need to join this back onto the original voter file. The motivation for this is that by joining back onto the orginal table we can then use some of the other information that it provides such as party affiliation and birth year, among others.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># join these back to the original voter file to get additional information </span>
+potential_targets &lt;-<span class="st"> </span><span class="kw">inner_join</span>(primary_dems, swvf, 
+                                <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;sos_voterid&quot;</span> =<span class="st"> &quot;SOS_VOTERID&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(sos_voterid, party_affiliation, precinct_name,
+         date_of_birth, registration_date, party, n) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age =</span> <span class="kw">as.integer</span>((<span class="kw">Sys.Date</span>() <span class="op">-</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">ymd</span>(date_of_birth)) <span class="op">/</span><span class="st"> </span><span class="dv">365</span>))
+
+<span class="kw">select</span>(potential_targets, sos_voterid, precinct_name, party_affiliation, age, n) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>n)</code></pre>
+<pre><code>## # A tibble: 3,588 x 5
+##    sos_voterid  precinct_name            party_affiliation   age     n
+##    &lt;chr&gt;        &lt;chr&gt;                    &lt;chr&gt;             &lt;int&gt; &lt;int&gt;
+##  1 OH0010322183 PRECINCT ASHTABULA 2-A   D                    68    14
+##  2 OH0015532776 ATHENS 3-4               D                    63    14
+##  3 OH0010329359 PRECINCT ASHTABULA 5-A   D                    56    13
+##  4 OH0014653051 EAST CLEVELAND-03-C      D                    79    13
+##  5 OH0014799002 PARMA-04-A               D                    60    13
+##  6 OH0014805561 PARMA-05-A               D                    65    13
+##  7 OH0015041796 SOLON-02-B               D                    67    13
+##  8 OH0010327092 PRECINCT ASHTABULA 2-B   D                    61    12
+##  9 OH0010330463 PRECINCT ASHTABULA 5-B   D                    79    12
+## 10 OH0011536605 PRECINCT E LIVERPOOL 4-A D                    61    12
+## # … with 3,578 more rows</code></pre>
+<p>Let’s create some cross tables to identify how many times people of each party voted for a Demorat in a primary.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># generate some cross-tabs. Everyone loves cross tabs.</span>
+<span class="kw">count</span>(potential_targets, party_affiliation, party) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop =</span> <span class="kw">round</span>(n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n), <span class="dv">2</span>))</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   party_affiliation party        n  prop
+##   &lt;chr&gt;             &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt;
+## 1 &quot;&quot;                Democrat  1093  0.3 
+## 2 D                 Democrat  1828  0.51
+## 3 G                 Democrat     4  0   
+## 4 R                 Democrat   663  0.18</code></pre>
+<p>What is most telling from this table is that 30% of individuals who voted for a Democrat in the primary have no party affiliation. Now that we have a data frame with voter IDs and their registered party. We can begin segmenting this group based on the afore mentioned definitions. This will be done with a basic <code>case_when()</code> statement.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Tier 1 base dems will be those that are registered dem and have voted dem</span>
+<span class="co"># we  will tier our targets</span>
+
+<span class="co"># Tier 2 will be our motivation group. </span>
+<span class="co"># Those that aren&#39;t registered with a party, but have voted Dem</span>
+
+
+<span class="co"># Tier 3 will be our persuasion group. </span>
+<span class="co"># These are the folks that have voted Dem but aren&#39;t registered as such. </span>
+
+<span class="co"># export thiws and upload to VAN or other management software. </span>
+targets &lt;-<span class="st"> </span>potential_targets <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tier =</span> <span class="kw">case_when</span>(
+    party_affiliation <span class="op">==</span><span class="st"> &quot;D&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+    party_affiliation <span class="op">==</span><span class="st"> &quot;&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
+    <span class="op">!</span>party_affiliation <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;D&quot;</span>) <span class="op">~</span><span class="st"> </span><span class="dv">3</span>
+  ))</code></pre>
+<p>Now select voter ID and tier, write as a csv, and bulk upload into VAN!</p>
+<pre><code>## # A tibble: 3 x 5
+##    tier med_age n_primaries tier_size `n_primaries/sum(n_primaries)`
+##   &lt;dbl&gt;   &lt;dbl&gt;       &lt;int&gt;     &lt;int&gt;                          &lt;dbl&gt;
+## 1     1      59        8071      1828                          0.700
+## 2     2      56        2026      1093                          0.176
+## 3     3      62        1436       667                          0.125</code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="web-scraping-polling-use-case.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["r4c.pdf", "r4c.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
