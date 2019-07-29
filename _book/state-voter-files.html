@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-07-28" />
+<meta name="date" content="2019-07-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -458,344 +458,105 @@ file_urls</code></pre>
            party <span class="op">==</span><span class="st"> &quot;X&quot;</span> <span class="op">~</span><span class="st"> &quot;Independent&quot;</span>
          ))
 
-sw_clean</code></pre>
-<pre><code>##     sos_voterid county_number county_id last_name first_name middle_name
-## 1  OH0016238254             6     21511   KUETHER    BARBARA           A
-## 2  OH0019414074             2   1010005   GEMLICK       JODI         LYN
-## 3  OH0019419095             6     40055   KITCHEN     LESLIE           L
-## 4  OH0019489283             9    482703     GRACE     AMANDA       LEIGH
-## 5  OH0015384921            18   2044314    CARNER    TIFFANY           J
-## 6  OH0020115764            13   6100757 VAN SCYOC      SUSAN           L
-## 7  OH0015058130            18   1674659     BERRY     NICOLE           L
-## 8  OH0015138398            18   1775588 GILCHRIST     LAUREN           E
-## 9  OH0017921202            13    155695   MEADORS      NANCY      LOUISE
-## 10 OH0020901137             4   9642563  ANDERSON      DAVID           A
-## 11 OH0021110639            13   6114771  PANGUITO       GAIL           M
-## 12 OH0021216967            18   2470286    TOOHEY   MARGARET           M
-## 13 OH0015214880            18   1863083       TAG    JESSICA            
-## 14 OH0018242491             7     33803     KOZEL      HENRY     CHARLES
-## 15 OH0012639909            17     12573       PRY    DOUGLAS           A
-## 16 OH0019156107            18   2253681     BARRY    COLLEEN           L
-## 17 OH0021892836             3   9633538    MILLER     TREVOR         IAN
-## 18 OH0014978513            18   1005945   EDWARDS    CYNTHIA           A
-## 19 OH0021955947            18   2554809  TOWNSEND      KIARA            
-## 20 OH0018713790             9    459591     SCHUL      KATIE    MICHELLE
-##    suffix date_of_birth registration_date voter_status party_affiliation
-## 1            1969-11-15        1998-02-23       ACTIVE                  
-## 2            1972-08-19        2007-01-29       ACTIVE                  
-## 3            1969-12-26        2008-01-09       ACTIVE                  
-## 4            1974-11-09        2008-02-01       ACTIVE                  
-## 5            1971-08-28        2016-05-25       ACTIVE                  
-## 6            1973-08-01        2008-09-18       ACTIVE                  
-## 7            1975-04-25        2009-08-19       ACTIVE                  
-## 8            1978-12-02        1999-04-30       ACTIVE                 D
-## 9            1943-04-07        1997-06-27       ACTIVE                  
-## 10           1943-07-14        2009-11-30       ACTIVE                 R
-## 11           1972-03-16        2010-07-14 CONFIRMATION                  
-## 12           1992-09-24        2017-10-09       ACTIVE                  
-## 13           1982-12-31        2010-12-21       ACTIVE                 D
-## 14           1927-09-07        1977-11-08 CONFIRMATION                  
-## 15           1967-05-05        2015-05-14       ACTIVE                 R
-## 16           1978-06-30        2011-07-22       ACTIVE                  
-## 17           1987-08-24        2012-08-20       ACTIVE                 R
-## 18           1962-05-03        2012-09-22       ACTIVE                  
-## 19           1974-10-30        2012-09-11 CONFIRMATION                  
-## 20           1987-03-02        2012-09-20       ACTIVE                  
-##               residential_address1 residential_secondary_addr
-## 1                   725 OAKWOOD DR                           
-## 2                3464 WOODHAVEN LN                           
-## 3                  122 CONCORD AVE                           
-## 4             932 SLEEPY HOLLOW DR                           
-## 5                13902 BENWOOD AVE                           
-## 6                1090 S MUSCOVY DR                           
-## 7                 16308 KOLLIN AVE                           
-## 8               3419 E OXFORD OVAL                           
-## 9                 6137 TAYLOR PIKE                           
-## 10                6787 LINDSLEY AV                           
-## 11             6321 TRAIL RIDGE CT                           
-## 12              25 PEPPER CREEK DR                           
-## 13                  1916 W 50TH ST                           
-## 14 55505 BLOOMINGDALE ST WOLFHURST                           
-## 15                   4691 BAKER RD                           
-## 16             6103 NORTHCLIFF AVE                           
-## 17                    1998 TR 1095                           
-## 18                14307 GRANGER RD                           
-## 19                11910 BUCKEYE RD                           
-## 20                18 TWIN LAKES DR                           
-##    residential_city residential_state residential_zip
-## 1           MINSTER                OH           45865
-## 2              LIMA                OH           45806
-## 3          ST MARYS                OH           45885
-## 4            MONROE                OH           45050
-## 5         CLEVELAND                OH           44105
-## 6          LOVELAND                OH           45140
-## 7         CLEVELAND                OH           44128
-## 8     NORTH OLMSTED                OH           44070
-## 9       BLANCHESTER                OH           45107
-## 10          ANDOVER                OH           44003
-## 11         LOVELAND                OH           45140
-## 12      PEPPER PIKE                OH           44124
-## 13        CLEVELAND                OH           44102
-## 14       BRIDGEPORT                OH           43912
-## 15        CRESTLINE                OH           44827
-## 16         BROOKLYN                OH           44144
-## 17          ASHLAND                OH           44805
-## 18        MAPLE HTS                OH           44137
-## 19        CLEVELAND                OH           44120
-## 20        FAIRFIELD                OH           45014
-##    residential_zip_plus4 residential_country residential_postalcode
-## 1                     NA                  NA                     NA
-## 2                     NA                  NA                     NA
-## 3                     NA                  NA                     NA
-## 4                     NA                  NA                     NA
-## 5                     NA                  NA                     NA
-## 6                     NA                  NA                     NA
-## 7                     NA                  NA                     NA
-## 8                     NA                  NA                     NA
-## 9                     NA                  NA                     NA
-## 10                    NA                  NA                     NA
-## 11                    NA                  NA                     NA
-## 12                    NA                  NA                     NA
-## 13                    NA                  NA                     NA
-## 14                    NA                  NA                     NA
-## 15                    NA                  NA                     NA
-## 16                    NA                  NA                     NA
-## 17                    NA                  NA                     NA
-## 18                    NA                  NA                     NA
-## 19                    NA                  NA                     NA
-## 20                    NA                  NA                     NA
-##    mailing_address1 mailing_secondary_address mailing_city mailing_state
-## 1                                          NA                           
-## 2                                          NA                           
-## 3                                          NA                           
-## 4                                          NA                           
-## 5                                          NA                           
-## 6                                          NA                           
-## 7                                          NA                           
-## 8                                          NA                           
-## 9                                          NA                           
-## 10                                         NA                           
-## 11                                         NA                           
-## 12                                         NA                           
-## 13                                         NA                           
-## 14                                         NA                           
-## 15                                         NA                           
-## 16                                         NA                           
-## 17                                         NA                           
-## 18                                         NA                           
-## 19                                         NA                           
-## 20                                         NA                           
-##    mailing_zip mailing_zip_plus4 mailing_country mailing_postal_code
-## 1           NA                NA                                    
-## 2           NA                NA                                    
-## 3           NA                NA                                    
-## 4           NA                NA                                    
-## 5           NA                NA                                    
-## 6           NA                NA                                    
-## 7           NA                NA                                    
-## 8           NA                NA                                    
-## 9           NA                NA                                    
-## 10          NA                NA                                    
-## 11          NA                NA                                    
-## 12          NA                NA                                    
-## 13          NA                NA                                    
-## 14          NA                NA                                    
-## 15          NA                NA                                    
-## 16          NA                NA                                    
-## 17          NA                NA                                    
-## 18          NA                NA                                    
-## 19          NA                NA                                    
-## 20          NA                NA                                    
-##                      career_center           city
-## 1                                                
-## 2             APOLLO CAREER CENTER               
-## 3                                  ST. MARYS CITY
-## 4                                     MONROE CITY
-## 5                                                
-## 6       GREAT OAKS CAREER CAMPUSES               
-## 7                                                
-## 8            POLARIS CAREER CENTER               
-## 9       GREAT OAKS CAREER CAMPUSES               
-## 10                                               
-## 11      GREAT OAKS CAREER CAMPUSES               
-## 12                                               
-## 13                                               
-## 14  BELMONT-HARRISON CAREER CENTER               
-## 15    PIONEER CAREER &amp; TECH CENTER               
-## 16           POLARIS CAREER CENTER               
-## 17 ASHLAND COUNTY-WEST HOLMES JVSD               
-## 18                                               
-## 19                                               
-## 20                                 FAIRFIELD CITY
-##           city_school_district county_court_district
-## 1                                                 NA
-## 2                                                 NA
-## 3             ST MARYS CITY SD                    NA
-## 4                                                 NA
-## 5  CLEVELAND MUNICIPAL CITY SD                    NA
-## 6                                                 NA
-## 7  CLEVELAND MUNICIPAL CITY SD                    NA
-## 8        NORTH OLMSTED CITY SD                    NA
-## 9                                                 NA
-## 10                                                NA
-## 11                                                NA
-## 12              ORANGE CITY SD                    NA
-## 13 CLEVELAND MUNICIPAL CITY SD                    NA
-## 14                                                NA
-## 15                                                NA
-## 16            BROOKLYN CITY SD                    NA
-## 17                                                NA
-## 18       MAPLE HEIGHTS CITY SD                    NA
-## 19 CLEVELAND MUNICIPAL CITY SD                    NA
-## 20           FAIRFIELD CITY SD                    NA
-##    congressional_district court_of_appeals edu_service_center_district
-## 1                       4                3         AUGLAIZE COUNTY ESC
-## 2                       4                3            ALLEN COUNTY ESC
-## 3                       4                3                            
-## 4                       8               12           BUTLER COUNTY ESC
-## 5                      11                8                            
-## 6                       2               12                            
-## 7                      11                8                            
-## 8                      16                8                            
-## 9                       2               12                            
-## 10                     14               11        ASHTABULA COUNTY ESC
-## 11                      2               12                            
-## 12                     11                8                            
-## 13                     11                8                            
-## 14                      6                7                            
-## 15                      4                3                MID-OHIO ESC
-## 16                      9                8                            
-## 17                      7                5              TRI-COUNTY ESC
-## 18                     11                8                            
-## 19                     11                8                            
-## 20                      8               12                            
-##      exempted_vill_school_district library
-## 1                                       NA
-## 2                                       NA
-## 3                                       NA
-## 4                                       NA
-## 5                                       NA
-## 6                                       NA
-## 7                                       NA
-## 8                                       NA
-## 9                                       NA
-## 10                                      NA
-## 11                                      NA
-## 12                                      NA
-## 13                                      NA
-## 14 BRIDGEPORT EX VILL SD (BELMONT)      NA
-## 15                                      NA
-## 16                                      NA
-## 17                                      NA
-## 18                                      NA
-## 19                                      NA
-## 20                                      NA
-##                     local_school_district municipal_court_district
-## 1             MINSTER LOCAL SD (AUGLAIZE)                         
-## 2                SHAWNEE LOCAL SD (ALLEN)                     LIMA
-## 3                                                                 
-## 4                MONROE LOCAL SD (BUTLER)                         
-## 5                                                        CLEVELAND
-## 6                                                                 
-## 7                                                        CLEVELAND
-## 8                                                      ROCKY-RIVER
-## 9                                                                 
-## 10 PYMATUNING VALLEY LOCAL SD (ASHTABULA)                         
-## 11                                                                
-## 12                                                  SHAKER-HEIGHTS
-## 13                                                       CLEVELAND
-## 14                                                                
-## 15    BUCKEYE CENTRAL LOCAL SD (CRAWFORD)                         
-## 16                                                           PARMA
-## 17           HILLSDALE LOCAL SD (ASHLAND)                         
-## 18                                                GARFIELD-HEIGHTS
-## 19                                                       CLEVELAND
-## 20                                                                
-##            precinct_name precinct_code state_board_of_education
-## 1     PRECINCT MINSTER N         06AAZ                        1
-## 2              SHAWNEE H         02AFU                        1
-## 3  PRECINCT ST. MARYS 3A         06AAE                        1
-## 4               MONROE 2      09-P-AKN                        3
-## 5         CLEVELAND-02-Q      18-P-ALJ                       11
-## 6       MIAMI TOWNSHIP X      13-P-ACY                       10
-## 7         CLEVELAND-01-E      18-P-AIA                       11
-## 8     NORTH OLMSTED-02-C      18-P-CDV                        5
-## 9       WAYNE TOWNSHIP B      13-P-AGV                       10
-## 10 PRECINCT WMSFLD TWP 2         04AEW                        7
-## 11    MIAMI TOWNSHIP L1L      13-P-AHS                       10
-## 12      PEPPER PIKE-00-D      18-P-CNB                       11
-## 13        CLEVELAND-15-J      18-P-BDX                       11
-## 14  PRECINCT PEASE TWP 2         07ABW                        8
-## 15            VERNON TWP      17-P-ACN                        1
-## 16         BROOKLYN-00-H      18-P-AGJ                       11
-## 17      PRECINCT MIFFLIN         03ACV                        5
-## 18    MAPLE HEIGHTS-03-B      18-P-CAE                       11
-## 19        CLEVELAND-04-E      18-P-AMQ                       11
-## 20              FAIR7WD1      09-P-AAG                        3
-##    state_representative_district state_senate_district          township
-## 1                             84                    12  JACKSON TOWNSHIP
-## 2                              4                    12  Township Shawnee
-## 3                             82                     1 ST MARYS TOWNSHIP
-## 4                             53                     4    LEMON TOWNSHIP
-## 5                              9                    21                  
-## 6                             65                    14         MIAMI TWP
-## 7                             12                    25                  
-## 8                             16                    24                  
-## 9                             65                    14         WAYNE TWP
-## 10                            64                    32 WILLIAMSFIELD TWP
-## 11                            65                    14         MIAMI TWP
-## 12                            12                    25                  
-## 13                            13                    23                  
-## 14                            96                    30    PEASE TOWNSHIP
-## 15                            87                    26   VERNON TOWNSHIP
-## 16                            14                    23                  
-## 17                            70                    22  MIFFLIN-COMBINED
-## 18                            12                    25                  
-## 19                             9                    21                  
-## 20                            51                     4                  
-##            village                     ward election_type election_date
-## 1  MINSTER VILLAGE                                PRIMARY    2000-03-07
-## 2                                                 PRIMARY    2000-03-07
-## 3                          ST. MARYS WARD 3       PRIMARY    2000-03-07
-## 4                                                 PRIMARY    2000-03-07
-## 5                          CLEVELAND WARD 2       PRIMARY    2000-03-07
-## 6                                                 PRIMARY    2000-03-07
-## 7                          CLEVELAND WARD 1       PRIMARY    2000-03-07
-## 8                      NORTH OLMSTED WARD 2       PRIMARY    2000-03-07
-## 9                                                 PRIMARY    2000-03-07
-## 10                                                PRIMARY    2000-03-07
-## 11                                                PRIMARY    2000-03-07
-## 12                                                PRIMARY    2000-03-07
-## 13                        CLEVELAND WARD 15       PRIMARY    2000-03-07
-## 14                                                PRIMARY    2000-03-07
-## 15                                                PRIMARY    2000-03-07
-## 16                                                PRIMARY    2000-03-07
-## 17                                                PRIMARY    2000-03-07
-## 18                 MAPLE HEIGHTS DISTRICT 3       PRIMARY    2000-03-07
-## 19                         CLEVELAND WARD 4       PRIMARY    2000-03-07
-## 20                     FAIRFIELD CTY WARD 1       PRIMARY    2000-03-07
-##          party
-## 1         &lt;NA&gt;
-## 2         &lt;NA&gt;
-## 3         &lt;NA&gt;
-## 4         &lt;NA&gt;
-## 5         &lt;NA&gt;
-## 6         &lt;NA&gt;
-## 7         &lt;NA&gt;
-## 8         &lt;NA&gt;
-## 9         &lt;NA&gt;
-## 10        &lt;NA&gt;
-## 11        &lt;NA&gt;
-## 12        &lt;NA&gt;
-## 13        &lt;NA&gt;
-## 14    Democrat
-## 15 Independent
-## 16        &lt;NA&gt;
-## 17        &lt;NA&gt;
-## 18        &lt;NA&gt;
-## 19        &lt;NA&gt;
-## 20        &lt;NA&gt;
-##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 599980 rows ]</code></pre>
+<span class="kw">head</span>(sw_clean)</code></pre>
+<pre><code>##    sos_voterid county_number county_id last_name first_name middle_name
+## 1 OH0016238254             6     21511   KUETHER    BARBARA           A
+## 2 OH0019414074             2   1010005   GEMLICK       JODI         LYN
+## 3 OH0019419095             6     40055   KITCHEN     LESLIE           L
+## 4 OH0019489283             9    482703     GRACE     AMANDA       LEIGH
+## 5 OH0015384921            18   2044314    CARNER    TIFFANY           J
+## 6 OH0020115764            13   6100757 VAN SCYOC      SUSAN           L
+##   suffix date_of_birth registration_date voter_status party_affiliation
+## 1           1969-11-15        1998-02-23       ACTIVE                  
+## 2           1972-08-19        2007-01-29       ACTIVE                  
+## 3           1969-12-26        2008-01-09       ACTIVE                  
+## 4           1974-11-09        2008-02-01       ACTIVE                  
+## 5           1971-08-28        2016-05-25       ACTIVE                  
+## 6           1973-08-01        2008-09-18       ACTIVE                  
+##   residential_address1 residential_secondary_addr residential_city
+## 1       725 OAKWOOD DR                                     MINSTER
+## 2    3464 WOODHAVEN LN                                        LIMA
+## 3      122 CONCORD AVE                                    ST MARYS
+## 4 932 SLEEPY HOLLOW DR                                      MONROE
+## 5    13902 BENWOOD AVE                                   CLEVELAND
+## 6    1090 S MUSCOVY DR                                    LOVELAND
+##   residential_state residential_zip residential_zip_plus4
+## 1                OH           45865                    NA
+## 2                OH           45806                    NA
+## 3                OH           45885                    NA
+## 4                OH           45050                    NA
+## 5                OH           44105                    NA
+## 6                OH           45140                    NA
+##   residential_country residential_postalcode mailing_address1
+## 1                  NA                     NA                 
+## 2                  NA                     NA                 
+## 3                  NA                     NA                 
+## 4                  NA                     NA                 
+## 5                  NA                     NA                 
+## 6                  NA                     NA                 
+##   mailing_secondary_address mailing_city mailing_state mailing_zip
+## 1                        NA                                     NA
+## 2                        NA                                     NA
+## 3                        NA                                     NA
+## 4                        NA                                     NA
+## 5                        NA                                     NA
+## 6                        NA                                     NA
+##   mailing_zip_plus4 mailing_country mailing_postal_code
+## 1                NA                                    
+## 2                NA                                    
+## 3                NA                                    
+## 4                NA                                    
+## 5                NA                                    
+## 6                NA                                    
+##                career_center           city        city_school_district
+## 1                                                                      
+## 2       APOLLO CAREER CENTER                                           
+## 3                            ST. MARYS CITY            ST MARYS CITY SD
+## 4                               MONROE CITY                            
+## 5                                           CLEVELAND MUNICIPAL CITY SD
+## 6 GREAT OAKS CAREER CAMPUSES                                           
+##   county_court_district congressional_district court_of_appeals
+## 1                    NA                      4                3
+## 2                    NA                      4                3
+## 3                    NA                      4                3
+## 4                    NA                      8               12
+## 5                    NA                     11                8
+## 6                    NA                      2               12
+##   edu_service_center_district exempted_vill_school_district library
+## 1         AUGLAIZE COUNTY ESC                                    NA
+## 2            ALLEN COUNTY ESC                                    NA
+## 3                                                                NA
+## 4           BUTLER COUNTY ESC                                    NA
+## 5                                                                NA
+## 6                                                                NA
+##         local_school_district municipal_court_district
+## 1 MINSTER LOCAL SD (AUGLAIZE)                         
+## 2    SHAWNEE LOCAL SD (ALLEN)                     LIMA
+## 3                                                     
+## 4    MONROE LOCAL SD (BUTLER)                         
+## 5                                            CLEVELAND
+## 6                                                     
+##           precinct_name precinct_code state_board_of_education
+## 1    PRECINCT MINSTER N         06AAZ                        1
+## 2             SHAWNEE H         02AFU                        1
+## 3 PRECINCT ST. MARYS 3A         06AAE                        1
+## 4              MONROE 2      09-P-AKN                        3
+## 5        CLEVELAND-02-Q      18-P-ALJ                       11
+## 6      MIAMI TOWNSHIP X      13-P-ACY                       10
+##   state_representative_district state_senate_district          township
+## 1                            84                    12  JACKSON TOWNSHIP
+## 2                             4                    12  Township Shawnee
+## 3                            82                     1 ST MARYS TOWNSHIP
+## 4                            53                     4    LEMON TOWNSHIP
+## 5                             9                    21                  
+## 6                            65                    14         MIAMI TWP
+##           village             ward election_type election_date party
+## 1 MINSTER VILLAGE                        PRIMARY    2000-03-07  &lt;NA&gt;
+## 2                                        PRIMARY    2000-03-07  &lt;NA&gt;
+## 3                 ST. MARYS WARD 3       PRIMARY    2000-03-07  &lt;NA&gt;
+## 4                                        PRIMARY    2000-03-07  &lt;NA&gt;
+## 5                 CLEVELAND WARD 2       PRIMARY    2000-03-07  &lt;NA&gt;
+## 6                                        PRIMARY    2000-03-07  &lt;NA&gt;</code></pre>
 </div>
 <div id="creating-targets" class="section level3">
 <h3><span class="header-section-number">7.3.5</span> Creating targets</h3>
@@ -811,21 +572,16 @@ primary_dems &lt;-<span class="st"> </span>sw_clean <span class="op">%&gt;%</spa
          party <span class="op">==</span><span class="st"> &quot;Democrat&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(sos_voterid, party)
 
-primary_dems</code></pre>
-<pre><code>## # A tibble: 3,588 x 3
-##    sos_voterid  party        n
-##    &lt;chr&gt;        &lt;chr&gt;    &lt;int&gt;
-##  1 OH0010002426 Democrat     1
-##  2 OH0010004408 Democrat     1
-##  3 OH0010012148 Democrat     1
-##  4 OH0010012441 Democrat     3
-##  5 OH0010013144 Democrat     1
-##  6 OH0010015404 Democrat     1
-##  7 OH0010015734 Democrat     1
-##  8 OH0010019098 Democrat     2
-##  9 OH0010020566 Democrat     1
-## 10 OH0010021800 Democrat     1
-## # … with 3,578 more rows</code></pre>
+<span class="kw">head</span>(primary_dems)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   sos_voterid  party        n
+##   &lt;chr&gt;        &lt;chr&gt;    &lt;int&gt;
+## 1 OH0010002426 Democrat     1
+## 2 OH0010004408 Democrat     1
+## 3 OH0010012148 Democrat     1
+## 4 OH0010012441 Democrat     3
+## 5 OH0010013144 Democrat     1
+## 6 OH0010015404 Democrat     1</code></pre>
 <p>Now that we have a table of everyone who has voted for a Democrat in a primary, we need to join this back onto the original voter file. The motivation for this is that by joining back onto the orginal table we can then use some of the other information that it provides such as party affiliation and birth year, among others.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># join these back to the original voter file to get additional information </span>
 potential_targets &lt;-<span class="st"> </span><span class="kw">inner_join</span>(primary_dems, swvf, 
@@ -836,21 +592,17 @@ potential_targets &lt;-<span class="st"> </span><span class="kw">inner_join</spa
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age =</span> <span class="kw">as.integer</span>((<span class="kw">Sys.Date</span>() <span class="op">-</span><span class="st"> </span>lubridate<span class="op">::</span><span class="kw">ymd</span>(date_of_birth)) <span class="op">/</span><span class="st"> </span><span class="dv">365</span>))
 
 <span class="kw">select</span>(potential_targets, sos_voterid, precinct_name, party_affiliation, age, n) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>n)</code></pre>
-<pre><code>## # A tibble: 3,588 x 5
-##    sos_voterid  precinct_name            party_affiliation   age     n
-##    &lt;chr&gt;        &lt;chr&gt;                    &lt;chr&gt;             &lt;int&gt; &lt;int&gt;
-##  1 OH0010322183 PRECINCT ASHTABULA 2-A   D                    68    14
-##  2 OH0015532776 ATHENS 3-4               D                    63    14
-##  3 OH0010329359 PRECINCT ASHTABULA 5-A   D                    56    13
-##  4 OH0014653051 EAST CLEVELAND-03-C      D                    79    13
-##  5 OH0014799002 PARMA-04-A               D                    60    13
-##  6 OH0014805561 PARMA-05-A               D                    65    13
-##  7 OH0015041796 SOLON-02-B               D                    67    13
-##  8 OH0010327092 PRECINCT ASHTABULA 2-B   D                    61    12
-##  9 OH0010330463 PRECINCT ASHTABULA 5-B   D                    79    12
-## 10 OH0011536605 PRECINCT E LIVERPOOL 4-A D                    61    12
-## # … with 3,578 more rows</code></pre>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>n) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   sos_voterid  precinct_name          party_affiliation   age     n
+##   &lt;chr&gt;        &lt;chr&gt;                  &lt;chr&gt;             &lt;int&gt; &lt;int&gt;
+## 1 OH0010322183 PRECINCT ASHTABULA 2-A D                    68    14
+## 2 OH0015532776 ATHENS 3-4             D                    63    14
+## 3 OH0010329359 PRECINCT ASHTABULA 5-A D                    56    13
+## 4 OH0014653051 EAST CLEVELAND-03-C    D                    79    13
+## 5 OH0014799002 PARMA-04-A             D                    60    13
+## 6 OH0014805561 PARMA-05-A             D                    65    13</code></pre>
 <p>Let’s create some cross tables to identify how many times people of each party voted for a Demorat in a primary.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># generate some cross-tabs. Everyone loves cross tabs.</span>
 <span class="kw">count</span>(potential_targets, party_affiliation, party) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -882,11 +634,11 @@ targets &lt;-<span class="st"> </span>potential_targets <span class="op">%&gt;%<
   ))</code></pre>
 <p>Now select voter ID and tier, write as a csv, and bulk upload into VAN!</p>
 <pre><code>## # A tibble: 3 x 5
-##    tier med_age n_primaries tier_size `n_primaries/sum(n_primaries)`
-##   &lt;dbl&gt;   &lt;dbl&gt;       &lt;int&gt;     &lt;int&gt;                          &lt;dbl&gt;
-## 1     1      59        8071      1828                          0.700
-## 2     2      56        2026      1093                          0.176
-## 3     3      62        1436       667                          0.125</code></pre>
+##    tier med_age n_primaries tier_size     p
+##   &lt;dbl&gt;   &lt;dbl&gt;       &lt;int&gt;     &lt;int&gt; &lt;dbl&gt;
+## 1     1      59        8071      1828 0.700
+## 2     2      56        2026      1093 0.176
+## 3     3      62        1436       667 0.125</code></pre>
 
 </div>
 </div>
