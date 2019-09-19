@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 google trends results | R for Pogressive Campaigns</title>
-  <meta name="description" content="Chapter 5 google trends results | R for Pogressive Campaigns" />
+  <title>Chapter 5 google trends results | R for Progressive Campaigns</title>
+  <meta name="description" content="Chapter 5 google trends results | R for Progressive Campaigns" />
   <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 google trends results | R for Pogressive Campaigns" />
+  <meta property="og:title" content="Chapter 5 google trends results | R for Progressive Campaigns" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 google trends results | R for Pogressive Campaigns" />
+  <meta name="twitter:title" content="Chapter 5 google trends results | R for Progressive Campaigns" />
   
   
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-07-29" />
+<meta name="date" content="2019-09-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -178,7 +178,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Progressive Campaigns</a>
           </h1>
         </div>
 
@@ -227,30 +227,30 @@ candidate_trends</code></pre>
 ## # A tibble: 5 x 5
 ##   keyword          max_hits min_hits from       to        
 ##   &lt;chr&gt;               &lt;int&gt;    &lt;int&gt; &lt;date&gt;     &lt;date&gt;    
-## 1 Bernie Sanders        100       58 2019-07-15 2019-07-25
-## 2 Beto O&#39;Rourke           2        1 2019-07-15 2019-07-25
-## 3 Elizabeth Warren       57       37 2019-07-15 2019-07-25
-## 4 Joe Biden              58       37 2019-07-15 2019-07-25
-## 5 Kamala Harris          80       53 2019-07-15 2019-07-25</code></pre>
+## 1 Bernie Sanders         70       12 2019-09-05 2019-09-17
+## 2 Beto O&#39;Rourke          32        1 2019-09-05 2019-09-17
+## 3 Elizabeth Warren       70       10 2019-09-05 2019-09-17
+## 4 Joe Biden             100        9 2019-09-05 2019-09-17
+## 5 Kamala Harris          58        5 2019-09-05 2019-09-17</code></pre>
 <p>Trendy creates an object of class <code>trendy</code> see <code>class(candidate_trends)</code> trendy. There are a number of accessor functions. We will use <code>get_interest()</code> and <code>get_related_queries()</code>. See the documentation of the others.</p>
 <p>To access to relative popularity, we will use <code>get_interest(trendy)</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">popularity &lt;-<span class="st"> </span><span class="kw">get_interest</span>(candidate_trends)
 
 popularity</code></pre>
-<pre><code>## # A tibble: 55 x 7
+<pre><code>## # A tibble: 65 x 7
 ##    date                 hits geo   time          keyword  gprop category   
 ##    &lt;dttm&gt;              &lt;int&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      
-##  1 2019-07-15 00:00:00    50 world 2019-07-15 2… Joe Bid… web   All catego…
-##  2 2019-07-16 00:00:00    58 world 2019-07-15 2… Joe Bid… web   All catego…
-##  3 2019-07-17 00:00:00    49 world 2019-07-15 2… Joe Bid… web   All catego…
-##  4 2019-07-18 00:00:00    48 world 2019-07-15 2… Joe Bid… web   All catego…
-##  5 2019-07-19 00:00:00    45 world 2019-07-15 2… Joe Bid… web   All catego…
-##  6 2019-07-20 00:00:00    37 world 2019-07-15 2… Joe Bid… web   All catego…
-##  7 2019-07-21 00:00:00    49 world 2019-07-15 2… Joe Bid… web   All catego…
-##  8 2019-07-22 00:00:00    43 world 2019-07-15 2… Joe Bid… web   All catego…
-##  9 2019-07-23 00:00:00    37 world 2019-07-15 2… Joe Bid… web   All catego…
-## 10 2019-07-24 00:00:00    37 world 2019-07-15 2… Joe Bid… web   All catego…
-## # … with 45 more rows</code></pre>
+##  1 2019-09-05 00:00:00    36 world 2019-09-05 2… Joe Bid… web   All catego…
+##  2 2019-09-06 00:00:00    20 world 2019-09-05 2… Joe Bid… web   All catego…
+##  3 2019-09-07 00:00:00    18 world 2019-09-05 2… Joe Bid… web   All catego…
+##  4 2019-09-08 00:00:00    14 world 2019-09-05 2… Joe Bid… web   All catego…
+##  5 2019-09-09 00:00:00    10 world 2019-09-05 2… Joe Bid… web   All catego…
+##  6 2019-09-10 00:00:00     9 world 2019-09-05 2… Joe Bid… web   All catego…
+##  7 2019-09-11 00:00:00     9 world 2019-09-05 2… Joe Bid… web   All catego…
+##  8 2019-09-12 00:00:00    13 world 2019-09-05 2… Joe Bid… web   All catego…
+##  9 2019-09-13 00:00:00   100 world 2019-09-05 2… Joe Bid… web   All catego…
+## 10 2019-09-14 00:00:00    32 world 2019-09-05 2… Joe Bid… web   All catego…
+## # … with 55 more rows</code></pre>
 <p>For related queries we will use <code>get_related_queries(trendy)</code>. Note that you can either pipe the object or pass it directly.</p>
 <pre class="sourceCode r"><code class="sourceCode r">candidate_trends <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">get_related_queries</span>() <span class="op">%&gt;%</span><span class="st"> </span>

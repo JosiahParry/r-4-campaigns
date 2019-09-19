@@ -1,5 +1,5 @@
 --- 
-title: "R for Pogressive Campaigns"
+title: "R for Progressive Campaigns"
 author: "Josiah Parry"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -14,7 +14,7 @@ description: ""
 
 As the 2020 Presidential election looms nearer and nearer. It is important that every campaign is keeping an eye on their field performance. In 2008, the Obama campaign revolutionized the use of data in political campaigns. Since then, data teams have expanded and grown in size, capacity, and complexity.
 
-This short bookdown project is intended to illustrate how data can be used in campaigns through the statistical programming language R. This is a collection of small "recipes" that I have created that are intended to aid data teams in leveragng R.
+This short bookdown project is intended to illustrate how data can be used in campaigns through the statistical programming language R. This is a collection of small "recipes" that I have created that are intended to aid data teams in leveraging R.
 
 As the Data Director for NextGen American New Hampshire team during the 2018 midterm elections, I learned a lot about the ways that data was and wasn't being leveraged in progressive politics. This is my attempt to democratize (pun heavily intended) data analytic skills for progressive campaigns.
 

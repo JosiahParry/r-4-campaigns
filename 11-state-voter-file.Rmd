@@ -7,11 +7,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Motivation
 
-Who one votes for is private but when someone voted is a matter of public record. States' Secretary of State (SOS) maintain a public record of who voted. The accompanying data may vary state by state. For example, the state of New Hampshire does not record the age of the person voting. Companies such as [Catalist](https://www.catalist.us/data/) have built their business around aggregating, cleaning, and enhancing public voter files. However, these databases can be quite expensive and are not updated at the same pace as the state voter file. 
+_Who_ one votes for is private, but _when_ someone votes is a matter of public record. A state's Secretary of State (SOS) maintains a public record of who voted. The accompanying data may vary state by state. For example, the state of New Hampshire does not record the age of the person voting. Companies such as [Catalist](https://www.catalist.us/data/) have built their business around aggregating, cleaning, and enhancing public voter files. However, these databases can be quite expensive and are not updated at the same pace as the state voter file. 
 
 ## Overview
 
-In this section, we will demonstrate how to programatically download and clean the state voterfile. From there, we will utilize it to identify potential voters and canvassing targets. Once those targets have been identified, they can  be uploaded as a list into VAN based on their SOS ID which should be present—depending on your provider. 
+In this section we will demonstrate how to programatically download and clean the state voterfile. From there, we will identify potential voters and canvassing targets. Once those targets have been identified, they can  be uploaded as a list into VAN based on their SOS ID which should be present depending on your provider. 
 
 The OH SOS website provide links to the [voter file](https://www6.sos.state.oh.us/ords/f?p=VOTERFTP:STWD:::#stwdVtrFiles) which are updated frequently. These files were last updated on July 19th, 2019 as of today (July 21st, 2019). We will combine the webscraping tools (`rvest`) that we previously learned and combine them with `dplyr` and `data.table`—a package that works exceptionally well with large data, see the [wiki](https://github.com/Rdatatable/data.table/wiki) for a primer.
 
@@ -67,6 +67,8 @@ R.utils::gunzip("data/SWVF_1_22 (Adams-Erie).txt.gz")
 
 data.table reads text files using `fread()`. Since this file is very large, we will take only the first 10,000 observations. Do this by setting the `nrows` argument to `10000`. Since data.table is an extension upon the `data.frame`, we can combine both data.table aand dplyr functions. 
 
+### Voter file exploratoration
+
 ```{r}
 swvf <- fread("data/SWVF_1_22 (Adams-Erie).txt", nrows = 10000)
 ```
@@ -77,7 +79,7 @@ Do your due dilligence and look at _all_ 106 columns. This is a great time to em
 glimpse(swvf)
 ```
 
-Nope! They are not tidy. Currently each row represents one voter and the events are on the columns following the format `ELECTION TYPE-MM/DD/YYYY`. The date of the election should be its own column as should the type (i.e. general, primary, or special). These data need to be converted to a longer format where each row is a unique combination of one voter and election pair. This means that if an individual voted in five elections, there would be five observations.
+Nope! They are not tidy. Currently each row represents one voter and the events are on the columns following the format `ELECTION TYPE-MM/DD/YYYY`. The date of the election should be its own column as should the type (i.e. general, primary, or special). These data need to be converted to a longer format where each row is a unique combination of one voter and election. This means that if an individual voted in five elections, there would be five observations.
 
 There are two main steps that need to be taken to tidy up these data. Collect the column headers and their respective values into two new columns: `election`, and `party`. Since the column headers contain two variables of interest, namely the election type and election date, the column will be split into two.
 
@@ -103,21 +105,25 @@ Notice that there are multiple values for `party`. What are these?
 distinct(sw_gathered, party)
 ```
 
-The SOS website has a downloadable data dictionary. The _Voter File Lyaout_ says:
+### Tidying
+
+The SOS website has a downloadable data dictionary. The _Voter File Layout_ says:
 
 > The data dictionary Variable filed name with election type and date of each election. Value for this field indicates how the voter voted in that election. 
 
-> Values are:
-C - Constitution Party
-D - Democrat Party
-E - Reform Party
-G - Green Party
-L - Libertarian Party
-N - Natural Law Party
-R - Republican Party
-S - Socialist Party 
-X - Voted without declaring party affiliation
-Blank - Indicates that there is no voting record for this voter for this election
+
+| Abbr. | Party Name |
+| ----- | ---------- |
+| C | Constitution Party |
+| D | Democrat Party |
+| E | Reform Party  |
+| G | Green Party |
+| L | Libertarian Party |
+| N | Natural Law Party |
+| R | Republican Party |
+| S | Socialist Party  |
+| X | Voted without declaring party affiliation |
+| Blank | Indicates that there is no voting record for this voter for this election |
 
 We can use this to clean up the party field using `case_when()`. To create two separate columns for the election type and date, we can split on the first `-`. `tidyr::separate()` will split the column into two or more columns based on the `sep` argument. Once the `election_date` column has been created, we will need to parse it accordingly using lubridate. Since the date column is formatted as `MM/DD/YYYY` we can use `lubridate::mdy()` to parse it to class `Date`.
 
@@ -136,48 +142,89 @@ sw_clean <- sw_gathered %>%
            party == "S" ~ "Socialist",
            party == "X" ~ "Independent"
          ))
+
+head(sw_clean)
 ```
 
 
+### Creating targets
+
+One thing that you will need to do is identify your potential voter base. These voters are sometimes referred to as your "targets" or your voter "universe". Each voter is a unique culmination of experience, opinions, and biases. As such, not every person will be willing to vote for your candidate or maybe to even vote at all. Some people are habitual voters who vote in every election and always along party lines. Others may only sometimes vote in a general election. And others might not vote consistently along party lines. 
+
+Due to the never ending complexities that are peoples' preferences and persuasions it is important to break the pool of potential voters down into smaller groups which I will refer to as _tiers_. We will break our voters into three distinct tiers. These categorizations are rather crude. Work with your state leadership team to determine the best way to segment your voter base.
+
+Tier 1. Base voters - registered Democrats who have voted Democrat in a primary
+Tier 2. Motivation - are not registered with a party but have voted Democrat in a primary
+Tier 3. Persuasion - folks that have voted Democrat in a priimary but aren't registered as such
+
+
+To begin this process, we want to identify everyone who has voted Democrat in a primary. We will filter `sw_clean` to these criteria. Then we will count the number of times each voter has voted for a Democrat. This will then be joined back to the original data frame so we can identify those people who have voted Democrat even if it conflicts with their party registration.
 
 ```{r}
 # One thing that you will need to do is to identify your target base voters. These will most likely be those who have voted Democrat in previous primaries. Then we will compare those people with their registered party. 
 primary_dems <- sw_clean %>% 
   filter(election_type == "PRIMARY",
          party == "Democrat") %>% 
-  count(SOS_VOTERID, party)
+  count(sos_voterid, party)
+
+head(primary_dems)
 ```
+
+Now that we have a table of everyone who has voted for a Democrat in a primary, we need to join this back onto the original voter file. The motivation for this is that by joining back onto the orginal table we can then use some of the other information that it provides such as party affiliation and birth year, among others.
 
 
 ```{r}
 # join these back to the original voter file to get additional information 
-potential_targets <- right_join(primary_dems, swvf) %>% 
-  select(SOS_VOTERID, PARTY_AFFILIATION, PRECINCT_NAME, DATE_OF_BIRTH, REGISTRATION_DATE, party, n) %>% 
-  filter(party == "Democrat") %>% 
-  mutate(age = as.integer((Sys.Date() - lubridate::ymd(DATE_OF_BIRTH)) / 365))
+potential_targets <- inner_join(primary_dems, swvf, 
+                                by = c("sos_voterid" = "SOS_VOTERID")) %>% 
+  janitor::clean_names() %>% 
+  select(sos_voterid, party_affiliation, precinct_name,
+         date_of_birth, registration_date, party, n) %>% 
+  mutate(age = as.integer((Sys.Date() - lubridate::ymd(date_of_birth)) / 365))
 
-# generate some cross-tabs. Everyone loves cross tabs. For some insight into how we can segment this group.
-count(potential_targets, PARTY_AFFILIATION, party)
-
+select(potential_targets, sos_voterid, precinct_name, party_affiliation, age, n) %>% 
+  arrange(-n) %>% 
+  head()
 ```
 
+Let's create some cross tables to identify how many times people of each party voted for a Demorat in a primary.
+
 ```{r}
-# base dems will be those that are registered dem and have voted dem
+# generate some cross-tabs. Everyone loves cross tabs.
+count(potential_targets, party_affiliation, party) %>% 
+  mutate(prop = round(n / sum(n), 2))
+```
+
+What is most telling from this table is that 30% of individuals who voted for a Democrat in the primary have no party affiliation. Now that we have a data frame with voter IDs and their registered party. We can begin segmenting this group based on the afore mentioned definitions. This will be done with a basic `case_when()` statement.
+
+```{r}
+# Tier 1 base dems will be those that are registered dem and have voted dem
 # we  will tier our targets
 
-# tier 2 will be our motivation group. Those that aren't registered with a party, but have voted Dem
-# this will be the motivation group
+# Tier 2 will be our motivation group. 
+# Those that aren't registered with a party, but have voted Dem
 
-# tier 3 will be our persuasion group. These are the folks that have voted Dem but aren't registered as such. This is the theoretically harder group to encourage to vote. 
 
-# create a new data frame with the SOS VoterID & tier. 
+# Tier 3 will be our persuasion group. 
+# These are the folks that have voted Dem but aren't registered as such. 
+
 # export thiws and upload to VAN or other management software. 
 targets <- potential_targets %>% 
   mutate(tier = case_when(
-    PARTY_AFFILIATION == "D" ~ 1,
-    PARTY_AFFILIATION == "" ~ 2,
-    !PARTY_AFFILIATION %in% c("", "D") ~ 3
-  )) %>% 
-  select(SOS_VOTERID, tier)
+    party_affiliation == "D" ~ 1,
+    party_affiliation == "" ~ 2,
+    !party_affiliation %in% c("", "D") ~ 3
+  ))
+```
+
+Now select voter ID and tier, write as a csv, and bulk upload into VAN!
+
+```{r echo=FALSE}
+targets %>% 
+  group_by(tier) %>% 
+  summarise(med_age = median(age),
+            n_primaries = sum(n),
+            tier_size = n()) %>% 
+  mutate(p = n_primaries / sum(n_primaries))
 ```
 

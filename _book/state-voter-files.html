@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 State Voter Files | R for Pogressive Campaigns</title>
-  <meta name="description" content="Chapter 7 State Voter Files | R for Pogressive Campaigns" />
+  <title>Chapter 7 State Voter Files | R for Progressive Campaigns</title>
+  <meta name="description" content="Chapter 7 State Voter Files | R for Progressive Campaigns" />
   <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 State Voter Files | R for Pogressive Campaigns" />
+  <meta property="og:title" content="Chapter 7 State Voter Files | R for Progressive Campaigns" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 State Voter Files | R for Pogressive Campaigns" />
+  <meta name="twitter:title" content="Chapter 7 State Voter Files | R for Progressive Campaigns" />
   
   
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Josiah Parry" />
 
 
-<meta name="date" content="2019-07-29" />
+<meta name="date" content="2019-09-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -178,7 +178,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Pogressive Campaigns</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R for Progressive Campaigns</a>
           </h1>
         </div>
 
@@ -598,11 +598,11 @@ potential_targets &lt;-<span class="st"> </span><span class="kw">inner_join</spa
 ##   sos_voterid  precinct_name          party_affiliation   age     n
 ##   &lt;chr&gt;        &lt;chr&gt;                  &lt;chr&gt;             &lt;int&gt; &lt;int&gt;
 ## 1 OH0010322183 PRECINCT ASHTABULA 2-A D                    68    14
-## 2 OH0015532776 ATHENS 3-4             D                    63    14
-## 3 OH0010329359 PRECINCT ASHTABULA 5-A D                    56    13
+## 2 OH0015532776 ATHENS 3-4             D                    64    14
+## 3 OH0010329359 PRECINCT ASHTABULA 5-A D                    57    13
 ## 4 OH0014653051 EAST CLEVELAND-03-C    D                    79    13
 ## 5 OH0014799002 PARMA-04-A             D                    60    13
-## 6 OH0014805561 PARMA-05-A             D                    65    13</code></pre>
+## 6 OH0014805561 PARMA-05-A             D                    66    13</code></pre>
 <p>Let’s create some cross tables to identify how many times people of each party voted for a Demorat in a primary.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># generate some cross-tabs. Everyone loves cross tabs.</span>
 <span class="kw">count</span>(potential_targets, party_affiliation, party) <span class="op">%&gt;%</span><span class="st"> </span>

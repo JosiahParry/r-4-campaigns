@@ -3,3 +3,6 @@
 .Rproj.user/
 .Rproj.user/*
 .httr-oauth
+drafts
+data
+data-raw
